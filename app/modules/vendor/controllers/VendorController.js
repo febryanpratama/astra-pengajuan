@@ -1,4 +1,6 @@
+const { validationResult } = require("express-validator");
 const db = require("../../../core/models");
+const ResponseCode = require("../../../core/utils/ResponseCode");
 const Vendor = db.vendors;
 
 // CREATE: untuk enambahkan data kedalam tabel book
@@ -36,27 +38,31 @@ exports.create = (req, res) => {
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
-  await Vendor.findAll()
-    .then((vendors) => {
-      res.json({
-        message: "Books retrieved successfully.",
-        data: vendors,
-      });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: err.message || "Some error occurred while retrieving books.",
-        data: null,
-      });
-    });
+  const data = await Vendor.findAll({
+    where: {
+      is_deleted: null,
+    },
+  });
+
+  return ResponseCode.successGet(req, res, "Data Vendor", data);
 };
 
-exports.getAll = async (req, res) => {
-  const data = await Vendor.findAll({});
+exports.store = async (req, res) => {
+  let data = req.body;
+  // const errors = validationResult(data);
 
-  return res.json({
-    data: "kosong",
+  // if (!errors.isEmpty()) {
+  //   return ResponseCode.errorPost(req, res, errors.array());
+  // }
+
+  const response = await Vendor.create({
+    nama_vendor: data.nama_vendor,
+    pemilik_vendor: data.pemilik_vendor,
+    telpon: data.telpon,
+    alamat: data.alamat,
   });
+
+  return ResponseCode.successPost(req, res, "Data Vendor Berhasil Ditambahkan");
 };
 
 // // UPDATE: Merubah data sesuai dengan id yang dikirimkan sebagai params

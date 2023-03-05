@@ -1,7 +1,17 @@
 const VendorController = require("../controllers/VendorController");
 const router = require("express").Router();
+const AuthMiddleware = require("../../../core/middleware/AuthMiddleware");
+// const {
+//   postValidator,
+// } = require("../../../core/validators/vendor/VendorValidator");
 
-router.get("/", VendorController.findAll);
-router.get("/all", VendorController.getAll);
+router.get("/", AuthMiddleware.AuthAdmin, VendorController.findAll);
+
+router.post(
+  "/",
+  AuthMiddleware.AuthAdmin,
+  //   postValidator,
+  VendorController.store
+);
 
 module.exports = router;
