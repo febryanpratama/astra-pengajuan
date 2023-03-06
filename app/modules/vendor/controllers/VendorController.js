@@ -38,3 +38,31 @@ exports.detail = async (req, res) => {
 
   return ResponseCode.successGet(req, res, "Data Vendor", response);
 };
+
+exports.update = async (req, res) => {
+  const id = req.params.id;
+  let data = req.body;
+
+  try {
+    const response = await Vendor.update(
+      {
+        nama_vendor: data.nama_vendor,
+        pemilik_vendor: data.pemilik_vendor,
+        telpon: data.telpon,
+        alamat: data.alamat,
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
+
+    return ResponseCode.successPost(req, res, "Data Vendor Berhasil Diubah");
+  } catch (err) {
+    //
+    console.log(err);
+    return ResponseCode.errorPost(req, res, err.response);
+    // console.log(err);
+  }
+};

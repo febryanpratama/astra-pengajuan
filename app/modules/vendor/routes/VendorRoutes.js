@@ -14,4 +14,10 @@ router.post(
   VendorController.store
 );
 router.get("/:id", AuthMiddleware.AuthAdmin, VendorController.detail);
+router.patch(
+  "/:id",
+  AuthMiddleware.AuthAdmin,
+  postValidator,
+  VendorController.update
+);
 module.exports = router;
