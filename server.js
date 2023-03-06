@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.use("/api/auth/login", AuthRoutes);
+app.use("/api/auth", AuthRoutes);
 app.use("/api/vendor", VendorRoutes);
 
 app.listen(port, () =>
