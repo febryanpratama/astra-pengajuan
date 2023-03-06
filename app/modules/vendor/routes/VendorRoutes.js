@@ -20,4 +20,7 @@ router.patch(
   postValidator,
   VendorController.update
 );
+
+router.delete("/:id", AuthMiddleware.AuthAdmin, VendorController.delete);
+
 module.exports = router;

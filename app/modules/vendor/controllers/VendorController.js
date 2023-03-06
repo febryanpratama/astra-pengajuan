@@ -66,3 +66,27 @@ exports.update = async (req, res) => {
     // console.log(err);
   }
 };
+
+exports.delete = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const response = await Vendor.update(
+      {
+        is_deleted: new Date().toLocaleDateString(),
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
+
+    return ResponseCode.successPost(req, res, "Data Vendor Berhasil Dihapus");
+  } catch (err) {
+    //
+    console.log(err);
+    return ResponseCode.errorPost(req, res, err.response);
+    // console.log(err);
+  }
+};
