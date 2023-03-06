@@ -4,10 +4,11 @@ const app = express();
 const port = 8081;
 const VendorRoutes = require("./app/modules/vendor/routes/VendorRoutes");
 const AuthRoutes = require("./app/modules/authentication/routes/AuthRoutes");
+const bodyParser = require("body-parser");
 
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const db = require("./app/core/models");
 db.sequelize.sync();
