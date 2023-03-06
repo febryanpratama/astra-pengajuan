@@ -5,18 +5,22 @@ const {
   postValidator,
 } = require("../../../core/validators/vendor/VendorValidator");
 
-router.get("/", AuthMiddleware.AuthAdmin, VendorController.findAll);
+router.get(
+  "/",
+  // AuthMiddleware.AuthAdmin,
+  VendorController.findAll
+);
 
 router.post(
   "/",
-  AuthMiddleware.AuthAdmin,
+  // AuthMiddleware.AuthAdmin,
   postValidator,
   VendorController.store
 );
 router.get("/:id", AuthMiddleware.AuthAdmin, VendorController.detail);
 router.patch(
   "/:id",
-  AuthMiddleware.AuthAdmin,
+  // AuthMiddleware.AuthAdmin,
   postValidator,
   VendorController.update
 );
