@@ -1,9 +1,10 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "astra_pengajuan",
-    "host": "127.0.0.1",
+    "username": "doadmin",
+    "password": "AVNS_MSG6cgn7djRhui37Ysl",
+    "database": "dbastrapengajuan",
+    "host": "dbastra-do-user-13495530-0.b.db.ondigitalocean.com",
+    "port": 25060,
     "dialect": "mysql"
   },
   "test": {

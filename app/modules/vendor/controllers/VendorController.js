@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator");
-const db = require("../../../core/models");
+const db = require("../../../../models");
 const ResponseCode = require("../../../core/utils/ResponseCode");
 const Vendor = db.vendors;
 

@@ -10,7 +10,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const db = require("./app/core/models");
+const db = require("./models");
 db.sequelize.sync();
 
 app.get("/", (req, res) => {
