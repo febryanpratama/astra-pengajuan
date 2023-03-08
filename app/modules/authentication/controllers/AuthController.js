@@ -13,6 +13,10 @@ exports.login = async (req, res) => {
     }
   );
 
+  if (response.data.status === false) {
+    return ResponseCode.errorPost(req, res, response.data.message);
+  }
+
   const respAkun = {
     id: response.data.data.id,
     email: response.data.data.email,
