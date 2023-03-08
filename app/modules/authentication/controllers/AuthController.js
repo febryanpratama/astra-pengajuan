@@ -24,5 +24,13 @@ exports.login = async (req, res) => {
     expiresIn: "1d",
   });
 
-  return ResponseCode.successGet(req, res, "Login Success", token);
+  const respData = {
+    token: token,
+    id: response.data.data.id,
+    email: response.data.data.email,
+    departemen: response.data.data.departemen,
+    roles: response.data.data.roles,
+  };
+
+  return ResponseCode.successGet(req, res, "Login Success", respData);
 };
