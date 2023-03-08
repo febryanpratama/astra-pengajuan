@@ -1,9 +1,9 @@
 {
   "development": {
     "username": "doadmin",
-    "password": "AVNS_MSG6cgn7djRhui37Ysl",
+    "password": "AVNS_Y16EXIeNjEKbAlSAcWk",
     "database": "dbastrapengajuan",
-    "host": "dbastra-do-user-13495530-0.b.db.ondigitalocean.com",
+    "host": "dbdefault-do-user-11471383-0.b.db.ondigitalocean.com",
     "port": 25060,
     "dialect": "mysql"
   },
