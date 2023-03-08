@@ -28,6 +28,7 @@ exports.login = async (req, res) => {
     token: token,
     id: response.data.data.id,
     email: response.data.data.email,
+    nama: response.data.data.name,
     departemen: response.data.data.departemen,
     roles: response.data.data.roles,
   };
