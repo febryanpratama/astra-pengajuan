@@ -1,5 +1,5 @@
 {
-  "development": {
+  "production": {
     "username": "doadmin",
     "password": "AVNS_Y16EXIeNjEKbAlSAcWk",
     "database": "dbastrapengajuan",
@@ -14,10 +14,10 @@
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
-  "production": {
+  "development": {
     "username": "root",
     "password": null,
-    "database": "database_production",
+    "database": "astra_pengajuan",
     "host": "127.0.0.1",
     "dialect": "mysql"
   }
