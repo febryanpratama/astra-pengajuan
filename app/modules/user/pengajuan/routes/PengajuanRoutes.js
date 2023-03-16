@@ -1,7 +1,7 @@
 // const PengajuanController = require("../controllers/PengajuanController");
 const PengajuanController = require("../controllers/PengajuanController");
 const router = require("express").Router();
-const AuthMiddleware = require("../../../core/middleware/AuthMiddleware");
+const AuthMiddleware = require("../../../../core/middleware/AuthMiddleware");
 // const {
 //   postValidator,
 // } = require("../../../core/validators/pengajuan/PengajuanValidator");

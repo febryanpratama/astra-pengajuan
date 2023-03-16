@@ -2,9 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const port = 8080;
-const VendorRoutes = require("./app/modules/vendor/routes/VendorRoutes");
+const VendorRoutes = require("./app/modules/admin/vendor/routes/VendorRoutes");
 const AuthRoutes = require("./app/modules/authentication/routes/AuthRoutes");
-const PengajuanRoutes = require("./app/modules/pengajuan/routes/PengajuanRoutes");
+const PengajuanRoutes = require("./app/modules/user/pengajuan/routes/PengajuanRoutes");
 const bodyParser = require("body-parser");
 
 app.use(cors());

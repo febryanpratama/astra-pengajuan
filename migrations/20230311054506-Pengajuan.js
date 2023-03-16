@@ -50,11 +50,16 @@ module.exports = {
         allowNull: true,
       },
       prioritas: {
-        type: Sequelize.ENUM("high", "normal", "low"),
+        type: Sequelize.ENUM("Low", "Normal", "High"),
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM("sukses", "proses_admin", "proses_vendor"),
+        type: Sequelize.ENUM(
+          "Verifikasi Admin",
+          "Proses Admin",
+          "Proses Vendor",
+          "Selesai"
+        ),
         allowNull: false,
       },
       harga: {
@@ -83,5 +88,7 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
+
+    await queryInterface.dropTable("pengajuans");
   },
 };

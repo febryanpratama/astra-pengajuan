@@ -1,9 +1,9 @@
 const VendorController = require("../controllers/VendorController");
 const router = require("express").Router();
-const AuthMiddleware = require("../../../core/middleware/AuthMiddleware");
+const AuthMiddleware = require("../../../../core/middleware/AuthMiddleware");
 const {
   postValidator,
-} = require("../../../core/validators/vendor/VendorValidator");
+} = require("../../../../core/validators/vendor/VendorValidator");
 
 router.get("/", AuthMiddleware.AuthAdmin, VendorController.findAll);
 

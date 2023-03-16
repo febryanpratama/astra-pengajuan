@@ -49,4 +49,20 @@ db.pengajuans = require("./pengajuan.model")(sequelize, Sequelize);
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+db.sequelize.sync({ force: false }).then(() => {
+  console.log("yes re-sync done!");
+});
+
+// Join
+
+db.pengajuans.belongsTo(db.vendors, {
+  foreignKey: "vendor_id",
+  as: "vendor",
+});
+
+// db.vendors.hasMany(db.pengajuans, {
+//   foreignKey: "id",
+//   as: "pengajuan",
+// });
+
 module.exports = db;

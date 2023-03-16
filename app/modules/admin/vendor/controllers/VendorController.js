@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
-const db = require("../../../../models");
-const ResponseCode = require("../../../core/utils/ResponseCode");
+const db = require("../../../../../models");
+const ResponseCode = require("../../../../core/utils/ResponseCode");
 const Vendor = db.vendors;
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
