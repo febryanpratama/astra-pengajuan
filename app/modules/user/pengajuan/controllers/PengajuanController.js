@@ -7,6 +7,12 @@ const Vendor = db.vendors;
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
   const data = await Pengajuan.findAll({
+    include: [
+      {
+        model: Vendor,
+        as: "vendor",
+      },
+    ],
     where: {
       is_deleted: null,
     },
