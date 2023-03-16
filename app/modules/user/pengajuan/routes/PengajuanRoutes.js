@@ -2,16 +2,16 @@
 const PengajuanController = require("../controllers/PengajuanController");
 const router = require("express").Router();
 const AuthMiddleware = require("../../../../core/middleware/AuthMiddleware");
-// const {
-//   postValidator,
-// } = require("../../../core/validators/pengajuan/PengajuanValidator");
+const {
+  postValidator,
+} = require("../../../../core/validators/pengajuan/PengajuanValidator");
 
 router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.findAll);
 
 router.post(
   "/",
   AuthMiddleware.AuthAdmin,
-  // postValidator,
+  postValidator,
   PengajuanController.store
 );
 router.get("/:id", AuthMiddleware.AuthAdmin, PengajuanController.detail);

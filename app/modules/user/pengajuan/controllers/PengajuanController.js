@@ -25,31 +25,28 @@ exports.findAll = async (req, res) => {
 exports.store = async (req, res) => {
   let data = req.body;
 
+  // return ResponseCode.successGet(req, res, "Data Pengajuan", "kontill");
   try {
-    const getVendor = await db.vendors.findOne({
-      where: {
-        id: data.vendor_id,
-      },
-    });
-    console.log(getVendor);
-    if (getVendor == null) {
-      return ResponseCode.errorPost(req, res, "Vendor tidak ditemukan");
-    }
+    // const getVendor = await db.vendors.findOne({
+    //   where: {
+    //     id: data.vendor_id,
+    //   },
+    // });
+    // console.log(getVendor);
+    // if (getVendor == null) {
+    //   return ResponseCode.errorPost(req, res, "Vendor tidak ditemukan");
+    // }
 
-    // return ResponseCode.successPost(req, res, "Vendor ditemukan");
+    // return Response Code.successPost(req, res, "Vendor ditemukan");
 
     const response = await Pengajuan.create({
       user_id: data.user_id,
-      vendor_id: data.vendor_id,
       pengajuan_name: data.pengajuan_name,
-      tanggal_pengajuan: data.tanggal_pengajuan,
-      tanggal_mulai: data.tanggal_mulai,
-      tanggal_selesai: data.tanggal_selesai,
+      tanggal_pengajuan: new Date().toDateString(),
       deskripsi: data.deskripsi,
-      komentar: data.komentar,
       prioritas: data.prioritas,
-      status: data.status,
-      harga: data.harga ? data.harga : 0,
+      status: "Verifikasi Admin",
+      harga: 0,
     });
 
     return ResponseCode.successPost(
