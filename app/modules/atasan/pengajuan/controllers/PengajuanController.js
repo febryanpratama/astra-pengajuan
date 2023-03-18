@@ -3,7 +3,6 @@ const db = require("../../../../../models");
 const ResponseCode = require("../../../../core/utils/ResponseCode");
 const Pengajuan = db.pengajuans;
 const Vendor = db.vendors;
-// const Foto = db.Fotos;
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
@@ -50,22 +49,12 @@ exports.store = async (req, res) => {
       // karena sudah di set
       harga: 0,
     });
-
-    //foto
-    const fotos = await db.foto.create({
-      pengajuan_id: response.id,
-      file_photo: response.file_photo,
-      createAt: new Date().toDateString(),
-      updateAt: new Date().toDateString(),
-    });
     // tambah lg nanti
     // console.log(response);
-    const history = await db.history.create({
+    const history = await db.historys.create({
       pengajuan_id: response.id,
       tanggal: new Date().toDateString(),
       deskripsi: "Membuat Pengajuan Baru",
-      createAt: new Date().toDateString(),
-      updateAt: new Date().toDateString(),
     });
 
     return ResponseCode.successPost(

@@ -1,9 +1,10 @@
 const { validationResult } = require("express-validator");
 const db = require("../../../../../models");
 const ResponseCode = require("../../../../core/utils/ResponseCode");
+const { post } = require("../routes/PengajuanRoutes");
 const Pengajuan = db.pengajuans;
 const Vendor = db.vendors;
-// const Foto = db.Fotos;
+const History = db.history;
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
@@ -19,7 +20,6 @@ exports.findAll = async (req, res) => {
     },
   });
 
-  // console.log(d)
   return ResponseCode.successGet(req, res, "Data Pengajuan", data);
 };
 
@@ -51,22 +51,15 @@ exports.store = async (req, res) => {
       harga: 0,
     });
 
-    //foto
-    const fotos = await db.foto.create({
-      pengajuan_id: response.id,
-      file_photo: response.file_photo,
-      createAt: new Date().toDateString(),
-      updateAt: new Date().toDateString(),
-    });
     // tambah lg nanti
     // console.log(response);
-    const history = await db.history.create({
+    const respHistory = await History.create({
       pengajuan_id: response.id,
       tanggal: new Date().toDateString(),
       deskripsi: "Membuat Pengajuan Baru",
-      createAt: new Date().toDateString(),
-      updateAt: new Date().toDateString(),
     });
+
+    // store foto
 
     return ResponseCode.successPost(
       req,
@@ -102,6 +95,7 @@ exports.update = async (req, res) => {
   try {
     // logika cek id pengajuan
     const cekpengajuan = await Pengajuan.findOne({
+      //join table HistoryTable
       where: { status: "Verifikasi Admin", id },
     });
     if (cekpengajuan == null) {

@@ -7,13 +7,14 @@ const {
 } = require("../../../../core/validators/pengajuan/PengajuanValidator");
 
 router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.findAll);
-
+// api/pengajuan
 router.post(
   "/",
   AuthMiddleware.AuthAdmin,
   postValidator,
   PengajuanController.store
 );
+// url/api/prngajuan
 router.get("/:id", AuthMiddleware.AuthAdmin, PengajuanController.detail);
 router.patch(
   "/:id",
@@ -21,5 +22,6 @@ router.patch(
   postValidator,
   PengajuanController.update
 );
+//url/api/pengajuan/1
 router.delete("/:id", AuthMiddleware.AuthAdmin, PengajuanController.delete);
 module.exports = router;

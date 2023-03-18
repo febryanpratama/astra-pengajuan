@@ -36,6 +36,9 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.ENUM("hight", "normal", "low"),
       allowNull: false,
     },
+    // image: {
+    //   type: Sequelize.STRING,
+    // },
     status: {
       type: Sequelize.ENUM("sukses", "proses_admin", "proses_vendor"),
       allowNull: false,
