@@ -56,7 +56,7 @@ exports.store = async (req, res) => {
 
     //foto
 
-    const fotos = async(req, res, next) => {
+    const fotos = await fotos  ({
       let matches = req.body.image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
       let response = {};
       if (matches.length!==3){
@@ -74,7 +74,7 @@ exports.store = async (req, res) => {
         return res.send({"status" :"sussces"});
       }catch (e) {
         next(e);
-    }; 
+    }); 
 
     // const respFoto = await fotos.create({
     //   pengajuan_id: response.id,
