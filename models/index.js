@@ -62,9 +62,6 @@ db.pengajuans.belongsTo(db.vendors, {
   as: "vendor",
 });
 
-// db.vendors.hasMany(db.pengajuans, {
-//   foreignKey: "id",
-//   as: "pengajuan",
-// });
+// join table foto
 
 module.exports = db;
