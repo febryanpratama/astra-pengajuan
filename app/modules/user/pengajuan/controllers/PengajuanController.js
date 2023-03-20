@@ -1,9 +1,12 @@
+// const { Axios } = require("axios");
+// const axios = require("axios");
+const { default: axios } = require("axios");
 const { validationResult } = require("express-validator");
 const db = require("../../../../../models");
 const ResponseCode = require("../../../../core/utils/ResponseCode");
 const Pengajuan = db.pengajuans;
 const Vendor = db.vendors;
-// const Foto = db.Fotos;
+const Foto = db.foto;
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
@@ -12,6 +15,10 @@ exports.findAll = async (req, res) => {
       {
         model: Vendor,
         as: "vendor",
+      },
+      {
+        model: Foto,
+        as: "foto",
       },
     ],
     where: {
@@ -26,19 +33,23 @@ exports.findAll = async (req, res) => {
 exports.store = async (req, res) => {
   let data = req.body;
 
-  // return ResponseCode.successGet(req, res, "Data Pengajuan", "kontill");
+  // console.log(checkUser);
   try {
-    // const getVendor = await db.vendors.findOne({
-    //   where: {
-    //     id: data.vendor_id,
-    //   },
-    // });
-    // console.log(getVendor);
-    // if (getVendor == null) {
-    //   return ResponseCode.errorPost(req, res, "Vendor tidak ditemukan");
-    // }
+    // Check User id from asmokalbarmobile
+    const checkUser = await axios.post(
+      "https://asmokalbarmobile.com/api/auth/me",
+      {
+        user_id: data.user_id,
+      }
+    );
 
-    // return Response Code.successPost(req, res, "Vendor ditemukan");
+    console.log(checkUser);
+
+    if (checkUser.data.status == false) {
+      return ResponseCode.errorPost(req, res, checkUser.data.message);
+    }
+
+    // return ResponseCode.successGet(req, res, checkUser.data.data);
 
     const response = await Pengajuan.create({
       user_id: data.user_id,
@@ -52,12 +63,20 @@ exports.store = async (req, res) => {
     });
 
     //foto
-    const fotos = await db.foto.create({
-      pengajuan_id: response.id,
-      file_photo: response.file_photo,
-      createAt: new Date().toDateString(),
-      updateAt: new Date().toDateString(),
+
+    data.foto.forEach((element) => {
+      // check dulu base64nya:image validasi
+
+      const checkImage = element["image"];
+
+      const foto = Foto.create({
+        pengajuan_id: response.id,
+        file_photo: element["image"],
+        createAt: new Date().toDateString(),
+        updateAt: new Date().toDateString(),
+      });
     });
+
     // tambah lg nanti
     // console.log(response);
     const history = await db.history.create({
@@ -74,8 +93,8 @@ exports.store = async (req, res) => {
       "Data Pengajuan Berhasil Ditambahkan"
     );
   } catch (error) {
-    console.log(error);
-    return ResponseCode.errorPost(req, res, error);
+    // console.log(error);
+    return ResponseCode.errorPost(req, res, error.data);
   }
 };
 

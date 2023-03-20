@@ -4,10 +4,9 @@ const ResponseCode = require("../../../../core/utils/ResponseCode");
 const { post } = require("../routes/PengajuanRoutes");
 const Pengajuan = db.pengajuans;
 const Vendor = db.vendors;
-const History = db.history;
 const fotos = db.fotos;
-const fs = require("fs");
-
+const History = db.history;
+// const fs = require("fs");
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
@@ -28,6 +27,8 @@ exports.findAll = async (req, res) => {
 
 exports.store = async (req, res) => {
   let data = req.body;
+
+  return ResponseCode.successGet(req, res, "Data Pengajuan", data);
 
   // return ResponseCode.successGet(req, res, "Data Pengajuan", "kontill");
   try {
@@ -55,48 +56,21 @@ exports.store = async (req, res) => {
     });
 
     //foto
+    // const respFotos = await fotos.create({
+    //   respFotos.forEach(element => {
 
-    const fotos = await fotos  ({
-      let matches = req.body.image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-      let response = {};
-      if (matches.length!==3){
-        return new Error ('Invalid input string');
-      }
-      response.type = matches[1];
-      response.data = new Buffer(matches[2],'base64');
-      let decodedImg = response;
-      let imageBuffer = decodedImg.data;
-      let type = decodedImg.type;
-      let extension = mime.extension(type);
-      let fileName = "image." + extension;
-      try {
-        fs.writeFileSync(assets + fileName, imageBuffer, 'utf8');
-        return res.send({"status" :"sussces"});
-      }catch (e) {
-        next(e);
-    }); 
-
-    // const respFoto = await fotos.create({
-    //   pengajuan_id: response.id,
-    //   file_photo: data.file_photo,
+    //   });
+    // });
+    // const respFotos = await fotos.create({
+    //   pengajuan_id: data.pengajuan_id,
+    //   File_photo: data.File_photo,
     // });
 
-    // const base64Image = req.body.image;
-    // const buffer = Buffer.from(base64Image, 'base64');
-    // res.sendFile('nama-file.jpg', { root: __dirname });
-    // const fs = require('fs');
-// fs.writeFile('nama-file.jpg', buffer, (err) => {
-//   if (err) throw err;
-//   console.log('File telah tersimpan.');
-// });
-
-
-    // tambah lg nanti
-    // console.log(response);
     const respHistory = await History.create({
       pengajuan_id: response.id,
       tanggal: new Date().toDateString(),
       deskripsi: "Membuat Pengajuan Baru",
+      // createAt: new Date().toDateString(),
     });
 
     // store foto
