@@ -46,11 +46,14 @@ Object.keys(db).forEach((modelName) => {
 
 db.vendors = require("./vendor.model")(sequelize, Sequelize);
 db.pengajuans = require("./pengajuan.model")(sequelize, Sequelize);
+db.history = require("./history.model")(sequelize, Sequelize);
+db.foto = require("./foto.model")(sequelize, Sequelize);
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 db.sequelize.sync({ force: false }).then(() => {
-  console.log("yes re-sync done!");
+  // console.log("yes re-sync done!");
 });
 
 // Join
@@ -60,9 +63,10 @@ db.pengajuans.belongsTo(db.vendors, {
   as: "vendor",
 });
 
-// db.vendors.hasMany(db.pengajuans, {
-//   foreignKey: "id",
-//   as: "pengajuan",
-// });
+// join table foto
+db.pengajuans.hasMany(db.foto, {
+  foreignKey: "pengajuan_id",
+  as: "foto",
+});
 
 module.exports = db;
