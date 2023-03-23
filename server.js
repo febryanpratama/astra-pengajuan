@@ -19,9 +19,15 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+// user
 app.use("/api/auth", AuthRoutes);
 app.use("/api/vendor", VendorRoutes);
 app.use("/api/pengajuan", PengajuanRoutes);
+
+// Admin
+// app.use("/api/admin/pengajuan");
+
+// Atasan
 
 app.listen(port, () =>
   console.log(`App listening on port http://localhost:${port}!`)
