@@ -4,7 +4,7 @@ const ResponseCode = require("../../../../core/utils/ResponseCode");
 const { post } = require("../routes/PengajuanRoutes");
 const Pengajuan = db.pengajuans;
 const Vendor = db.vendors;
-const Foto = db.Foto;
+const Foto = db.foto;
 const History = db.history;
 // const fs = require("fs");
 
