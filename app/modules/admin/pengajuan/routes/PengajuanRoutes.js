@@ -24,4 +24,6 @@ router.patch(
 );
 //url/api/pengajuan/1
 router.delete("/:id", AuthMiddleware.AuthAdmin, PengajuanController.delete);
+
+// router.get("tolak/:id", PengajuanController.tolak);
 module.exports = router;

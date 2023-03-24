@@ -4,7 +4,7 @@ const ResponseCode = require("../../../../core/utils/ResponseCode");
 const { post } = require("../routes/PengajuanRoutes");
 const Pengajuan = db.pengajuans;
 const Vendor = db.vendors;
-const fotos = db.fotos;
+const Foto = db.foto;
 const History = db.history;
 // const fs = require("fs");
 
@@ -15,6 +15,14 @@ exports.findAll = async (req, res) => {
       {
         model: Vendor,
         as: "vendor",
+      },
+      {
+        model: Foto,
+        as: "foto",
+      },
+      {
+        model: History,
+        as: "aktivitas",
       },
     ],
     where: {
@@ -28,7 +36,7 @@ exports.findAll = async (req, res) => {
 exports.store = async (req, res) => {
   let data = req.body;
 
-  return ResponseCode.successGet(req, res, "Data Pengajuan", data);
+  // return ResponseCode.successGet(req, res, "Data Pengajuan", data);
 
   // return ResponseCode.successGet(req, res, "Data Pengajuan", "kontill");
   try {
@@ -55,16 +63,16 @@ exports.store = async (req, res) => {
       harga: 0,
     });
 
-    //foto
-    // const respFotos = await fotos.create({
-    //   respFotos.forEach(element => {
+    data.foto.forEach((element) => {
+      const checkImage = element["image"];
 
-    //   });
-    // });
-    // const respFotos = await fotos.create({
-    //   pengajuan_id: data.pengajuan_id,
-    //   File_photo: data.File_photo,
-    // });
+      const foto = Foto.create({
+        pengajuan_id: response.id,
+        file_photo: element["image"],
+        createAt: new Date().toDateString(),
+        updateAt: new Date().toDateString(),
+      });
+    });
 
     const respHistory = await History.create({
       pengajuan_id: response.id,
@@ -163,5 +171,90 @@ exports.delete = async (req, res) => {
     console.log(err);
     return ResponseCode.errorPost(req, res, err.response);
     // console.log(err);
+  }
+};
+
+exports.terima = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const dataPengajuan = await Pengajuan.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (dataPengajuan.status == "Verifikasi Admin") {
+      const response = await Pengajuan.update(
+        {
+          status: "Proses Admin",
+        },
+        {
+          where: {
+            id: id,
+          },
+        }
+      );
+
+      return ResponseCode.successPost(
+        req,
+        res,
+        "Data Pengajuan Berhasil DiHapus"
+      );
+    }
+
+    if (dataPengajuan.status == "Proses Admin") {
+      const response = await Pengajuan.update(
+        {
+          status: "Proses Vendor",
+        },
+        {
+          where: {
+            id: id,
+          },
+        }
+      );
+    }
+
+    if (dataPengajuan.status == "Proses Vendor") {
+      const response = await Pengajuan.update(
+        {
+          status: "Selesai",
+        },
+        {
+          where: {
+            id: id,
+          },
+        }
+      );
+    }
+  } catch (err) {}
+};
+
+exports.tolak = async (req, res) => {
+  const id = req.params.id;
+  // const data = req.body;
+
+  // data.pengajuan_name
+  try {
+    const response = await Pengajuan.update(
+      {
+        status: "Ditolak",
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
+
+    return ResponseCode.successPost(
+      req,
+      res,
+      "Data Pengajuan Berhasil DiHapus"
+    );
+  } catch (err) {
+    console.log(err);
+    return ResponseCode.errorPost(req, res, err.response);
   }
 };

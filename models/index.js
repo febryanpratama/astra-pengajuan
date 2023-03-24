@@ -69,4 +69,9 @@ db.pengajuans.hasMany(db.foto, {
   as: "foto",
 });
 
+db.pengajuans.hasMany(db.history, {
+  foreignKey: "pengajuan_id",
+  as: "aktivitas",
+});
+
 module.exports = db;
