@@ -58,6 +58,7 @@ class AuthMiddleware {
 
     next();
   };
+
   AuthAtasan = (req, res, next) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
@@ -77,7 +78,7 @@ class AuthMiddleware {
         message: "Token Not Found",
       });
 
-    if (payload.roles != "user") {
+    if (payload.roles != "Atasan") {
       return res.status(401).json({
         status: false,
         message: "Your not Authorized",
