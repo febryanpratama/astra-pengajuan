@@ -12,7 +12,7 @@ exports.postValidator = [
     .notEmpty()
     .isString()
     .matches(/^(Low|Normal|High)$/i),
-  check("foto").trim().notEmpty().isString(),
+  check("foto").notEmpty(),
 
   (req, res, next) => {
     const errors = validationResult(req);
