@@ -38,6 +38,7 @@ exports.findAll = async (req, res) => {
 exports.store = async (req, res) => {
   let data = req.body;
 
+  // return ResponseCode.successGet(req, res, "Data Pengajuan", data);
   // console.log(checkUser);
   try {
     // Check User id from asmokalbarmobile
@@ -48,7 +49,7 @@ exports.store = async (req, res) => {
       }
     );
 
-    console.log(checkUser);
+    // console.log(checkUser);
 
     if (checkUser.data.status == false) {
       return ResponseCode.errorPost(req, res, checkUser.data.message);

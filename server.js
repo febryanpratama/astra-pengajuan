@@ -10,8 +10,8 @@ const PengajuanRoutesAtasan = require("./app/modules/atasan/pengajuan/routes/Pen
 const bodyParser = require("body-parser");
 
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ type: "application/json" }));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 const db = require("./models");
 db.sequelize.sync();
