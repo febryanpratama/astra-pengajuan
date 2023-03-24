@@ -8,18 +8,18 @@ const {
 
 router.get("/", AuthMiddleware.AuthAtasan, PengajuanController.findAll);
 
-router.post(
-  "/",
-  AuthMiddleware.AuthAtasan,
-  postValidator,
-  PengajuanController.store
-);
-router.get("/:id", AuthMiddleware.AuthAtasan, PengajuanController.detail);
-router.patch(
-  "/:id",
-  AuthMiddleware.AuthAtasan,
-  postValidator,
-  PengajuanController.update
-);
-router.delete("/:id", AuthMiddleware.AuthAtasan, PengajuanController.delete);
+// router.post(
+//   "/",
+//   AuthMiddleware.AuthAtasan,
+//   postValidator
+//   PengajuanController.store
+// );
+// router.get("/:id", AuthMiddleware.AuthAtasan, PengajuanController.detail);
+// router.patch(
+//   "/:id",
+//   AuthMiddleware.AuthAtasan,
+//   postValidator,
+//   PengajuanController.update
+// );
+// router.delete("/:id", AuthMiddleware.AuthAtasan, PengajuanController.delete);
 module.exports = router;

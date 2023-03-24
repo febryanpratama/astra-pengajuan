@@ -6,6 +6,7 @@ const {
   postValidator,
 } = require("../../../../core/validators/pengajuan/PengajuanValidator");
 
+// user
 router.get("/", AuthMiddleware.AuthUser, PengajuanController.findAll);
 
 router.post(
@@ -22,4 +23,9 @@ router.patch(
   PengajuanController.update
 );
 router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.delete);
+
+// atasan
+
+// admin
+
 module.exports = router;
