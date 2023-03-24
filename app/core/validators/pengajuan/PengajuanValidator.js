@@ -4,7 +4,7 @@ const { check, checkSchema, validationResult } = require("express-validator");
 const ResponseCode = require("../../utils/ResponseCode");
 
 exports.postValidator = [
-  check("user_id").trim().notEmpty().isString().isLength({ min: 1 }),
+  // check("user_id").trim().notEmpty().isString().isLength({ min: 1 }),
   check("pengajuan_name").trim().notEmpty().isString().isLength({ min: 3 }),
   check("deskripsi").trim().notEmpty().isString().isLength({ min: 3 }),
   check("prioritas")

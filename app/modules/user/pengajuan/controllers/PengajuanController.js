@@ -28,6 +28,7 @@ exports.findAll = async (req, res) => {
     ],
     where: {
       is_deleted: null,
+      user_id: req.app.locals.credential.id,
     },
   });
 
@@ -38,6 +39,13 @@ exports.findAll = async (req, res) => {
 exports.store = async (req, res) => {
   let data = req.body;
 
+  // return ResponseCode.successGet(
+  //   req,
+  //   res,
+  //   "Data Pengajuan",
+  //   req.app.locals.credential.id
+  // );
+
   // return ResponseCode.successGet(req, res, "Data Pengajuan", data);
   // console.log(checkUser);
   try {
@@ -45,7 +53,7 @@ exports.store = async (req, res) => {
     const checkUser = await axios.post(
       "https://asmokalbarmobile.com/api/auth/me",
       {
-        user_id: data.user_id,
+        user_id: req.app.locals.credential.id,
       }
     );
 
@@ -58,7 +66,7 @@ exports.store = async (req, res) => {
     // return ResponseCode.successGet(req, res, checkUser.data.data);
 
     const response = await Pengajuan.create({
-      user_id: data.user_id,
+      user_id: req.app.locals.credential.id,
       pengajuan_name: data.pengajuan_name,
       tanggal_pengajuan: new Date().toDateString(),
       deskripsi: data.deskripsi,
