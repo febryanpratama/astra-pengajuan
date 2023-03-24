@@ -6,20 +6,20 @@ const {
   postValidator,
 } = require("../../../../core/validators/pengajuan/PengajuanValidator");
 
-router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.findAll);
+router.get("/", AuthMiddleware.AuthUser, PengajuanController.findAll);
 
 router.post(
   "/",
-  AuthMiddleware.AuthAdmin,
+  AuthMiddleware.AuthUser,
   postValidator,
   PengajuanController.store
 );
-router.get("/:id", AuthMiddleware.AuthAdmin, PengajuanController.detail);
+router.get("/:id", AuthMiddleware.AuthUser, PengajuanController.detail);
 router.patch(
   "/:id",
-  AuthMiddleware.AuthAdmin,
+  AuthMiddleware.AuthUser,
   postValidator,
   PengajuanController.update
 );
-router.delete("/:id", AuthMiddleware.AuthAdmin, PengajuanController.delete);
+router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.delete);
 module.exports = router;

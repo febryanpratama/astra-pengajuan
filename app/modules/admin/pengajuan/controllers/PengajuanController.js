@@ -16,6 +16,14 @@ exports.findAll = async (req, res) => {
         model: Vendor,
         as: "vendor",
       },
+      {
+        model: Foto,
+        as: "foto",
+      },
+      {
+        model: History,
+        as: "aktivitas",
+      },
     ],
     where: {
       is_deleted: null,
@@ -55,16 +63,16 @@ exports.store = async (req, res) => {
       harga: 0,
     });
 
-    //foto
-    // const respFotos = await fotos.create({
-    //   respFotos.forEach(element => {
+    data.foto.forEach((element) => {
+      const checkImage = element["image"];
 
-    //   });
-    // });
-    // const respFotos = await fotos.create({
-    //   pengajuan_id: data.pengajuan_id,
-    //   File_photo: data.File_photo,
-    // });
+      const foto = Foto.create({
+        pengajuan_id: response.id,
+        file_photo: element["image"],
+        createAt: new Date().toDateString(),
+        updateAt: new Date().toDateString(),
+      });
+    });
 
     const respHistory = await History.create({
       pengajuan_id: response.id,
@@ -166,87 +174,87 @@ exports.delete = async (req, res) => {
   }
 };
 
-// exports.terima = async (req, res) => {
-//   const id = req.params.id;
+exports.terima = async (req, res) => {
+  const id = req.params.id;
 
-//   try {
-//     const dataPengajuan = await Pengajuan.findOne({
-//       where: {
-//         id: id,
-//       },
-//     });
+  try {
+    const dataPengajuan = await Pengajuan.findOne({
+      where: {
+        id: id,
+      },
+    });
 
-//     if(dataPengajuan.status == "Verifikasi Admin"){
-//       const response = await Pengajuan.update(
-//         {
-//           status: "Proses Admin",
-//         },
-//         {
-//           where: {
-//             id: id,
-//           },
-//         }
-//       );
+    if (dataPengajuan.status == "Verifikasi Admin") {
+      const response = await Pengajuan.update(
+        {
+          status: "Proses Admin",
+        },
+        {
+          where: {
+            id: id,
+          },
+        }
+      );
 
-//       return ResponseCode.successPost(
-//         req,
-//         res,
-//         "Data Pengajuan Berhasil DiHapus"
-//       );
-//     }
+      return ResponseCode.successPost(
+        req,
+        res,
+        "Data Pengajuan Berhasil DiHapus"
+      );
+    }
 
-//     if (dataPengajuan.status == "Proses Admin") {
-//       const response = await Pengajuan.update(
-//         {
-//           status: "Proses Vendor",
-//         },
-//         {
-//           where: {
-//             id: id,
-//           },
-//         }
-//       );
-//     }
+    if (dataPengajuan.status == "Proses Admin") {
+      const response = await Pengajuan.update(
+        {
+          status: "Proses Vendor",
+        },
+        {
+          where: {
+            id: id,
+          },
+        }
+      );
+    }
 
-//     if (dataPengajuan.status == "Proses Vendor") {
-//       const response = await Pengajuan.update(
-//         {
-//           status: "Selesai",
-//         },
-//         {
-//           where: {
-//             id: id,
-//           },
-//         }
-//       );
-//     }
+    if (dataPengajuan.status == "Proses Vendor") {
+      const response = await Pengajuan.update(
+        {
+          status: "Selesai",
+        },
+        {
+          where: {
+            id: id,
+          },
+        }
+      );
+    }
+  } catch (err) {}
+};
 
-//   } catch (err) {
+exports.tolak = async (req, res) => {
+  const id = req.params.id;
+  // const data = req.body;
 
-//   }
-// }
+  // data.pengajuan_name
+  try {
+    const response = await Pengajuan.update(
+      {
+        status: "Ditolak",
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
 
-// exports.tolak = async (req, res) => {
-//   const id = req.params.id;
-//   // const data = req.body;
-
-//   // data.pengajuan_name
-//   try {
-//     const response = await Pengajuan.update(
-//       {
-//         status: "Ditolak",
-//       },
-//       {
-//         where: {
-//           id: id,
-//         },
-//       }
-//     );
-
-//     return ResponseCode.successPost(
-//       req,
-//       res,
-//       "Data Pengajuan Berhasil DiHapus"
-//     );
-//   }
-// };
+    return ResponseCode.successPost(
+      req,
+      res,
+      "Data Pengajuan Berhasil DiHapus"
+    );
+  } catch (err) {
+    console.log(err);
+    return ResponseCode.errorPost(req, res, err.response);
+  }
+};
