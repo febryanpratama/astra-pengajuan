@@ -28,6 +28,7 @@ class AuthMiddleware {
       });
     }
 
+    req.app.locals.credential = payload;
     next();
   };
   AuthUser = (req, res, next) => {
@@ -55,6 +56,8 @@ class AuthMiddleware {
         message: "Your not Authorized",
       });
     }
+
+    req.app.locals.credential = payload;
 
     next();
   };
@@ -84,6 +87,8 @@ class AuthMiddleware {
         message: "Your not Authorized",
       });
     }
+
+    req.app.locals.credential = payload;
 
     next();
   };
