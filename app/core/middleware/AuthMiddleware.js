@@ -81,7 +81,7 @@ class AuthMiddleware {
         message: "Token Not Found",
       });
 
-    if (payload.roles != "Atasan") {
+    if (payload.roles != "atasan") {
       return res.status(401).json({
         status: false,
         message: "Your not Authorized",

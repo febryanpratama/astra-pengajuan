@@ -6,7 +6,11 @@ const VendorRoutes = require("./app/modules/admin/vendor/routes/VendorRoutes");
 const AuthRoutes = require("./app/modules/authentication/routes/AuthRoutes");
 const PengajuanRoutes = require("./app/modules/user/pengajuan/routes/PengajuanRoutes");
 const PengajuanRoutesAtasan = require("./app/modules/atasan/pengajuan/routes/PengajuanRoutes");
+//tesn
+const PengajuanRoutesAdmin = require("./app/modules/admin/pengajuan/routes/PengajuanRoutes");
 
+const PengajuanRoutesUser = require("./app/modules/user/pengajuan/routes/PengajuanRoutes");
+const VendorRoutesUser = require("./app/modules/user/vendor/routes/VendorRoutes");
 const bodyParser = require("body-parser");
 
 app.use(cors());
@@ -21,17 +25,18 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-// pengajuan routes linknya belum kena admin dan atasan
+// pengajuan routes linknya belum kena admin dan user
+// vendor user routes linknya belum kena admin
 
 // user
 app.use("/api/auth", AuthRoutes);
-app.use("/api/user/vendor", VendorRoutes);
-app.use("/api/user/pengajuan", PengajuanRoutes);
+app.use("/api/user/vendor", VendorRoutesUser);
+app.use("/api/user/pengajuan", PengajuanRoutesUser);
 
 // Admin
 app.use("/api/auth", AuthRoutes);
 app.use("/api/admin/vendor", VendorRoutes);
-app.use("/api/admin/pengajuan", PengajuanRoutes);
+app.use("/api/admin/pengajuan", PengajuanRoutesAdmin);
 
 // Atasan
 app.use("/api/atasan/auth", AuthRoutes);
