@@ -2,15 +2,14 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const port = 8080;
-const VendorRoutes = require("./app/modules/admin/vendor/routes/VendorRoutes");
 const AuthRoutes = require("./app/modules/authentication/routes/AuthRoutes");
-const PengajuanRoutes = require("./app/modules/user/pengajuan/routes/PengajuanRoutes");
-const PengajuanRoutesAtasan = require("./app/modules/atasan/pengajuan/routes/PengajuanRoutes");
-//tesn
-const PengajuanRoutesAdmin = require("./app/modules/admin/pengajuan/routes/PengajuanRoutes");
 
-const PengajuanRoutesUser = require("./app/modules/user/pengajuan/routes/PengajuanRoutes");
+const VendorRoutes = require("./app/modules/admin/vendor/routes/VendorRoutes");
 const VendorRoutesUser = require("./app/modules/user/vendor/routes/VendorRoutes");
+
+const PengajuanRoutes = require("./app/modules/user/pengajuan/routes/PengajuanRoutes");
+const PengajuanRoutesadmin = require("./app/modules/admin/pengajuan/routes/PengajuanRoutes");
+const PengajuanRoutesatasan = require("./app/modules/atasan/pengajuan/routes/PengajuanRoutes");
 const bodyParser = require("body-parser");
 
 app.use(cors());
@@ -25,22 +24,19 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-// pengajuan routes linknya belum kena admin dan user
-// vendor user routes linknya belum kena admin
-
 // user
 app.use("/api/auth", AuthRoutes);
 app.use("/api/user/vendor", VendorRoutesUser);
-app.use("/api/user/pengajuan", PengajuanRoutesUser);
+app.use("/api/user/pengajuan", PengajuanRoutes);
 
 // Admin
 app.use("/api/auth", AuthRoutes);
 app.use("/api/admin/vendor", VendorRoutes);
-app.use("/api/admin/pengajuan", PengajuanRoutesAdmin);
+app.use("/api/admin/pengajuan", PengajuanRoutesadmin);
 
 // Atasan
 app.use("/api/atasan/auth", AuthRoutes);
-app.use("/api/atasan/pengajuan", PengajuanRoutesAtasan);
+app.use("/api/atasan/pengajuan", PengajuanRoutesatasan);
 
 app.listen(port, () =>
   console.log(`App listening on port http://localhost:${port}!`)

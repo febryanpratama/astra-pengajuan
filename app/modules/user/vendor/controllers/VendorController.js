@@ -66,6 +66,17 @@ exports.findAll = async (req, res) => {
 //     // console.log(err);
 //   }
 // };
+exports.detail = async (req, res) => {
+  const id = req.params.id;
+
+  const response = await Vendor.findOne({
+    where: {
+      id: id,
+    },
+  });
+
+  return ResponseCode.successGet(req, res, "Data Vendor", response);
+};
 
 // exports.delete = async (req, res) => {
 //   const id = req.params.id;

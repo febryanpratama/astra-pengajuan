@@ -22,8 +22,11 @@ router.patch(
   postValidator,
   PengajuanController.update
 );
+router.patch("/", AuthMiddleware.AuthAdmin, PengajuanController.terima);
+router.patch("/", AuthMiddleware.AuthAdmin, PengajuanController.tolak);
+
 //url/api/pengajuan/1
 router.delete("/:id", AuthMiddleware.AuthAdmin, PengajuanController.delete);
 
-// router.get("tolak/:id", PengajuanController.tolak);
+router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.findAll);
 module.exports = router;
