@@ -1,8 +1,12 @@
 const { validationResult } = require("express-validator");
 const db = require("../../../../../models");
 const ResponseCode = require("../../../../core/utils/ResponseCode");
+const { post } = require("../routes/PengajuanRoutes");
 const Pengajuan = db.pengajuans;
-// const Vendor = db.vendors;
+const Vendor = db.vendors;
+const Foto = db.foto;
+const History = db.history;
+// const fs = require("fs");
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
@@ -12,19 +16,26 @@ exports.findAll = async (req, res) => {
         model: Vendor,
         as: "vendor",
       },
+      {
+        model: Foto,
+        as: "foto",
+      },
+      {
+        model: History,
+        as: "aktivitas",
+      },
     ],
     where: {
       is_deleted: null,
     },
   });
 
-  // console.log(d)
   return ResponseCode.successGet(req, res, "Data Pengajuan", data);
 };
 
 exports.detail = async (req, res) => {
   const id = req.params.id;
-  let data = req;
+
   const response = await Pengajuan.findOne({
     where: {
       id: id,

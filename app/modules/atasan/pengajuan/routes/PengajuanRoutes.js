@@ -14,12 +14,12 @@ router.get("/", AuthMiddleware.AuthAtasan, PengajuanController.findAll);
 //   postValidator
 //   PengajuanController.store
 // );
-// router.get("/:id", AuthMiddleware.AuthAtasan, PengajuanController.detail);
-// router.patch(
-//   "/:id",
-//   AuthMiddleware.AuthAtasan,
-//   postValidator,
-//   PengajuanController.update
-// );
+router.get("/:id", AuthMiddleware.AuthAtasan, PengajuanController.detail);
+router.patch(
+  "/:id",
+  AuthMiddleware.AuthAtasan,
+  postValidator,
+  PengajuanController.update
+);
 // router.delete("/:id", AuthMiddleware.AuthAtasan, PengajuanController.delete);
 module.exports = router;
