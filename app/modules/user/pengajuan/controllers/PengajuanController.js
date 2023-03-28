@@ -204,74 +204,69 @@ exports.delete = async (req, res) => {
   }
 
   //admin terima tolak
-
-  exports.terimatolak = async (req, res) => {
-    const id = req.params.id;
-    let data = req.body;
-    try {
-      if (data.is_status == "Tolak") {
-        const tolakPengajuan = await Pengajuan.update(
-          {
-            status: "Tolak",
+};
+exports.terimatolak = async (req, res) => {
+  const id = req.params.id;
+  let data = req.body;
+  try {
+    if (data.is_status == "Tolak") {
+      const tolakPengajuan = await Pengajuan.update(
+        {
+          status: "Tolak",
+        },
+        {
+          where: {
+            id,
           },
-          {
-            where: {
-              id,
-            },
-          }
-        );
-      }
-
-      if (data.is_status != "Tolak") {
-        const tolakPengajuan = await Pengajuan.update(
-          {
-            status: "Proses Admin",
-          },
-          {
-            where: {
-              id,
-            },
-          }
-        );
-      }
-      // const cekpengajuan = await Pengajuan.findOne({
-      //   where: { status: "Verifikasi Admin", id },
-      // });
-      // if (cekpengajuan == null) {
-      //   return ResponseCode.errorPost(req, res, "Pengajuan tidak ditemukan");
-      // }
-
-      // const response = await Pengajuan.update(
-      //   {
-      //     status: data.status,
-      //     harga: data.harga,
-      //   },
-      //   {
-      //     where: {
-      //       id: id,
-      //     },
-      //   }
-      // );
-
-      // const history = await db.history.create({
-      //   pengajuan_id: response.id,
-      //   tanggal: new Date().toDateString(),
-      //   deskripsi: "Menghapus / Membatalkan Data Pengajuan ",
-      //   createAt: new Date().toDateString(),
-      //   updateAt: new Date().toDateString(),
-      // });
-
-      return ResponseCode.successPost(
-        req,
-        res,
-        "Data Pengajuan Berhasil Diubah"
+        }
       );
-    } catch (err) {
-      //
-      console.log(err);
-      return ResponseCode.errorPost(req, res, err.response);
-      // console.log(err);
     }
-  };
+
+    if (data.is_status != "Tolak") {
+      const tolakPengajuan = await Pengajuan.update(
+        {
+          status: "Proses Admin",
+        },
+        {
+          where: {
+            id,
+          },
+        }
+      );
+    }
+    // const cekpengajuan = await Pengajuan.findOne({
+    //   where: { status: "Verifikasi Admin", id },
+    // });
+    // if (cekpengajuan == null) {
+    //   return ResponseCode.errorPost(req, res, "Pengajuan tidak ditemukan");
+    // }
+
+    // const response = await Pengajuan.update(
+    //   {
+    //     status: data.status,
+    //     harga: data.harga,
+    //   },
+    //   {
+    //     where: {
+    //       id: id,
+    //     },
+    //   }
+    // );
+
+    // const history = await db.history.create({
+    //   pengajuan_id: response.id,
+    //   tanggal: new Date().toDateString(),
+    //   deskripsi: "Menghapus / Membatalkan Data Pengajuan ",
+    //   createAt: new Date().toDateString(),
+    //   updateAt: new Date().toDateString(),
+    // });
+
+    return ResponseCode.successPost(req, res, "Data Pengajuan Berhasil Diubah");
+  } catch (err) {
+    //
+    console.log(err);
+    return ResponseCode.errorPost(req, res, err.response);
+    // console.log(err);
+  }
 };
 //

@@ -137,7 +137,6 @@ exports.update = async (req, res) => {
         },
       }
     );
-
     return ResponseCode.successPost(req, res, "Data Pengajuan Berhasil Diubah");
   } catch (err) {
     //
@@ -258,3 +257,14 @@ exports.tolak = async (req, res) => {
     return ResponseCode.errorPost(req, res, err.response);
   }
 };
+
+// exports.Report = async (req, res) => {
+//   const today = moment(); // Keep today is a moment object
+//     getPeriod = getPeriod.filter(
+//     (item) => moment(item.tanggal_selesai).isSameOrAfter(today) && moment(item.tanggal_mulai).isSameOrBefore(today);
+// );
+
+// };
+// exports.History = async (req, res) => {
+
+// };

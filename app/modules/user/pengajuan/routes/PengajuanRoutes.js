@@ -23,6 +23,7 @@ router.patch(
   PengajuanController.update
 );
 router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.delete);
+// router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.terimatolak);
 
 // atasan
 

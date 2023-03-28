@@ -24,7 +24,7 @@ exports.findAll = async (req, res) => {
 
 exports.detail = async (req, res) => {
   const id = req.params.id;
-
+  let data = req;
   const response = await Pengajuan.findOne({
     where: {
       id: id,
