@@ -258,13 +258,4 @@ exports.tolak = async (req, res) => {
   }
 };
 
-// exports.Report = async (req, res) => {
-//   const today = moment(); // Keep today is a moment object
-//     getPeriod = getPeriod.filter(
-//     (item) => moment(item.tanggal_selesai).isSameOrAfter(today) && moment(item.tanggal_mulai).isSameOrBefore(today);
-// );
-
-// };
-// exports.History = async (req, res) => {
-
-// };
+// exports.report = async (req, res, next) => {};
