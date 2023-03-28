@@ -22,6 +22,9 @@ router.patch(
   postValidator,
   PengajuanController.update
 );
+
+// router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.report);
+
 router.patch("/", AuthMiddleware.AuthAdmin, PengajuanController.terima);
 router.patch("/", AuthMiddleware.AuthAdmin, PengajuanController.tolak);
 

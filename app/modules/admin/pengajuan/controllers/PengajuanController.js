@@ -266,11 +266,5 @@ exports.tolak = async (req, res) => {
 
 // };
 // exports.History = async (req, res) => {
-//   const data = await History.findAll({
 
-//     where: {
-//       id : id,
-//       status : "sukses/proses_admin/proses_vendor",
-//     },
-// });
-// console.log(data);
+// };
