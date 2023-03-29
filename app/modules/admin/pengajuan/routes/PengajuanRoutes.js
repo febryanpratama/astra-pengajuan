@@ -23,6 +23,8 @@ router.patch(
   PengajuanController.update
 );
 
+router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.report);
+
 // router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.report);
 
 router.patch("/", AuthMiddleware.AuthAdmin, PengajuanController.terima);

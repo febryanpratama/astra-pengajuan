@@ -1,7 +1,7 @@
 const { validationResult } = require("express-validator");
 const db = require("../../../../../models");
 const ResponseCode = require("../../../../core/utils/ResponseCode");
-const { post } = require("../routes/PengajuanRoutes");
+const { post, use } = require("../routes/PengajuanRoutes");
 const Pengajuan = db.pengajuans;
 const Vendor = db.vendors;
 const Foto = db.foto;
@@ -258,4 +258,40 @@ exports.tolak = async (req, res) => {
   }
 };
 
-// exports.report = async (req, res, next) => {};
+exports.report = async (req, res) => {
+  const id = req.params.id;
+  let data = req.body;
+  try {
+    const cekreport = await Pengajuan.findAll({
+      where: {
+        tanggal_pengajuan: {
+          [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
+        },
+      },
+    });
+    if (cekreport == null) {
+      return ResponseCode.successGet(
+        req,
+        res,
+        "Data Pengajuan Report tidak ditemukan"
+      );
+    }
+    const response = await Pengajuan.findAll({
+      tanggal_pengajuan: {
+        [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
+      },
+      where: {
+        id: id,
+      },
+    });
+    return ResponseCode.successGet(
+      req,
+      res,
+      "Data Pengajuan Report Ditemukan ",
+      response
+    );
+  } catch (err) {
+    console.log(err);
+    return ResponseCode.error.errorPost(req, res, err.response);
+  }
+};
