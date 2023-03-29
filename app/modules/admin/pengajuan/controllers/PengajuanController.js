@@ -266,6 +266,7 @@ exports.report = async (req, res) => {
   let data = req.body;
 
   // console.log("data");
+  // INI BEDA
   const startedDate = new Date(data.tanggal_mulai + " 00:00:00");
   const endDate = new Date(data.tanggal_selesai + " 23:59:59");
   // return ResponseCode.successGet(req, res, startedDate);
@@ -279,7 +280,7 @@ exports.report = async (req, res) => {
       },
     });
 
-    return ResponseCode.successGet(req, res, "Data", cekreport);
+    // return ResponseCode.successGet(req, res, "Data", cekreport);
     if (cekreport == null) {
       return ResponseCode.successGet(
         req,
@@ -287,19 +288,19 @@ exports.report = async (req, res) => {
         "Data Pengajuan Report tidak ditemukan"
       );
     }
-    const response = await Pengajuan.findAll({
-      tanggal_pengajuan: {
-        [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
-      },
-      where: {
-        id: id,
-      },
-    });
+    // const response = await Pengajuan.findAll({
+    //   tanggal_pengajuan: {
+    //     [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
+    //   },
+    //   where: {
+    //     id: id,
+    //   },
+    // });
     return ResponseCode.successGet(
       req,
       res,
       "Data Pengajuan Report Ditemukan ",
-      response
+      cekreport
     );
   } catch (err) {
     console.log(err);

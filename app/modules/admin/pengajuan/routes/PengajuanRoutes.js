@@ -15,6 +15,7 @@ router.post(
   PengajuanController.store
 );
 // url/api/prngajuan
+// Ini punya pebri
 router.get("/report", AuthMiddleware.AuthAdmin, PengajuanController.report);
 router.get("/:id", AuthMiddleware.AuthAdmin, PengajuanController.detail);
 router.patch(
@@ -24,6 +25,7 @@ router.patch(
   PengajuanController.update
 );
 
+// Ini Punya agus
 // router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.report);
 
 router.patch("/", AuthMiddleware.AuthAdmin, PengajuanController.terima);
