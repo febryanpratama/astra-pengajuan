@@ -6,6 +6,9 @@ const Pengajuan = db.pengajuans;
 const Vendor = db.vendors;
 const Foto = db.foto;
 const History = db.history;
+
+const { Op } = require("sequelize");
+
 // const fs = require("fs");
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
@@ -261,6 +264,12 @@ exports.tolak = async (req, res) => {
 exports.report = async (req, res) => {
   const id = req.params.id;
   let data = req.body;
+
+  // console.log("data");
+  const startedDate = new Date(data.tanggal_mulai + " 00:00:00");
+  const endDate = new Date(data.tanggal_selesai + " 23:59:59");
+  // return ResponseCode.successGet(req, res, startedDate);
+
   try {
     const cekreport = await Pengajuan.findAll({
       where: {
@@ -269,6 +278,8 @@ exports.report = async (req, res) => {
         },
       },
     });
+
+    return ResponseCode.successGet(req, res, "Data", cekreport);
     if (cekreport == null) {
       return ResponseCode.successGet(
         req,

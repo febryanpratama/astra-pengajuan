@@ -15,6 +15,7 @@ router.post(
   PengajuanController.store
 );
 // url/api/prngajuan
+router.get("/report", AuthMiddleware.AuthAdmin, PengajuanController.report);
 router.get("/:id", AuthMiddleware.AuthAdmin, PengajuanController.detail);
 router.patch(
   "/:id",
@@ -22,8 +23,6 @@ router.patch(
   postValidator,
   PengajuanController.update
 );
-
-router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.report);
 
 // router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.report);
 
