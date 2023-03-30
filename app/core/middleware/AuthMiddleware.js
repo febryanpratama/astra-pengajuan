@@ -21,16 +21,20 @@ class AuthMiddleware {
         message: "Token Not Found",
       });
 
+    // console.log(payload.roles);
+
+    // return ResponseCode.successGet(res, payload.roles);
     if (payload.roles != "admin") {
       return res.status(401).json({
         status: false,
-        message: "Your not Authorized",
+        message: "Your not Authorized Admin",
       });
     }
 
     req.app.locals.credential = payload;
     next();
   };
+
   AuthUser = (req, res, next) => {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
@@ -53,7 +57,7 @@ class AuthMiddleware {
     if (payload.roles != "user") {
       return res.status(401).json({
         status: false,
-        message: "Your not Authorized",
+        message: "Your not Authorized User",
       });
     }
 
@@ -84,7 +88,7 @@ class AuthMiddleware {
     if (payload.roles != "atasan") {
       return res.status(401).json({
         status: false,
-        message: "Your not Authorized",
+        message: "Your not Authorized Atasan",
       });
     }
 

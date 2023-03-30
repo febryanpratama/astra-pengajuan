@@ -13,6 +13,8 @@ const { Op } = require("sequelize");
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
+  // return ResponseCode.successGet(req, res, "Data Pengajuan", "xx");
+
   const data = await Pengajuan.findAll({
     include: [
       {
@@ -101,6 +103,20 @@ exports.detail = async (req, res) => {
   const id = req.params.id;
 
   const response = await Pengajuan.findOne({
+    include: [
+      {
+        model: Vendor,
+        as: "vendor",
+      },
+      {
+        model: Foto,
+        as: "foto",
+      },
+      {
+        model: History,
+        as: "aktivitas",
+      },
+    ],
     where: {
       id: id,
     },

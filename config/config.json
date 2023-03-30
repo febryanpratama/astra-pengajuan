@@ -15,10 +15,11 @@
     "dialect": "mysql"
   },
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "astra_pengajuan",
-    "host": "127.0.0.1",
+    "username": "doadmin",
+    "password": "AVNS_Y16EXIeNjEKbAlSAcWk",
+    "database": "dbastrapengajuan",
+    "host": "dbdefault-do-user-11471383-0.b.db.ondigitalocean.com",
+    "port": 25060,
     "dialect": "mysql"
   }
 }
