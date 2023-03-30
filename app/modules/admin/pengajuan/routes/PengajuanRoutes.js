@@ -6,7 +6,7 @@ const {
   postValidator,
 } = require("../../../../core/validators/pengajuan/PengajuanValidator");
 
-router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.findAll);
+router.get("/", PengajuanController.findAll);
 // api/pengajuan
 router.post(
   "/",
@@ -16,13 +16,13 @@ router.post(
 );
 // url/api/prngajuan
 // Ini punya pebri
-router.get("/report", AuthMiddleware.AuthUser, PengajuanController.report);
+router.get("/report", AuthMiddleware.AuthAdmin, PengajuanController.report);
 // router.get("/history", AuthMiddleware.AuthAdmin, PengajuanController.history);
 
-router.get("/:id", AuthMiddleware.AuthUser, PengajuanController.detail);
+router.get("/:id", AuthMiddleware.AuthAdmin, PengajuanController.detail);
 router.patch(
   "/:id",
-  AuthMiddleware.AuthUser,
+  AuthMiddleware.AuthAdmin,
   postValidator,
   PengajuanController.update
 );
@@ -30,8 +30,8 @@ router.patch(
 // Ini Punya agus
 // router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.report);
 
-router.patch("/", AuthMiddleware.AuthUser, PengajuanController.terima);
-router.patch("/", AuthMiddleware.AuthUser, PengajuanController.tolak);
+router.patch("/", AuthMiddleware.AuthAdmin, PengajuanController.terima);
+router.patch("/", AuthMiddleware.AuthAdmin, PengajuanController.tolak);
 
 //url/api/pengajuan/1
 router.delete("/:id", AuthMiddleware.AuthAdmin, PengajuanController.delete);
