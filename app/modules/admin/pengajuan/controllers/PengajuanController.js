@@ -1,11 +1,14 @@
 const { validationResult } = require("express-validator");
 const db = require("../../../../../models");
 const ResponseCode = require("../../../../core/utils/ResponseCode");
-const { post } = require("../routes/PengajuanRoutes");
+const { post, use } = require("../routes/PengajuanRoutes");
 const Pengajuan = db.pengajuans;
 const Vendor = db.vendors;
 const Foto = db.foto;
 const History = db.history;
+
+const { Op } = require("sequelize");
+
 // const fs = require("fs");
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
@@ -239,6 +242,7 @@ exports.tolak = async (req, res) => {
     const response = await Pengajuan.update(
       {
         status: "Ditolak",
+        komentar: data.komentar,
       },
       {
         where: {
@@ -258,13 +262,49 @@ exports.tolak = async (req, res) => {
   }
 };
 
-// exports.Report = async (req, res) => {
-//   const today = moment(); // Keep today is a moment object
-//     getPeriod = getPeriod.filter(
-//     (item) => moment(item.tanggal_selesai).isSameOrAfter(today) && moment(item.tanggal_mulai).isSameOrBefore(today);
-// );
+exports.report = async (req, res) => {
+  const id = req.params.id;
+  let data = req.body;
 
-// };
-// exports.History = async (req, res) => {
+  // console.log("data");
+  // INI BEDA
+  const startedDate = new Date(data.tanggal_mulai + " 00:00:00");
+  const endDate = new Date(data.tanggal_selesai + " 23:59:59");
+  // return ResponseCode.successGet(req, res, startedDate);
 
-// };
+  try {
+    const cekreport = await Pengajuan.findAll({
+      where: {
+        tanggal_pengajuan: {
+          [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
+        },
+      },
+    });
+
+    // return ResponseCode.successGet(req, res, "Data", cekreport);
+    if (cekreport == null) {
+      return ResponseCode.successGet(
+        req,
+        res,
+        "Data Pengajuan Report tidak ditemukan"
+      );
+    }
+    // const response = await Pengajuan.findAll({
+    //   tanggal_pengajuan: {
+    //     [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
+    //   },
+    //   where: {
+    //     id: id,
+    //   },
+    // });
+    return ResponseCode.successGet(
+      req,
+      res,
+      "Data Pengajuan Report Ditemukan ",
+      cekreport
+    );
+  } catch (err) {
+    console.log(err);
+    return ResponseCode.error.errorPost(req, res, err.response);
+  }
+};

@@ -15,18 +15,23 @@ router.post(
   PengajuanController.store
 );
 // url/api/prngajuan
-router.get("/:id", AuthMiddleware.AuthAdmin, PengajuanController.detail);
+// Ini punya pebri
+router.get("/report", AuthMiddleware.AuthUser, PengajuanController.report);
+// router.get("/history", AuthMiddleware.AuthAdmin, PengajuanController.history);
+
+router.get("/:id", AuthMiddleware.AuthUser, PengajuanController.detail);
 router.patch(
   "/:id",
-  AuthMiddleware.AuthAdmin,
+  AuthMiddleware.AuthUser,
   postValidator,
   PengajuanController.update
 );
 
+// Ini Punya agus
 // router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.report);
 
-router.patch("/", AuthMiddleware.AuthAdmin, PengajuanController.terima);
-router.patch("/", AuthMiddleware.AuthAdmin, PengajuanController.tolak);
+router.patch("/", AuthMiddleware.AuthUser, PengajuanController.terima);
+router.patch("/", AuthMiddleware.AuthUser, PengajuanController.tolak);
 
 //url/api/pengajuan/1
 router.delete("/:id", AuthMiddleware.AuthAdmin, PengajuanController.delete);
