@@ -242,6 +242,7 @@ exports.tolak = async (req, res) => {
     const response = await Pengajuan.update(
       {
         status: "Ditolak",
+        komentar: data.komentar,
       },
       {
         where: {
