@@ -195,10 +195,20 @@ exports.delete = async (req, res) => {
 exports.terima = async (req, res) => {
   const id = req.params.id;
 
+  // untuk tes req params id req
+  const { vendor, tanggal_mulai, tanggal_selesai } = req.body;
+  // return ResponseCode.successGet(req, res, "hjmtjtj", {
+  //   ID: id,
+  //   tanggal_mulai: tanggal_mulai,
+  //   Tanggal_selesai: tanggal_selesai,
+  // });
+
   try {
     const dataPengajuan = await Pengajuan.findOne({
       where: {
         id: id,
+        Tanggal_mulai: tanggal_mulai,
+        Tanggal_selesai: tanggal_selesai,
       },
     });
 
@@ -206,10 +216,14 @@ exports.terima = async (req, res) => {
       const response = await Pengajuan.update(
         {
           status: "Proses Admin",
+          Tanggal_mulai: tanggal_mulai,
+          Tanggal_selesai: tanggal_selesai,
         },
         {
           where: {
             id: id,
+            Tanggal_mulai: tanggal_mulai,
+            Tanggal_selesai: tanggal_selesai,
           },
         }
       );
@@ -225,10 +239,14 @@ exports.terima = async (req, res) => {
       const response = await Pengajuan.update(
         {
           status: "Proses Vendor",
+          Tanggal_mulai: tanggal_mulai,
+          Tanggal_selesai: tanggal_selesai,
         },
         {
           where: {
             id: id,
+            Tanggal_mulai: tanggal_mulai,
+            Tanggal_selesai: tanggal_selesai,
           },
         }
       );
@@ -238,10 +256,14 @@ exports.terima = async (req, res) => {
       const response = await Pengajuan.update(
         {
           status: "Selesai",
+          Tanggal_mulai: tanggal_mulai,
+          Tanggal_selesai: tanggal_selesai,
         },
         {
           where: {
             id: id,
+            Tanggal_mulai: tanggal_mulai,
+            Tanggal_selesai: tanggal_selesai,
           },
         }
       );
@@ -257,6 +279,7 @@ exports.tolak = async (req, res) => {
   try {
     const response = await Pengajuan.update(
       {
+        //tanggal mulai tanggal selesai
         status: "Ditolak",
         komentar: data.komentar,
       },
@@ -267,11 +290,7 @@ exports.tolak = async (req, res) => {
       }
     );
 
-    return ResponseCode.successPost(
-      req,
-      res,
-      "Data Pengajuan Berhasil DiHapus"
-    );
+    return ResponseCode.successPost(req, res, "Data Pengajuan DiTolak");
   } catch (err) {
     console.log(err);
     return ResponseCode.errorPost(req, res, err.response);
