@@ -30,8 +30,12 @@ router.patch(
 // Ini Punya agus
 // router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.report);
 
-router.patch("/", AuthMiddleware.AuthAdmin, PengajuanController.terima);
-router.patch("/", AuthMiddleware.AuthAdmin, PengajuanController.tolak);
+router.patch(
+  "/terima/:id",
+  AuthMiddleware.AuthAdmin,
+  PengajuanController.terima
+);
+router.patch("/tolak/:id", AuthMiddleware.AuthAdmin, PengajuanController.tolak);
 
 //url/api/pengajuan/1
 router.delete("/:id", AuthMiddleware.AuthAdmin, PengajuanController.delete);
