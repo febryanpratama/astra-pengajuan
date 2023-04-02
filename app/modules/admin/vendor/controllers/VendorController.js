@@ -1,7 +1,9 @@
 const { validationResult } = require("express-validator");
 const db = require("../../../../../models");
 const ResponseCode = require("../../../../core/utils/ResponseCode");
+// const { post, use } = require("../routes/VendorRoutes");
 const Vendor = db.vendors;
+const Pengajuan = db.pengajuans;
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
@@ -31,14 +33,27 @@ exports.detail = async (req, res) => {
   const id = req.params.id;
 
   const response = await Vendor.findOne({
+    include: [
+      {
+        model: Pengajuan,
+        as: "Pengajuan",
+      },
+      //   order: [
+      //     ['createAt', 'DESC']
+      // ],
+    ],
+
     where: {
       id: id,
     },
   });
+  console.log(response);
 
+  if (response == null) {
+    return ResponseCode.errorPost(req, res, "Data vendor tidak ditemukan");
+  }
   return ResponseCode.successGet(req, res, "Data Vendor", response);
 };
-
 exports.update = async (req, res) => {
   const id = req.params.id;
   let data = req.body;
