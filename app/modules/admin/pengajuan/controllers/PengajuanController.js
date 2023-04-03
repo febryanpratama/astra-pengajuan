@@ -194,7 +194,9 @@ exports.delete = async (req, res) => {
 
 exports.terima = async (req, res) => {
   const id = req.params.id;
-  let data = req.body;
+  // let data = req.body;
+
+  // const { tanggal_mulai, tanggal_selesai } = req.body;
   // untuk tes req params id req
   // const { vendor, tanggal_mulai, tanggal_selesai } = req.body;
   // return ResponseCode.successGet(req, res, "hjmtjtj", {
@@ -207,8 +209,6 @@ exports.terima = async (req, res) => {
     const dataPengajuan = await Pengajuan.findOne({
       where: {
         id: id,
-        Tanggal_mulai: tanggal_mulai,
-        Tanggal_selesai: tanggal_selesai,
       },
     });
 
@@ -216,14 +216,10 @@ exports.terima = async (req, res) => {
       const response = await Pengajuan.update(
         {
           status: "Proses Admin",
-          // Tanggal_mulai: tanggal_mulai,
-          // Tanggal_selesai: tanggal_selesai,
         },
         {
           where: {
             id: id,
-            Tanggal_mulai: tanggal_mulai,
-            Tanggal_selesai: tanggal_selesai,
           },
         }
       );
@@ -239,14 +235,10 @@ exports.terima = async (req, res) => {
       const response = await Pengajuan.update(
         {
           status: "Proses Vendor",
-          Tanggal_mulai: tanggal_mulai,
-          Tanggal_selesai: tanggal_selesai,
         },
         {
           where: {
             id: id,
-            // Tanggal_mulai: tanggal_mulai,
-            // Tanggal_selesai: tanggal_selesai,
           },
         }
       );
@@ -256,18 +248,15 @@ exports.terima = async (req, res) => {
       const response = await Pengajuan.update(
         {
           status: "Selesai",
-          // Tanggal_mulai: tanggal_mulai,
-          // Tanggal_selesai: tanggal_selesai,
         },
         {
           where: {
             id: id,
-            Tanggal_mulai: tanggal_mulai,
-            Tanggal_selesai: tanggal_selesai,
           },
         }
       );
     }
+    return ResponseCode.successGet(req, res, "Data diterima", cekreport);
   } catch (err) {}
 };
 
