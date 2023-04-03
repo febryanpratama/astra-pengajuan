@@ -17,11 +17,18 @@ router.get("/report", AuthMiddleware.AuthAtasan, PengajuanController.report);
 //   PengajuanController.store
 // );
 router.get("/:id", AuthMiddleware.AuthAtasan, PengajuanController.detail);
+// router.patch(
+//   "/:id",
+//   AuthMiddleware.AuthAtasan,
+//   // postValidator,
+//   PengajuanController.komentar
+// );
 router.patch(
-  "/:id",
+  "/komentar/:id",
   AuthMiddleware.AuthAtasan,
-  postValidator,
-  PengajuanController.update
+  PengajuanController.komentar
 );
+router.get("/report", AuthMiddleware.AuthAtasan, PengajuanController.report);
+
 // router.delete("/:id", AuthMiddleware.AuthAtasan, PengajuanController.delete);
 module.exports = router;

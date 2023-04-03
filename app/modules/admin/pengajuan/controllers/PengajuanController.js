@@ -194,9 +194,9 @@ exports.delete = async (req, res) => {
 
 exports.terima = async (req, res) => {
   const id = req.params.id;
-
+  let data = req.body;
   // untuk tes req params id req
-  const { vendor, tanggal_mulai, tanggal_selesai } = req.body;
+  // const { vendor, tanggal_mulai, tanggal_selesai } = req.body;
   // return ResponseCode.successGet(req, res, "hjmtjtj", {
   //   ID: id,
   //   tanggal_mulai: tanggal_mulai,
@@ -216,8 +216,8 @@ exports.terima = async (req, res) => {
       const response = await Pengajuan.update(
         {
           status: "Proses Admin",
-          Tanggal_mulai: tanggal_mulai,
-          Tanggal_selesai: tanggal_selesai,
+          // Tanggal_mulai: tanggal_mulai,
+          // Tanggal_selesai: tanggal_selesai,
         },
         {
           where: {
@@ -245,8 +245,8 @@ exports.terima = async (req, res) => {
         {
           where: {
             id: id,
-            Tanggal_mulai: tanggal_mulai,
-            Tanggal_selesai: tanggal_selesai,
+            // Tanggal_mulai: tanggal_mulai,
+            // Tanggal_selesai: tanggal_selesai,
           },
         }
       );
@@ -256,8 +256,8 @@ exports.terima = async (req, res) => {
       const response = await Pengajuan.update(
         {
           status: "Selesai",
-          Tanggal_mulai: tanggal_mulai,
-          Tanggal_selesai: tanggal_selesai,
+          // Tanggal_mulai: tanggal_mulai,
+          // Tanggal_selesai: tanggal_selesai,
         },
         {
           where: {
