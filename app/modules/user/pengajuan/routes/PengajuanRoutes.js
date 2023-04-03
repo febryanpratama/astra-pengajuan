@@ -15,18 +15,16 @@ router.post(
   postValidator,
   PengajuanController.store
 );
-router.get("/:id", AuthMiddleware.AuthUser, PengajuanController.detail);
+// router.get("/:id", AuthMiddleware.AuthUser, PengajuanController.detail);
 router.patch(
   "/:id",
   AuthMiddleware.AuthUser,
   postValidator,
   PengajuanController.update
 );
-router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.delete);
+// router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.delete);
 // router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.terimatolak);
 
-// atasan
-
-// admin
+router.get("/report", AuthMiddleware.AuthUser, PengajuanController.report);
 
 module.exports = router;

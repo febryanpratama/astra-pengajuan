@@ -9,6 +9,8 @@ const Vendor = db.vendors;
 const Foto = db.foto;
 const History = db.history;
 
+const { Op } = require("sequelize");
+
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
   const data = await Pengajuan.findAll({
@@ -117,7 +119,6 @@ exports.store = async (req, res) => {
 
 exports.detail = async (req, res) => {
   const id = req.params.id;
-
   const response = await Pengajuan.findOne({
     include: [
       {
@@ -189,36 +190,36 @@ exports.update = async (req, res) => {
   }
 };
 
-exports.delete = async (req, res) => {
-  const id = req.params.id;
-  try {
-    const response = await Pengajuan.update(
-      {
-        is_deleted: new Date(),
-      },
-      {
-        where: {
-          id: id,
-        },
-      }
-    );
+// exports.delete = async (req, res) => {
+//   const id = req.params.id;
+//   try {
+//     const response = await Pengajuan.update(
+//       {
+//         is_deleted: new Date(),
+//       },
+//       {
+//         where: {
+//           id: id,
+//         },
+//       }
+//     );
 
-    // History / log Aktivitas
+//     // History / log Aktivitas
 
-    return ResponseCode.successPost(
-      req,
-      res,
-      "Data Pengajuan Berhasil DiHapus"
-    );
-  } catch (err) {
-    //
-    console.log(err);
-    return ResponseCode.errorPost(req, res, err.response);
-    // console.log(err);
-  }
+//     return ResponseCode.successPost(
+//       req,
+//       res,
+//       "Data Pengajuan Berhasil DiHapus"
+//     );
+//   } catch (err) {
+//     //
+//     console.log(err);
+//     return ResponseCode.errorPost(req, res, err.response);
+//     // console.log(err);
+//   }
 
-  //admin terima tolak
-};
+//   //admin terima tolak
+// };
 exports.terimatolak = async (req, res) => {
   const id = req.params.id;
   let data = req.body;
@@ -248,38 +249,58 @@ exports.terimatolak = async (req, res) => {
         }
       );
     }
-    // const cekpengajuan = await Pengajuan.findOne({
-    //   where: { status: "Verifikasi Admin", id },
-    // });
-    // if (cekpengajuan == null) {
-    //   return ResponseCode.errorPost(req, res, "Pengajuan tidak ditemukan");
-    // }
-
-    // const response = await Pengajuan.update(
-    //   {
-    //     status: data.status,
-    //     harga: data.harga,
-    //   },
-    //   {
-    //     where: {
-    //       id: id,
-    //     },
-    //   }
-    // );
-
-    // const history = await db.history.create({
-    //   pengajuan_id: response.id,
-    //   tanggal: new Date().toDateString(),
-    //   deskripsi: "Menghapus / Membatalkan Data Pengajuan ",
-    //   createAt: new Date().toDateString(),
-    //   updateAt: new Date().toDateString(),
-    // });
-
     return ResponseCode.successPost(req, res, "Data Pengajuan Berhasil Diubah");
   } catch (err) {
     //
     console.log(err);
     return ResponseCode.errorPost(req, res, err.response);
     // console.log(err);
+  }
+};
+
+exports.report = async (req, res) => {
+  const id = req.params.id;
+  let data = req.body;
+
+  // console.log("data");
+  // INI BEDA
+  const startedDate = new Date(data.tanggal_mulai + " 00:00:00");
+  const endDate = new Date(data.tanggal_selesai + " 23:59:59");
+  // return ResponseCode.successGet(req, res, startedDate);
+
+  try {
+    const cekreport = await Pengajuan.findAll({
+      where: {
+        tanggal_pengajuan: {
+          [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
+        },
+      },
+    });
+
+    // return ResponseCode.successGet(req, res, "Data", cekreport);
+    if (cekreport == null) {
+      return ResponseCode.successGet(
+        req,
+        res,
+        "Data Pengajuan Report tidak ditemukan"
+      );
+    }
+    // const response = await Pengajuan.findAll({
+    //   tanggal_pengajuan: {
+    //     [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
+    //   },
+    //   where: {
+    //     id: id,
+    //   },
+    // });
+    return ResponseCode.successGet(
+      req,
+      res,
+      "Data Pengajuan Report Ditemukan ",
+      cekreport
+    );
+  } catch (err) {
+    console.log(err);
+    return ResponseCode.error.errorPost(req, res, err.response);
   }
 };
