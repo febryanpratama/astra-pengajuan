@@ -138,7 +138,7 @@ exports.detail = async (req, res) => {
       id: id,
     },
   });
-  console.log(response);
+  // console.log(response);
 
   if (response == null) {
     return ResponseCode.errorPost(req, res, "Detail tidak ditemukan");
@@ -190,33 +190,32 @@ exports.update = async (req, res) => {
   }
 };
 
-// exports.delete = async (req, res) => {
-//   const id = req.params.id;
-//   try {
-//     const response = await Pengajuan.update(
-//       {
-//         is_deleted: new Date(),
-//       },
-//       {
-//         where: {
-//           id: id,
-//         },
-//       }
-//     );
+exports.delete = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const response = await Pengajuan.update(
+      {
+        is_deleted: new Date(),
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
 
-//     // History / log Aktivitas
-
-//     return ResponseCode.successPost(
-//       req,
-//       res,
-//       "Data Pengajuan Berhasil DiHapus"
-//     );
-//   } catch (err) {
-//     //
-//     console.log(err);
-//     return ResponseCode.errorPost(req, res, err.response);
-//     // console.log(err);
-//   }
+    return ResponseCode.successPost(
+      req,
+      res,
+      "Data Pengajuan Berhasil DiHapus"
+    );
+  } catch (err) {
+    //
+    console.log(err);
+    return ResponseCode.errorPost(req, res, err.response);
+    // console.log(err);
+  }
+};
 
 //   //admin terima tolak
 // };
