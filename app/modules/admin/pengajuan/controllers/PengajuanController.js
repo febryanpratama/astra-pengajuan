@@ -194,7 +194,6 @@ exports.delete = async (req, res) => {
 
 exports.terima = async (req, res) => {
   const id = req.params.id;
-  // let data = req.body;
 
   // const { tanggal_mulai, tanggal_selesai } = req.body;
   // untuk tes req params id req
@@ -207,8 +206,20 @@ exports.terima = async (req, res) => {
 
   try {
     const dataPengajuan = await Pengajuan.findOne({
+      include: [
+        {
+          model: Vendor,
+          as: "vendor",
+        },
+        {
+          model: history,
+          as: "aktivitas",
+        },
+      ],
+
       where: {
         id: id,
+        harga: dataPengajuan.harga,
       },
     });
 
@@ -242,6 +253,7 @@ exports.terima = async (req, res) => {
           },
         }
       );
+      return ResponseCode.successPost(req, res, "Proses Vendor");
     }
 
     if (dataPengajuan.status == "Proses Vendor") {
@@ -255,6 +267,14 @@ exports.terima = async (req, res) => {
           },
         }
       );
+      const respHistory = await History.create({
+        pengajuan_id: id,
+        tanggal: new Date().toDateString(),
+        deskripsi: "Pengajuan Diterima",
+        createAt: new Date().toDateString(),
+        updateAt: new Date().toDateString(),
+      });
+      return ResponseCode.successPost(req, res, "Selesai");
     }
   } catch (err) {
     console.log(err);
@@ -283,7 +303,7 @@ exports.tolak = async (req, res) => {
     const respHistory = await History.create({
       pengajuan_id: id,
       tanggal: new Date().toDateString(),
-      deskripsi: "Pengajuan Ditolak Admin",
+      deskripsi: "Pengajuan Ditolak",
       createAt: new Date().toDateString(),
       updateAt: new Date().toDateString(),
     });

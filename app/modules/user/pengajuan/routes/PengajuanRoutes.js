@@ -15,14 +15,14 @@ router.post(
   postValidator,
   PengajuanController.store
 );
-// router.get("/:id", AuthMiddleware.AuthUser, PengajuanController.detail);
+router.get("/:id", AuthMiddleware.AuthUser, PengajuanController.detail);
 router.patch(
   "/:id",
   AuthMiddleware.AuthUser,
-  postValidator,
+  // postValidator,
   PengajuanController.update
 );
-// router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.delete);
+router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.delete);
 // router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.terimatolak);
 
 router.get("/report", AuthMiddleware.AuthUser, PengajuanController.report);
