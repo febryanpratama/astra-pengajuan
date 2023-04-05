@@ -200,7 +200,7 @@ exports.terima = async (req, res) => {
   // untuk tes req params id req
   // const { vendor, tanggal_mulai, tanggal_selesai } = req.body;
   // return ResponseCode.successGet(req, res, "hjmtjtj", {
-  //   ID: id,
+  // ID: id,
   //   tanggal_mulai: tanggal_mulai,
   //   Tanggal_selesai: tanggal_selesai,
   // });
@@ -256,19 +256,20 @@ exports.terima = async (req, res) => {
         }
       );
     }
-    return ResponseCode.successGet(req, res, "Data diterima", cekreport);
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+    return ResponseCode.errorPost(req, res, err.response);
+  }
 };
 
 exports.tolak = async (req, res) => {
   const id = req.params.id;
-  // const data = req.body;
+  const data = req.body;
 
   // data.pengajuan_name
   try {
     const response = await Pengajuan.update(
       {
-        //tanggal mulai tanggal selesai
         status: "Ditolak",
         komentar: data.komentar,
       },
@@ -278,6 +279,14 @@ exports.tolak = async (req, res) => {
         },
       }
     );
+
+    const respHistory = await History.create({
+      pengajuan_id: id,
+      tanggal: new Date().toDateString(),
+      deskripsi: "Pengajuan Ditolak Admin",
+      createAt: new Date().toDateString(),
+      updateAt: new Date().toDateString(),
+    });
 
     return ResponseCode.successPost(req, res, "Data Pengajuan DiTolak");
   } catch (err) {
