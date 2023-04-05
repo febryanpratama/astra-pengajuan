@@ -19,7 +19,7 @@ router.get("/:id", AuthMiddleware.AuthUser, PengajuanController.detail);
 router.patch(
   "/:id",
   AuthMiddleware.AuthUser,
-  // postValidator,
+  // postValidator,/
   PengajuanController.update
 );
 router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.delete);

@@ -138,7 +138,7 @@ exports.detail = async (req, res) => {
       id: id,
     },
   });
-  // console.log(response);
+  // console.log(response);/
 
   if (response == null) {
     return ResponseCode.errorPost(req, res, "Detail tidak ditemukan");
