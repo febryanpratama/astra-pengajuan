@@ -5,6 +5,7 @@ const AuthMiddleware = require("../../../../core/middleware/AuthMiddleware");
 const {
   postValidator,
 } = require("../../../../core/validators/pengajuan/PengajuanValidator");
+const { application } = require("express");
 
 router.get("/", PengajuanController.findAll);
 // api/pengajuan
@@ -35,6 +36,7 @@ router.patch(
   AuthMiddleware.AuthAdmin,
   PengajuanController.terima
 );
+
 router.patch("/tolak/:id", AuthMiddleware.AuthAdmin, PengajuanController.tolak);
 
 //url/api/pengajuan/1
