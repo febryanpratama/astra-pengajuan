@@ -174,7 +174,7 @@ exports.report = async (req, res) => {
 
     // return ResponseCode.successGet(req, res, "Data", cekreport);
     if (cekreport == null) {
-      return ResponseCode.successGet(
+      return ResponseCode.successPost(
         req,
         res,
         "Data Pengajuan Report tidak ditemukan"
@@ -188,7 +188,7 @@ exports.report = async (req, res) => {
     //     id: id,
     //   },
     // });
-    return ResponseCode.successGet(
+    return ResponseCode.successPost(
       req,
       res,
       "Data Pengajuan Report Ditemukan ",

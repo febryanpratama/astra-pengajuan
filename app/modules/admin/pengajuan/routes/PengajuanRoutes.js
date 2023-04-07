@@ -9,15 +9,15 @@ const { application } = require("express");
 
 router.get("/", PengajuanController.findAll);
 // api/pengajuan
-router.post(
-  "/",
-  AuthMiddleware.AuthAdmin,
-  postValidator,
-  PengajuanController.store
-);
+// router.post(
+//   "/",
+//   AuthMiddleware.AuthAdmin,
+//   postValidator,
+//   PengajuanController.store
+// );
 // url/api/prngajuan
 // Ini punya pebri
-router.get("/report", AuthMiddleware.AuthAdmin, PengajuanController.report);
+router.post("/report", AuthMiddleware.AuthAdmin, PengajuanController.report);
 // router.get("/history", AuthMiddleware.AuthAdmin, PengajuanController.history);
 
 router.get("/:id", AuthMiddleware.AuthAdmin, PengajuanController.detail);
