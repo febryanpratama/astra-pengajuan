@@ -22,9 +22,9 @@ router.patch(
   // postValidator,/
   PengajuanController.update
 );
-router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.delete);
-// router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.terimatolak);
+// router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.delete);
+router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.terimatolak);
 
-router.get("/report", AuthMiddleware.AuthUser, PengajuanController.report);
+router.post("/report", AuthMiddleware.AuthUser, PengajuanController.report);
 
 module.exports = router;

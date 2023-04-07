@@ -8,7 +8,7 @@ const {
 
 router.get("/", AuthMiddleware.AuthAtasan, PengajuanController.findAll);
 
-router.get("/report", AuthMiddleware.AuthAtasan, PengajuanController.report);
+router.post("/report", AuthMiddleware.AuthAtasan, PengajuanController.report);
 
 // router.post(
 //   "/",

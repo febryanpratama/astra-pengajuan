@@ -38,66 +38,66 @@ exports.findAll = async (req, res) => {
   return ResponseCode.successGet(req, res, "Data Pengajuan", data);
 };
 
-exports.store = async (req, res) => {
-  let data = req.body;
+// exports.store = async (req, res) => {
+//   let data = req.body;
 
-  // return ResponseCode.successGet(req, res, "Data Pengajuan", data);
+//   // return ResponseCode.successGet(req, res, "Data Pengajuan", data);
 
-  // return ResponseCode.successGet(req, res, "Data Pengajuan", "kontill");
-  try {
-    // const getVendor = await db.vendors.findOne({
-    //   where: {
-    //     id: data.vendor_id,
-    //   },
-    // });
-    // console.log(getVendor);
-    // if (getVendor == null) {
-    //   return ResponseCode.errorPost(req, res, "Vendor tidak ditemukan");
-    // }
+//   // return ResponseCode.successGet(req, res, "Data Pengajuan", "kontill");
+//   try {
+//     // const getVendor = await db.vendors.findOne({
+//     //   where: {
+//     //     id: data.vendor_id,
+//     //   },
+//     // });
+//     // console.log(getVendor);
+//     // if (getVendor == null) {
+//     //   return ResponseCode.errorPost(req, res, "Vendor tidak ditemukan");
+//     // }
 
-    // return Response Code.successPost(req, res, "Vendor ditemukan");
+//     // return Response Code.successPost(req, res, "Vendor ditemukan");
 
-    const response = await Pengajuan.create({
-      user_id: data.user_id,
-      pengajuan_name: data.pengajuan_name,
-      tanggal_pengajuan: new Date().toDateString(),
-      deskripsi: data.deskripsi,
-      prioritas: data.prioritas,
-      status: "Verifikasi Admin",
-      // karena sudah di set
-      harga: 0,
-    });
+//     const response = await Pengajuan.create({
+//       user_id: data.user_id,
+//       pengajuan_name: data.pengajuan_name,
+//       tanggal_pengajuan: new Date().toDateString(),
+//       deskripsi: data.deskripsi,
+//       prioritas: data.prioritas,
+//       status: "Verifikasi Admin",
+//       // karena sudah di set
+//       harga: 0,
+//     });
 
-    data.foto.forEach((element) => {
-      const checkImage = element["image"];
+//     data.foto.forEach((element) => {
+//       const checkImage = element["image"];
 
-      const foto = Foto.create({
-        pengajuan_id: response.id,
-        file_photo: element["image"],
-        createAt: new Date().toDateString(),
-        updateAt: new Date().toDateString(),
-      });
-    });
+//       const foto = Foto.create({
+//         pengajuan_id: response.id,
+//         file_photo: element["image"],
+//         createAt: new Date().toDateString(),
+//         updateAt: new Date().toDateString(),
+//       });
+//     });
 
-    const respHistory = await History.create({
-      pengajuan_id: response.id,
-      tanggal: new Date().toDateString(),
-      deskripsi: "Membuat Pengajuan Baru",
-      // createAt: new Date().toDateString(),
-    });
+//     const respHistory = await History.create({
+//       pengajuan_id: response.id,
+//       tanggal: new Date().toDateString(),
+//       deskripsi: "Membuat Pengajuan Baru",
+//       // createAt: new Date().toDateString(),
+//     });
 
-    // store foto
+//     // store foto
 
-    return ResponseCode.successPost(
-      req,
-      res,
-      "Data Pengajuan Berhasil Ditambahkan"
-    );
-  } catch (error) {
-    console.log(error);
-    return ResponseCode.errorPost(req, res, error);
-  }
-};
+//     return ResponseCode.successPost(
+//       req,
+//       res,
+//       "Data Pengajuan Berhasil Ditambahkan"
+//     );
+//   } catch (error) {
+//     console.log(error);
+//     return ResponseCode.errorPost(req, res, error);
+//   }
+// };
 
 exports.detail = async (req, res) => {
   const id = req.params.id;
@@ -194,6 +194,7 @@ exports.delete = async (req, res) => {
 
 exports.terima = async (req, res) => {
   const id = req.params.id;
+  const data = req.body;
 
   // const { tanggal_mulai, tanggal_selesai } = req.body;
   // untuk tes req params id req
@@ -206,20 +207,11 @@ exports.terima = async (req, res) => {
 
   try {
     const dataPengajuan = await Pengajuan.findOne({
-      include: [
-        {
-          model: Vendor,
-          as: "vendor",
-        },
-        {
-          model: history,
-          as: "aktivitas",
-        },
-      ],
-
       where: {
         id: id,
-        harga: dataPengajuan.harga,
+        harga: data.harga,
+        tanggal_mulai: data.tanggal_mulai,
+        tanggal_selesai: data.tanggal_selesai,
       },
     });
 
@@ -274,7 +266,7 @@ exports.terima = async (req, res) => {
         createAt: new Date().toDateString(),
         updateAt: new Date().toDateString(),
       });
-      return ResponseCode.successPost(req, res, "Selesai");
+      return ResponseCode.successPost(req, res, "Selesai", response);
     }
   } catch (err) {
     console.log(err);
