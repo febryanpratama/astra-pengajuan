@@ -9,7 +9,11 @@ const { application } = require("express");
 
 router.get("/", PengajuanController.findAll);
 
-router.post("/report", AuthMiddleware.AuthAdmin, PengajuanController.report);
+router.post(
+  "/report/list",
+  AuthMiddleware.AuthAdmin,
+  PengajuanController.report
+);
 
 router.get("/:id", AuthMiddleware.AuthAdmin, PengajuanController.detail);
 
@@ -19,9 +23,6 @@ router.patch(
   postValidator,
   PengajuanController.update
 );
-
-
-
 
 router.delete("/:id", AuthMiddleware.AuthAdmin, PengajuanController.delete);
 

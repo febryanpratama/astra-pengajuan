@@ -28,7 +28,11 @@ router.patch(
   AuthMiddleware.AuthAtasan,
   PengajuanController.komentar
 );
-router.get("/report", AuthMiddleware.AuthAtasan, PengajuanController.report);
+router.post(
+  "/report/list",
+  AuthMiddleware.AuthAtasan,
+  PengajuanController.report
+);
 
 // router.delete("/:id", AuthMiddleware.AuthAtasan, PengajuanController.delete);
 module.exports = router;
