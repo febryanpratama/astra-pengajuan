@@ -196,24 +196,26 @@ exports.terima = async (req, res) => {
   const id = req.params.id;
   const data = req.body;
 
-  // const { tanggal_mulai, tanggal_selesai } = req.body;
-  // untuk tes req params id req
-  // const { vendor, tanggal_mulai, tanggal_selesai } = req.body;
-  // return ResponseCode.successGet(req, res, "hjmtjtj", {
-  // ID: id,
-  //   tanggal_mulai: tanggal_mulai,
-  //   Tanggal_selesai: tanggal_selesai,
-  // });
 
+  console.log(data)
+  // return ResponseCode.successPost(
+  //       req,
+  //       res,
+  //       ""
+  //     );
   try {
     const dataPengajuan = await Pengajuan.findOne({
       where: {
         id: id,
-        harga: data.harga,
-        tanggal_mulai: data.tanggal_mulai,
-        tanggal_selesai: data.tanggal_selesai,
+        // harga: data.harga,
+        // tanggal_mulai: data.tanggal_mulai,
+        // tanggal_selesai: data.tanggal_selesai,
       },
     });
+
+    // console.log(dataPengajuan)
+
+    // return ResponseCode.successGet(req, res, "Data Pengajuan", dataPengajuan);
 
     if (dataPengajuan.status == "Verifikasi Admin") {
       const response = await Pengajuan.update(
@@ -230,7 +232,7 @@ exports.terima = async (req, res) => {
       return ResponseCode.successPost(
         req,
         res,
-        "Data Pengajuan Berhasil DiHapus"
+        "Data Pengajuan Berhasil DiProses oleh Admin"
       );
     }
 
@@ -245,7 +247,7 @@ exports.terima = async (req, res) => {
           },
         }
       );
-      return ResponseCode.successPost(req, res, "Proses Vendor");
+      return ResponseCode.successPost(req, res, "Data Pengajuan sedang diproses oleh Vendor");
     }
 
     if (dataPengajuan.status == "Proses Vendor") {
@@ -266,7 +268,7 @@ exports.terima = async (req, res) => {
         createAt: new Date().toDateString(),
         updateAt: new Date().toDateString(),
       });
-      return ResponseCode.successPost(req, res, "Selesai", response);
+      return ResponseCode.successPost(req, res, " Data Pengajuan telah Selesai", response);
     }
   } catch (err) {
     console.log(err);
@@ -277,6 +279,7 @@ exports.terima = async (req, res) => {
 exports.tolak = async (req, res) => {
   const id = req.params.id;
   const data = req.body;
+  // console.log(data)
 
   // data.pengajuan_name
   try {
