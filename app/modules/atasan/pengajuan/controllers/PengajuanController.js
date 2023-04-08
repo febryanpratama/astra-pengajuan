@@ -76,52 +76,52 @@ exports.komentar = async (req, res) => {
   // // console.log(err);
 };
 
-exports.report = async (req, res) => {
-  const id = req.params.id;
-  let data = req.body;
+// exports.report = async (req, res) => {
+//   const id = req.params.id;
+//   let data = req.body;
 
-  // console.log("data");
-  // INI BEDA
-  const startedDate = new Date(data.tanggal_mulai + " 00:00:00");
-  const endDate = new Date(data.tanggal_selesai + " 23:59:59");
-  // return ResponseCode.successGet(req, res, startedDate);
+//   // console.log("data");
+//   // INI BEDA
+//   const startedDate = new Date(data.tanggal_mulai + " 00:00:00");
+//   const endDate = new Date(data.tanggal_selesai + " 23:59:59");
+//   // return ResponseCode.successGet(req, res, startedDate);
 
-  try {
-    const cekreport = await Pengajuan.findAll({
-      where: {
-        tanggal_pengajuan: {
-          [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
-        },
-      },
-    });
+//   try {
+//     const cekreport = await Pengajuan.findAll({
+//       where: {
+//         tanggal_pengajuan: {
+//           [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
+//         },
+//       },
+//     });
 
-    // return ResponseCode.successGet(req, res, "Data", cekreport);
-    if (cekreport == null) {
-      return ResponseCode.successGet(
-        req,
-        res,
-        "Data Pengajuan Report tidak ditemukan"
-      );
-    }
-    // const response = await Pengajuan.findAll({
-    //   tanggal_pengajuan: {
-    //     [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
-    //   },
-    //   where: {
-    //     id: id,
-    //   },
-    // });
-    return ResponseCode.successGet(
-      req,
-      res,
-      "Data Pengajuan Report Ditemukan ",
-      cekreport
-    );
-  } catch (err) {
-    console.log(err);
-    return ResponseCode.error.errorPost(req, res, err.response);
-  }
-};
+//     // return ResponseCode.successGet(req, res, "Data", cekreport);
+//     if (cekreport == null) {
+//       return ResponseCode.successGet(
+//         req,
+//         res,
+//         "Data Pengajuan Report tidak ditemukan"
+//       );
+//     }
+//     // const response = await Pengajuan.findAll({
+//     //   tanggal_pengajuan: {
+//     //     [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
+//     //   },
+//     //   where: {
+//     //     id: id,
+//     //   },
+//     // });
+//     return ResponseCode.successGet(
+//       req,
+//       res,
+//       "Data Pengajuan Report Ditemukan ",
+//       cekreport
+//     );
+//   } catch (err) {
+//     console.log(err);
+//     return ResponseCode.error.errorPost(req, res, err.response);
+//   }
+// };
 
 exports.detail = async (req, res) => {
   const id = req.params.id;
@@ -174,7 +174,7 @@ exports.report = async (req, res) => {
 
     // return ResponseCode.successGet(req, res, "Data", cekreport);
     if (cekreport == null) {
-      return ResponseCode.successPost(
+      return ResponseCode.successGet(
         req,
         res,
         "Data Pengajuan Report tidak ditemukan"
@@ -188,7 +188,7 @@ exports.report = async (req, res) => {
     //     id: id,
     //   },
     // });
-    return ResponseCode.successPost(
+    return ResponseCode.successGet(
       req,
       res,
       "Data Pengajuan Report Ditemukan ",

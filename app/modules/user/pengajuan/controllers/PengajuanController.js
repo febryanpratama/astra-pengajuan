@@ -234,10 +234,14 @@ exports.report = async (req, res) => {
   const id = req.params.id;
   let data = req.body;
 
+  // console.log()
+  // const data = req.query;
+
+  // return ResponseCode.successGet(req, res, "Data Pengajuan", data);
   // console.log("data");
   // INI BEDA
-  const startedDate = new Date(data.tanggal_mulai + " 00:00:00");
-  const endDate = new Date(data.tanggal_selesai + " 23:59:59");
+  const startedDate = new Date(data.tanggalmulai + " 00:00:00");
+  const endDate = new Date(data.tanggalselesai + " 23:59:59");
   // return ResponseCode.successGet(req, res, startedDate);
 
   try {
