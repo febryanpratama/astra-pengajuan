@@ -41,21 +41,21 @@ exports.findAll = async (req, res) => {
 // exports.store = async (req, res) => {
 //   let data = req.body;
 
-//   // return ResponseCode.successGet(req, res, "Data Pengajuan", data);
+// return ResponseCode.successGet(req, res, "Data Pengajuan", data);
 
-//   // return ResponseCode.successGet(req, res, "Data Pengajuan", "kontill");
-//   try {
-//     // const getVendor = await db.vendors.findOne({
-//     //   where: {
-//     //     id: data.vendor_id,
-//     //   },
-//     // });
-//     // console.log(getVendor);
-//     // if (getVendor == null) {
-//     //   return ResponseCode.errorPost(req, res, "Vendor tidak ditemukan");
-//     // }
+// return ResponseCode.successGet(req, res, "Data Pengajuan", "kontill");
+// try {
+// const getVendor = await db.vendors.findOne({
+//   where: {
+//     id: data.vendor_id,
+//   },
+// });
+// console.log(getVendor);
+// if (getVendor == null) {
+//   return ResponseCode.errorPost(req, res, "Vendor tidak ditemukan");
+// }
 
-//     // return Response Code.successPost(req, res, "Vendor ditemukan");
+// return Response Code.successPost(req, res, "Vendor ditemukan");
 
 //     const response = await Pengajuan.create({
 //       user_id: data.user_id,
@@ -83,10 +83,10 @@ exports.findAll = async (req, res) => {
 //       pengajuan_id: response.id,
 //       tanggal: new Date().toDateString(),
 //       deskripsi: "Membuat Pengajuan Baru",
-//       // createAt: new Date().toDateString(),
+// createAt: new Date().toDateString(),
 //     });
 
-//     // store foto
+// store foto
 
 //     return ResponseCode.successPost(
 //       req,
@@ -194,10 +194,9 @@ exports.delete = async (req, res) => {
 
 exports.terima = async (req, res) => {
   const id = req.params.id;
-  const data = req.body;
+  // const data = req.body;
 
-
-  console.log(data)
+  console.log(data);
   // return ResponseCode.successPost(
   //       req,
   //       res,
@@ -247,7 +246,11 @@ exports.terima = async (req, res) => {
           },
         }
       );
-      return ResponseCode.successPost(req, res, "Data Pengajuan sedang diproses oleh Vendor");
+      return ResponseCode.successPost(
+        req,
+        res,
+        "Data Pengajuan sedang diproses oleh Vendor"
+      );
     }
 
     if (dataPengajuan.status == "Proses Vendor") {
@@ -268,7 +271,12 @@ exports.terima = async (req, res) => {
         createAt: new Date().toDateString(),
         updateAt: new Date().toDateString(),
       });
-      return ResponseCode.successPost(req, res, " Data Pengajuan telah Selesai", response);
+      return ResponseCode.successPost(
+        req,
+        res,
+        " Data Pengajuan telah Selesai",
+        response
+      );
     }
   } catch (err) {
     console.log(err);
