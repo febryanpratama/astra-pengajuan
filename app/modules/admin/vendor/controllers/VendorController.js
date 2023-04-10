@@ -106,16 +106,25 @@ exports.delete = async (req, res) => {
   }
 };
 
-// exports.jumlah = async (req, res) => {
-//   const id = req.params.user_id;
-//   const jumlah =
+exports.jumlah = async (req, res) => {
+  const id = req.params.id;
 
-//   try {
-//     const dataPengajuan = await Pengajuan.findOne({
-//       where: {
-//         user_id: user_id,
-//       },
-//     });
-//     return ResponseCode.successGet(req, res, "Data Pengajuan");
-//   } catch (error) {}
-// };
+  try {
+    // const count_data = [];
+    // const Pengajuan_data = await pengajuans.find().count();
+    const data = await Pengajuan.count({
+      where: { vendor_id: id },
+    });
+
+    return ResponseCode.successGet(
+      req,
+      res,
+      "Sukses Mengambil Jumlah data pengajuan dari Vendor",
+      data
+    );
+  } catch (error) {
+    // console.log();
+
+    return ResponseCode.errorPost(req, res, error.message);
+  }
+};
