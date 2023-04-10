@@ -30,12 +30,12 @@ app.use("/api/user/vendor", VendorRoutesUser);
 app.use("/api/user/pengajuan", PengajuanRoutes);
 
 // Admin
-app.use("/api/auth", AuthRoutes);
+// app.use("/api/auth", AuthRoutes);
 app.use("/api/admin/vendor", VendorRoutes);
 app.use("/api/admin/pengajuan", PengajuanRoutesadmin);
 
 // Atasan
-app.use("/api/atasan/auth", AuthRoutes);
+// app.use("/api/atasan/auth", AuthRoutes);
 app.use("/api/atasan/pengajuan", PengajuanRoutesatasan);
 
 app.listen(port, () =>
