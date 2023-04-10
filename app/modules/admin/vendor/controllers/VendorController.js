@@ -105,3 +105,17 @@ exports.delete = async (req, res) => {
     // console.log(err);
   }
 };
+
+// exports.jumlah = async (req, res) => {
+//   const id = req.params.user_id;
+//   const jumlah =
+
+//   try {
+//     const dataPengajuan = await Pengajuan.findOne({
+//       where: {
+//         user_id: user_id,
+//       },
+//     });
+//     return ResponseCode.successGet(req, res, "Data Pengajuan");
+//   } catch (error) {}
+// };
