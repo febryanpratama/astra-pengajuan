@@ -21,6 +21,8 @@ router.patch(
   VendorController.update
 );
 
+router.get("/jumlah/:id", AuthMiddleware.AuthAdmin, VendorController.jumlah);
+
 router.delete("/:id", AuthMiddleware.AuthAdmin, VendorController.delete);
 
 module.exports = router;

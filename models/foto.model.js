@@ -14,11 +14,11 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.TEXT,
       allowNull: false,
     },
-    createAt: {
+    createdAt: {
       type: Sequelize.DATE,
       allowNull: false,
     },
-    updateAt: {
+    updatedAt: {
       type: Sequelize.DATE,
       allowNull: false,
     },

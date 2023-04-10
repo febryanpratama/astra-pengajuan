@@ -5,7 +5,7 @@ const AuthMiddleware = require("../../../../core/middleware/AuthMiddleware");
 const {
   postValidator,
 } = require("../../../../core/validators/pengajuan/PengajuanValidator");
-const { application } = require("express");
+// const { application } = require("express");
 
 router.get("/", PengajuanController.findAll);
 
