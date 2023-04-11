@@ -45,7 +45,11 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true,
       },
-      komentar: {
+      komentaradmin: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      komentaratasan: {
         type: Sequelize.TEXT,
         allowNull: true,
       },
@@ -58,7 +62,8 @@ module.exports = {
           "Verifikasi Admin",
           "Proses Admin",
           "Proses Vendor",
-          "Selesai"
+          "Selesai",
+          "Ditolak"
         ),
         allowNull: false,
       },

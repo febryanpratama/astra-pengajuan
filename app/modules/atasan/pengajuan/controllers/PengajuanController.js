@@ -11,27 +11,37 @@ const { Op } = require("sequelize");
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
-  const data = await Pengajuan.findAll({
-    include: [
-      {
-        model: Vendor,
-        as: "vendor",
-      },
-      {
-        model: Foto,
-        as: "foto",
-      },
-      {
-        model: History,
-        as: "aktivitas",
-      },
-    ],
-    where: {
-      is_deleted: null,
-    },
-  });
+  // return ResponseCode.successGet(req, res, "Data Pengajuan", "xx");
 
-  return ResponseCode.successGet(req, res, "Data Pengajuan", data);
+  try{
+    const data = await Pengajuan.findAll({
+      include: [
+        {
+          model: Vendor,
+          as: "vendor",
+        },
+        {
+          model: Foto,
+          as: "foto",
+        },
+        {
+          model: History,
+          as: "aktivitas",
+        },
+      ],
+      where: {
+        is_deleted: null,
+      },
+    });
+  
+    return ResponseCode.successGet(req, res, "Data Pengajuan", data);
+  }
+  catch(err){
+    console.log(err)
+    return ResponseCode.errorPost(req, res, err.response);
+  }
+
+  // return ResponseCode.successGet(req, res, "Data Pengajuan", data);
 };
 
 exports.detail = async (req, res) => {
