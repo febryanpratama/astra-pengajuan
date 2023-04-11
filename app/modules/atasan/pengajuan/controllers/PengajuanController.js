@@ -50,7 +50,7 @@ exports.detail = async (req, res) => {
   return ResponseCode.successGet(req, res, "Data Pengajuan", response);
 };
 
-exports.komentaratasan = async (req, res) => {
+exports.komentar = async (req, res) => {
   const id = req.params.id;
   let data = req.body;
 
