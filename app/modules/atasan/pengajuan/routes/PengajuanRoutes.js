@@ -26,7 +26,7 @@ router.get("/:id", AuthMiddleware.AuthAtasan, PengajuanController.detail);
 router.patch(
   "/komentar/:id",
   AuthMiddleware.AuthAtasan,
-  PengajuanController.komentaratasan
+  PengajuanController.komentar
 );
 router.post(
   "/report/list",
