@@ -28,11 +28,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.TEXT,
       allowNull: true,
     },
-    komentaradmin: {
-      type: Sequelize.TEXT,
-      allowNull: true,
-    },
-    komentaratasan: {
+    komentar: {
       type: Sequelize.TEXT,
       allowNull: true,
     },
