@@ -28,23 +28,19 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.TEXT,
       allowNull: true,
     },
-    komentaradmin: {
-      type: Sequelize.TEXT,
-      allowNull: true,
-    },
-    komentaratasan: {
+    komentar: {
       type: Sequelize.TEXT,
       allowNull: true,
     },
     prioritas: {
-      type: Sequelize.ENUM("hight", "normal", "low"),
+      type: Sequelize.ENUM("high", "normal", "low"),
       allowNull: false,
     },
     // image: {
     //   type: Sequelize.STRING,
     // },
     status: {
-      type: Sequelize.ENUM("sukses", "proses_admin", "proses_vendor"),
+      type: Sequelize.ENUM("sukses", "proses_admin", "proses_vendor","Ditolak", "Verifikasi Admin"),
       allowNull: false,
     },
     harga: {

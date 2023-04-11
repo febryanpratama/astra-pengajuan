@@ -58,7 +58,8 @@ module.exports = {
           "Verifikasi Admin",
           "Proses Admin",
           "Proses Vendor",
-          "Selesai"
+          "Selesai",
+          "Ditolak"
         ),
         allowNull: false,
       },
