@@ -23,11 +23,11 @@ router.get("/:id", AuthMiddleware.AuthAtasan, PengajuanController.detail);
 //   // postValidator,
 //   PengajuanController.komentar
 // );
-router.patch(
-  "/komentar/:id",
-  AuthMiddleware.AuthAtasan,
-  PengajuanController.komentar
-);
+// router.patch(
+//   "/komentar/:id",
+//   AuthMiddleware.AuthAtasan,
+//   PengajuanController.komentar
+// );
 router.post(
   "/report/list",
   AuthMiddleware.AuthAtasan,

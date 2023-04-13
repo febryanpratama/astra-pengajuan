@@ -220,6 +220,9 @@ exports.terima = async (req, res) => {
       const response = await Pengajuan.update(
         {
           status: "Proses Admin",
+          // tanggal_mulai: data.tanggal_mulai,
+          // tanggal_selesai: data.tanggal_selesai,
+          // harga: data.harga,
         },
         {
           where: {
@@ -257,10 +260,14 @@ exports.terima = async (req, res) => {
       const response = await Pengajuan.update(
         {
           status: "Selesai",
+          tanggal_mulai: data.tanggal_mulai,
+          tanggal_selesai: data.tanggal_selesai,
+          harga: data.harga,
         },
         {
           where: {
             id: id,
+            // harga: data.harga,
           },
         }
       );
@@ -294,7 +301,7 @@ exports.tolak = async (req, res) => {
     const response = await Pengajuan.update(
       {
         status: "Ditolak",
-        komentar: data.komentar,
+        // komentar: data.komentar,
       },
       {
         where: {
@@ -362,5 +369,49 @@ exports.report = async (req, res) => {
   } catch (err) {
     console.log(err);
     return ResponseCode.error.errorPost(req, res, err.response);
+  }
+};
+
+exports.jumlah = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const data = await Pengajuan.count({
+      where: {
+        // vendors_id: id,
+        user_id: id,
+        // status: "Selesai",
+        // status: "Ditolak",
+      },
+    });
+    return ResponseCode.successGet(
+      req,
+      res,
+      "Sukses Mengambil jumlah semua data Pengajuan dan Vendor",
+      data
+    );
+  } catch (error) {
+    // console.log();
+    return ResponseCode.errorPost(req, res, error.response);
+  }
+};
+
+exports.selesai = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const data = await Pengajuan.count({
+      where: {
+        // vendors_id: id,
+        // user_id: id,
+        status: "Selesai",
+        // status: "Ditolak",
+      },
+    });
+    // console.log();
+
+    return ResponseCode.successGet(req, res, "Sukses Mms", data);
+  } catch (error) {
+    // console.log();
+    return ResponseCode.errorPost(req, res, error.response);
   }
 };
