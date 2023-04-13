@@ -194,21 +194,12 @@ exports.delete = async (req, res) => {
 
 exports.terima = async (req, res) => {
   const id = req.params.id;
-  // const data = req.body;
+  let data = req.body;
 
-  // console.log(data);
-  // return ResponseCode.successPost(
-  //       req,
-  //       res,
-  //       ""
-  //     );
   try {
     const dataPengajuan = await Pengajuan.findOne({
       where: {
         id: id,
-        // harga: data.harga,
-        // tanggal_mulai: data.tanggal_mulai,
-        // tanggal_selesai: data.tanggal_selesai,
       },
     });
 
@@ -216,13 +207,79 @@ exports.terima = async (req, res) => {
 
     // return ResponseCode.successGet(req, res, "Data Pengajuan", dataPengajuan);
 
+    // if (dataPengajuan.status == "Verifikasi Admin") {
+    //   const response = await Pengajuan.update(
+    //     {
+    //       status: "Proses Admin",
+    //       // tanggal_mulai: data.tanggal_mulai,
+    //       // tanggal_selesai: data.tanggal_selesai,
+    //       // harga: data.harga,
+    //     },
+    //     {
+    //       where: {
+    //         id: id,
+    //       },
+    //     }
+    //   );
+
+    //   return ResponseCode.successPost(
+    //     req,
+    //     res,
+    //     "Data Pengajuan Berhasil DiProses oleh Admin"
+    //   );
+    // }
+
+    // if (dataPengajuan.status == "Proses Admin") {
+    //   const response = await Pengajuan.update(
+    //     {
+    //       status: "Proses Vendor",
+    //     },
+    //     {
+    //       where: {
+    //         id: id,
+    //       },
+    //     }
+    //   );
+    //   return ResponseCode.successPost(
+    //     req,
+    //     res,
+    //     "Data Pengajuan sedang diproses oleh Vendor"
+    //   );
+    // }
+
+    // if (dataPengajuan.status == "Proses Vendor") {
+    //   const response = await Pengajuan.update(
+    //     {
+    //       status: "Selesai",
+    //       tanggal_mulai: data.tanggal_mulai,
+    //       tanggal_selesai: data.tanggal_selesai,
+    //       harga: data.harga,
+    //     },
+    //     {
+    //       where: {
+    //         id: id,
+    //         // harga: data.harga,
+    //       },
+    //     }
+    //   );
+    //   const respHistory = await History.create({
+    //     pengajuan_id: id,
+    //     tanggal: new Date().toDateString(),
+    //     deskripsi: "Pengajuan Diterima",
+    //     createAt: new Date().toDateString(),
+    //     updateAt: new Date().toDateString(),
+    //   });
+    //   return ResponseCode.successPost(
+    //     req,
+    //     res,
+    //     " Data Pengajuan telah Selesai",
+    //     response
+    //   );
+    // }
     if (dataPengajuan.status == "Verifikasi Admin") {
       const response = await Pengajuan.update(
         {
           status: "Proses Admin",
-          // tanggal_mulai: data.tanggal_mulai,
-          // tanggal_selesai: data.tanggal_selesai,
-          // harga: data.harga,
         },
         {
           where: {
@@ -230,14 +287,12 @@ exports.terima = async (req, res) => {
           },
         }
       );
-
       return ResponseCode.successPost(
         req,
         res,
         "Data Pengajuan Berhasil DiProses oleh Admin"
       );
     }
-
     if (dataPengajuan.status == "Proses Admin") {
       const response = await Pengajuan.update(
         {
@@ -249,6 +304,7 @@ exports.terima = async (req, res) => {
           },
         }
       );
+      // return ResponseCode.successPost(req,res,"Data Pengajuan sedang diproses oleh Vendor");
       return ResponseCode.successPost(
         req,
         res,
@@ -267,7 +323,6 @@ exports.terima = async (req, res) => {
         {
           where: {
             id: id,
-            // harga: data.harga,
           },
         }
       );
@@ -275,9 +330,11 @@ exports.terima = async (req, res) => {
         pengajuan_id: id,
         tanggal: new Date().toDateString(),
         deskripsi: "Pengajuan Diterima",
-        createAt: new Date().toDateString(),
-        updateAt: new Date().toDateString(),
+        createdAt: new Date().toDateString(),
+        updatedAt: new Date().toDateString(),
+        harga: data.harga,
       });
+      // return ResponseCode.successPost(req,res,"Data Pengajuan telah Selesai",response);
       return ResponseCode.successPost(
         req,
         res,
