@@ -6,7 +6,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     vendor_id: {
       type: Sequelize.BIGINT,
-      allowNull: true,
+      allowNull: false,
     },
     pengajuan_name: {
       type: Sequelize.STRING,
