@@ -203,79 +203,6 @@ exports.terima = async (req, res) => {
       },
     });
 
-    // console.log(dataPengajuan)
-
-    // return ResponseCode.successGet(req, res, "Data Pengajuan", dataPengajuan);
-
-    // if (dataPengajuan.status == "Verifikasi Admin") {
-    //   const response = await Pengajuan.update(
-    //     {
-    //       status: "Proses Admin",
-    //       // tanggal_mulai: data.tanggal_mulai,
-    //       // tanggal_selesai: data.tanggal_selesai,
-    //       // harga: data.harga,
-    //     },
-    //     {
-    //       where: {
-    //         id: id,
-    //       },
-    //     }
-    //   );
-
-    //   return ResponseCode.successPost(
-    //     req,
-    //     res,
-    //     "Data Pengajuan Berhasil DiProses oleh Admin"
-    //   );
-    // }
-
-    // if (dataPengajuan.status == "Proses Admin") {
-    //   const response = await Pengajuan.update(
-    //     {
-    //       status: "Proses Vendor",
-    //     },
-    //     {
-    //       where: {
-    //         id: id,
-    //       },
-    //     }
-    //   );
-    //   return ResponseCode.successPost(
-    //     req,
-    //     res,
-    //     "Data Pengajuan sedang diproses oleh Vendor"
-    //   );
-    // }
-
-    // if (dataPengajuan.status == "Proses Vendor") {
-    //   const response = await Pengajuan.update(
-    //     {
-    //       status: "Selesai",
-    //       tanggal_mulai: data.tanggal_mulai,
-    //       tanggal_selesai: data.tanggal_selesai,
-    //       harga: data.harga,
-    //     },
-    //     {
-    //       where: {
-    //         id: id,
-    //         // harga: data.harga,
-    //       },
-    //     }
-    //   );
-    //   const respHistory = await History.create({
-    //     pengajuan_id: id,
-    //     tanggal: new Date().toDateString(),
-    //     deskripsi: "Pengajuan Diterima",
-    //     createAt: new Date().toDateString(),
-    //     updateAt: new Date().toDateString(),
-    //   });
-    //   return ResponseCode.successPost(
-    //     req,
-    //     res,
-    //     " Data Pengajuan telah Selesai",
-    //     response
-    //   );
-    // }
     if (dataPengajuan.status == "Verifikasi Admin") {
       const response = await Pengajuan.update(
         {
@@ -296,7 +223,11 @@ exports.terima = async (req, res) => {
     if (dataPengajuan.status == "Proses Admin") {
       const response = await Pengajuan.update(
         {
+          id: data.id,
           status: "Proses Vendor",
+          tanggal_mulai: data.tanggal_mulai,
+          tanggal_selesai: data.tanggal_selesai,
+          harga: data.harga,
         },
         {
           where: {
@@ -316,9 +247,6 @@ exports.terima = async (req, res) => {
       const response = await Pengajuan.update(
         {
           status: "Selesai",
-          tanggal_mulai: data.tanggal_mulai,
-          tanggal_selesai: data.tanggal_selesai,
-          harga: data.harga,
         },
         {
           where: {

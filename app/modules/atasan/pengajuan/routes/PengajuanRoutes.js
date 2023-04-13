@@ -16,7 +16,7 @@ router.get("/", AuthMiddleware.AuthAtasan, PengajuanController.findAll);
 // );
 router.get("/:id", AuthMiddleware.AuthAtasan, PengajuanController.detail);
 router.patch(
-  "/:id",
+  "/komentar/:id",
   AuthMiddleware.AuthAtasan,
   // postValidator,
   PengajuanController.komentar
