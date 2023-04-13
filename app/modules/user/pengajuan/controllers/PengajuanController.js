@@ -89,8 +89,8 @@ exports.store = async (req, res) => {
       const foto = Foto.create({
         pengajuan_id: response.id,
         file_photo: element["image"],
-        createAt: new Date().toDateString(),
-        updateAt: new Date().toDateString(),
+        createdAt: new Date().toDateString(),
+        updatedAt: new Date().toDateString(),
       });
     });
 
@@ -102,8 +102,8 @@ exports.store = async (req, res) => {
       pengajuan_id: response.id,
       tanggal: new Date().toDateString(),
       deskripsi: "Membuat Pengajuan Baru",
-      createAt: new Date().toDateString(),
-      updateAt: new Date().toDateString(),
+      createdAt: new Date().toDateString(),
+      updatedAt: new Date().toDateString(),
     });
 
     return ResponseCode.successPost(
@@ -177,8 +177,8 @@ exports.update = async (req, res) => {
       pengajuan_id: response.id,
       tanggal: new Date().toDateString(),
       deskripsi: "Menghapus / Membatalkan Data Pengajuan ",
-      createAt: new Date().toDateString(),
-      updateAt: new Date().toDateString(),
+      createdAt: new Date().toDateString(),
+      updatedAt: new Date().toDateString(),
     });
 
     return ResponseCode.successPost(req, res, "Data Pengajuan Berhasil Diubah");

@@ -33,11 +33,11 @@ router.patch(
   PengajuanController.terima
 );
 
-// router.get(
-//   "/jumlah/:id",
-//   AuthMiddleware.AuthAdmin,
-//   PengajuanController.selesai
-// );
+router.get(
+  "/jumlah/:id",
+  AuthMiddleware.AuthAdmin,
+  PengajuanController.selesai
+);
 
 router.patch("/tolak/:id", AuthMiddleware.AuthAdmin, PengajuanController.tolak);
 module.exports = router;

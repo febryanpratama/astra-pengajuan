@@ -26,6 +26,13 @@ exports.store = async (req, res) => {
     alamat: data.alamat,
   });
 
+  const history = await db.history.create({
+    pengajuan_id: response.id,
+    tanggal: new Date().toDateString(),
+    deskripsi: "Membuat Vendor Baru",
+    createdAt: new Date().toDateString(),
+    updatedAt: new Date().toDateString(),
+  });
   return ResponseCode.successPost(req, res, "Data Vendor Berhasil Ditambahkan");
 };
 
