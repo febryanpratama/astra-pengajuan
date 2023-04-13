@@ -23,7 +23,7 @@ module.exports = {
       },
       vendor_id: {
         type: Sequelize.BIGINT,
-        allowNull: false,
+        allowNull: true,
       },
       pengajuan_name: {
         type: Sequelize.STRING,
