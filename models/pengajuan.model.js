@@ -40,7 +40,13 @@ module.exports = (sequelize, Sequelize) => {
     //   type: Sequelize.STRING,
     // },
     status: {
-      type: Sequelize.ENUM("sukses", "proses_admin", "proses_vendor","Ditolak", "Verifikasi Admin"),
+      type: Sequelize.ENUM(
+        "selesai",
+        "proses_admin",
+        "proses_vendor",
+        "Ditolak",
+        "Verifikasi Admin"
+      ),
       allowNull: false,
     },
     harga: {
