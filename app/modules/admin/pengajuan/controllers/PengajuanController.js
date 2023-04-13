@@ -371,8 +371,8 @@ exports.tolak = async (req, res) => {
       pengajuan_id: id,
       tanggal: new Date().toDateString(),
       deskripsi: "Pengajuan Ditolak",
-      createAt: new Date().toDateString(),
-      updateAt: new Date().toDateString(),
+      createdAt: new Date().toDateString(),
+      updatedAt: new Date().toDateString(),
     });
 
     return ResponseCode.successPost(req, res, "Data Pengajuan DiTolak");
