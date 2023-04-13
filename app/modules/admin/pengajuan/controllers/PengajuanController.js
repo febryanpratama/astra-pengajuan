@@ -330,8 +330,8 @@ exports.terima = async (req, res) => {
         pengajuan_id: id,
         tanggal: new Date().toDateString(),
         deskripsi: "Pengajuan Diterima",
-        createdAt: new Date().toDateString(),
-        updatedAt: new Date().toDateString(),
+        createAt: new Date().toDateString(),
+        updateAt: new Date().toDateString(),
         harga: data.harga,
       });
       // return ResponseCode.successPost(req,res,"Data Pengajuan telah Selesai",response);

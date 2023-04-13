@@ -8,8 +8,6 @@ const {
 
 router.get("/", AuthMiddleware.AuthAtasan, PengajuanController.findAll);
 
-router.post("/report", AuthMiddleware.AuthAtasan, PengajuanController.report);
-
 // router.post(
 //   "/",
 //   AuthMiddleware.AuthAtasan,
@@ -17,17 +15,12 @@ router.post("/report", AuthMiddleware.AuthAtasan, PengajuanController.report);
 //   PengajuanController.store
 // );
 router.get("/:id", AuthMiddleware.AuthAtasan, PengajuanController.detail);
-// router.patch(
-//   "/:id",
-//   AuthMiddleware.AuthAtasan,
-//   // postValidator,
-//   PengajuanController.komentar
-// );
-// router.patch(
-//   "/komentar/:id",
-//   AuthMiddleware.AuthAtasan,
-//   PengajuanController.komentar
-// );
+router.patch(
+  "/:id",
+  AuthMiddleware.AuthAtasan,
+  // postValidator,
+  PengajuanController.komentar
+);
 router.post(
   "/report/list",
   AuthMiddleware.AuthAtasan,
