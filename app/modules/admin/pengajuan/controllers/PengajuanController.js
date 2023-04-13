@@ -1,7 +1,7 @@
 const { validationResult } = require("express-validator");
 const db = require("../../../../../models");
 const ResponseCode = require("../../../../core/utils/ResponseCode");
-// const { post, use } = require("../routes/PengajuanRoutes");
+const { post } = require("../routes/PengajuanRoutes");
 const Pengajuan = db.pengajuans;
 const Vendor = db.vendors;
 const Foto = db.foto;
