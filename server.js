@@ -13,8 +13,8 @@ const PengajuanRoutesatasan = require("./app/modules/atasan/pengajuan/routes/Pen
 const bodyParser = require("body-parser");
 
 app.use(cors());
-app.use(bodyParser.json({ type: "application/json" }));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ type: "application/json",limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 
 const db = require("./models");
 db.sequelize.sync();
