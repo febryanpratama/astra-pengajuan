@@ -14,6 +14,16 @@ const { Op } = require("sequelize");
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
+  console.log(
+    "req.params.page: " +
+      req.query.page +
+      " req.query.limit: " +
+      req.query.limit
+  );
+
+  let limit = parseInt(req.query.limit) || 10;
+  let offset = parseInt(req.query.page) || 0;
+
   const data = await Pengajuan.findAll({
     include: [
       {
@@ -33,6 +43,8 @@ exports.findAll = async (req, res) => {
       is_deleted: null,
       user_id: req.app.locals.credential.id,
     },
+    limit: limit,
+    offset: offset,
   });
 
   // console.log(d)

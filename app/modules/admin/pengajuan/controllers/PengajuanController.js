@@ -8,34 +8,60 @@ const Foto = db.foto;
 const History = db.history;
 
 const { Op } = require("sequelize");
+// const vendorModel = require("../../../../../models/vendor.model");
 
 // const fs = require("fs");
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
-  // return ResponseCode.successGet(req, res, "Data Pengajuan", "xx");
+  // return ResponseCo
+  // limit page
+  console.log(
+    "req.params.page: " +
+      req.query.page +
+      " req.query.limit: " +
+      req.query.limit
+  );
 
-  const data = await Pengajuan.findAll({
-    include: [
-      {
-        model: Vendor,
-        as: "vendor",
-      },
-      {
-        model: Foto,
-        as: "foto",
-      },
-      {
-        model: History,
-        as: "aktivitas",
-      },
-    ],
-    where: {
-      is_deleted: null,
-    },
-  });
+  let limit = parseInt(req.query.limit) || 10;
+  let offset = parseInt(req.query.page) || 0;
 
-  return ResponseCode.successGet(req, res, "Data Pengajuan", data);
+  // return ResponseCode.successGet(req, res, "Data Pengajuan", limit);
+  // console.log("page: " + page + " limit: " + limit + " offset: " + offset);
+  try {
+    const data = await Pengajuan.findAll({
+      include: [
+        {
+          model: Vendor,
+          as: "vendor",
+        },
+        {
+          model: Foto,
+          as: "foto",
+        },
+        {
+          model: History,
+          as: "aktivitas",
+        },
+      ],
+      where: {
+        is_deleted: null,
+      },
+      limit: limit,
+      offset: offset,
+      // order: [["id", "DESC"]],
+    });
+
+    // const result = {
+    //   data: data,
+    //   page: offset,
+    //   limit: limit,
+    // };
+
+    return ResponseCode.successGet(req, res, "Data Pengajuan", data);
+  } catch (error) {
+    return ResponseCode.errorPost(req, res, error);
+  }
 };
 
 // exports.store = async (req, res) => {
@@ -223,7 +249,7 @@ exports.terima = async (req, res) => {
     if (dataPengajuan.status == "Proses Admin") {
       const response = await Pengajuan.update(
         {
-          id: data.id,
+          vendor_id: data.vendor_id,
           status: "Proses Vendor",
           tanggal_mulai: data.tanggal_mulai,
           tanggal_selesai: data.tanggal_selesai,
@@ -357,46 +383,47 @@ exports.report = async (req, res) => {
   }
 };
 
-exports.jumlah = async (req, res) => {
-  const id = req.params.id;
+// exports.jumlah = async (req, res) => {
+//   const id = req.params.id;
+//   let data = req.body;
 
-  try {
-    const data = await Pengajuan.count({
-      where: {
-        // vendors_id: id,
-        user_id: id,
-        // status: "Selesai",
-        // status: "Ditolak",
-      },
-    });
-    return ResponseCode.successGet(
-      req,
-      res,
-      "Sukses Mengambil jumlah semua data Pengajuan dan Vendor",
-      data
-    );
-  } catch (error) {
-    // console.log();
-    return ResponseCode.errorPost(req, res, error.response);
-  }
-};
+//   try {
+//     const dataPengajuan = await Pengajuan.count({
+//       where: {
+//         // vendors_id: id,
+//         id: id,
+//         status: "Selesai",
+//         // // status: "Ditolak",
+//       },
+//     });
+//     return ResponseCode.successGet(
+//       req,
+//       res,
+//       "Sukses Mengambil jumlah semua data Pengajuan dan Vendor",
+//       data
+//     );
+//   } catch (error) {
+//     // console.log();
+//     return ResponseCode.errorPost(req, res, error.response);
+//   }
+// };
 
-exports.selesai = async (req, res) => {
-  const id = req.params.id;
-  try {
-    const data = await Pengajuan.count({
-      where: {
-        // vendors_id: id,
-        // user_id: id,
-        status: "Selesai",
-        // status: "Ditolak",
-      },
-    });
-    // console.log();
+// exports.selesai = async (req, res) => {
+//   const id = req.params.id;
+//   try {
+//     const data = await Pengajuan.count({
+//       where: {
+//         // vendors_id: id,
+//         // user_id: id,
+//         status: "Selesai",
+//         // status: "Ditolak",
+//       },
+//     });
+//     // console.log();
 
-    return ResponseCode.successGet(req, res, "Sukses Mms", data);
-  } catch (error) {
-    // console.log();
-    return ResponseCode.errorPost(req, res, error.response);
-  }
-};
+//     return ResponseCode.successGet(req, res, "Sukses Mms", data);
+//   } catch (error) {
+//     // console.log();
+//     return ResponseCode.errorPost(req, res, error.response);
+//   }
+// };
