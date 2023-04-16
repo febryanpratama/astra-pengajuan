@@ -7,7 +7,7 @@ const {
 } = require("../../../../core/validators/pengajuan/PengajuanValidator");
 // const { application } = require("express");
 
-router.get("/", PengajuanController.findAll);
+router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.findAll);
 
 router.post(
   "/report/list",
