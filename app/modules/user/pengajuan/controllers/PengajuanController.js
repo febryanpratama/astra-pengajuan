@@ -30,14 +30,14 @@ exports.findAll = async (req, res) => {
         model: Vendor,
         as: "vendor",
       },
-      {
-        model: Foto,
-        as: "foto",
-      },
-      {
-        model: History,
-        as: "aktivitas",
-      },
+      // {
+      //   model: Foto,
+      //   as: "foto",
+      // },
+      // {
+      //   model: History,
+      //   as: "aktivitas",
+      // },
     ],
     where: {
       is_deleted: null,
