@@ -117,8 +117,6 @@ exports.jumlah = async (req, res) => {
   const id = req.params.id;
 
   try {
-    // const count_data = [];
-    // const Pengajuan_data = await pengajuans.find().count();
     const data = await Pengajuan.count({
       where: { vendor_id: id },
     });

@@ -41,6 +41,10 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: true,
       },
+      departemen: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       deskripsi: {
         type: Sequelize.TEXT,
         allowNull: true,
