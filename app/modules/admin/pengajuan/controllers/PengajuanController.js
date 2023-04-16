@@ -343,14 +343,14 @@ exports.tolak = async (req, res) => {
     );
 
     const respHistory = await History.create({
-      pengajuan_id: id,
+      pengajuan_id: response.id,
       tanggal: new Date().toDateString(),
-      deskripsi: "Pengajuan Ditolak",
+      deskripsi: "Pengajuan Ditolak oleh Admin",
       createdAt: new Date().toDateString(),
       updatedAt: new Date().toDateString(),
     });
 
-    return ResponseCode.successPost(req, res, "Data Pengajuan DiTolak");
+    return ResponseCode.successPost(req, res, "Data Pengajuan Ditolak");
   } catch (err) {
     console.log(err);
     return ResponseCode.errorPost(req, res, err.response);
