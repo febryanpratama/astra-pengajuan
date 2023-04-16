@@ -87,6 +87,7 @@ exports.store = async (req, res) => {
       deskripsi: data.deskripsi,
       prioritas: data.prioritas,
       status: "Verifikasi Admin",
+      departemen: req.app.locals.credential.departemen,
       // karena sudah di set
       // is_status: "Proses",
       harga: 0,

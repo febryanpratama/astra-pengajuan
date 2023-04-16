@@ -13,12 +13,12 @@ const { Op } = require("sequelize");
 exports.findAll = async (req, res) => {
   // return ResponseCode.successGet(req, res, "Data Pengajuan", "xx");
 
-  console.log(
-    "req.params.page: " +
-      req.query.page +
-      " req.query.limit: " +
-      req.query.limit
-  );
+  // console.log(
+  //   "req.params.page: " +
+  //     req.query.page +
+  //     " req.query.limit: " +
+  //     req.query.limit
+  // );
 
   let limit = parseInt(req.query.limit) || 10;
   let offset = parseInt(req.query.page) || 0;
@@ -41,6 +41,7 @@ exports.findAll = async (req, res) => {
       ],
       where: {
         is_deleted: null,
+        departemen: req.app.locals.credential.departemen,
       },
       limit: limit,
       offset: offset,
