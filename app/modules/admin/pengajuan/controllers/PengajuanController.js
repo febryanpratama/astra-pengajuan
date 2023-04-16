@@ -239,28 +239,30 @@ exports.terima = async (req, res) => {
       },
     });
 
-    if (dataPengajuan.status == "Verifikasi Admin") {
+
+    if(!dataPengajuan){
+      return ResponseCode.errorPost(req, res, "Pengajuan tidak ditemukan");
+    }
+
+    
+    if (data.tipe == "Proses Admin") {
+      // console.log("proses admin")
+      const dataVendor = await Vendor.findOne({
+          where: {
+            id: data.vendor_id,
+          },
+        })
+
+    // return ResponseCode.successGet(req, res, "Data Pengajuan", dataVendor);
+
+      if(!dataVendor){
+        return ResponseCode.errorPost(req, res, "Vendor tidak ditemukan");
+      }
+
       const response = await Pengajuan.update(
         {
           status: "Proses Admin",
-        },
-        {
-          where: {
-            id: id,
-          },
-        }
-      );
-      return ResponseCode.successPost(
-        req,
-        res,
-        "Data Pengajuan Berhasil DiProses oleh Admin"
-      );
-    }
-    if (dataPengajuan.status == "Proses Admin") {
-      const response = await Pengajuan.update(
-        {
           vendor_id: data.vendor_id,
-          status: "Proses Vendor",
           tanggal_mulai: data.tanggal_mulai,
           tanggal_selesai: data.tanggal_selesai,
           harga: data.harga,
@@ -271,15 +273,25 @@ exports.terima = async (req, res) => {
           },
         }
       );
-      // return ResponseCode.successPost(req,res,"Data Pengajuan sedang diproses oleh Vendor");
+
+      const history = await History.create({
+        pengajuan_id: response.id,
+        tanggal: new Date().toDateString(),
+        deskripsi: "Pengajuan Diterima oleh Admin",
+        createAt: new Date().toDateString(),
+        updateAt: new Date().toDateString(),
+      });
+
       return ResponseCode.successPost(
         req,
         res,
-        "Data Pengajuan sedang diproses oleh Vendor"
+        "Data Pengajuan Berhasil Diproses oleh Admin"
       );
     }
 
-    if (dataPengajuan.status == "Proses Vendor") {
+
+    if (data.tipe == "Selesai") {
+      // console.log("selesai")
       const response = await Pengajuan.update(
         {
           status: "Selesai",
@@ -291,12 +303,11 @@ exports.terima = async (req, res) => {
         }
       );
       const respHistory = await History.create({
-        pengajuan_id: id,
+        pengajuan_id: response.id,
         tanggal: new Date().toDateString(),
-        deskripsi: "Pengajuan Diterima",
+        deskripsi: "Pengajuan Telah Diselesaikan",
         createAt: new Date().toDateString(),
         updateAt: new Date().toDateString(),
-        harga: data.harga,
       });
       // return ResponseCode.successPost(req,res,"Data Pengajuan telah Selesai",response);
       return ResponseCode.successPost(
@@ -308,7 +319,7 @@ exports.terima = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    return ResponseCode.errorPost(req, res, err.response);
+    return ResponseCode.errorPost(req, res, err);
   }
 };
 
