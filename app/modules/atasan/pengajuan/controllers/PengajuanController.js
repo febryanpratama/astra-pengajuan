@@ -31,14 +31,14 @@ exports.findAll = async (req, res) => {
           model: Vendor,
           as: "vendor",
         },
-        {
-          model: Foto,
-          as: "foto",
-        },
-        {
-          model: History,
-          as: "aktivitas",
-        },
+        // {
+        //   model: Foto,
+        //   as: "foto",
+        // },
+        // {
+        //   model: History,
+        //   as: "aktivitas",
+        // },
       ],
       where: {
         is_deleted: null,
@@ -79,11 +79,26 @@ exports.detail = async (req, res) => {
   const id = req.params.id;
 
   const response = await Pengajuan.findOne({
+    include: [
+        {
+          model: Vendor,
+          as: "vendor",
+        },
+        {
+          model: Foto,
+          as: "foto",
+        },
+        {
+          model: History,
+          as: "aktivitas",
+        },
+      ],
+  },{
     where: {
       id: id,
     },
   });
-  console.log(response);
+  // console.log(response);
 
   if (response == null) {
     return ResponseCode.errorPost(req, res, "Detail tidak ditemukan");
