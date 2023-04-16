@@ -8,6 +8,7 @@ const Foto = db.foto;
 const History = db.history;
 
 const { Op } = require("sequelize");
+const { default: axios } = require("axios");
 // const vendorModel = require("../../../../../models/vendor.model");
 
 // const fs = require("fs");
@@ -52,14 +53,23 @@ exports.findAll = async (req, res) => {
       // order: [["id", "DESC"]],
     });
 
-    // const result = {
-    //   data: data,
-    //   page: offset,
-    //   limit: limit,
-    // };
+    for(let i = 0; i < data.length; i++){
+    // let datad = data[i]
+    let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
+      user_id: data[i].user_id
+    })
 
-    return ResponseCode.successGet(req, res, "Data Pengajuan", data);
+    let dataUser = {
+      nama: user.data.data.name,
+      departemen: user.data.data.departemen
+    }
+
+    data[i].dataValues.user = dataUser
+  }
+
+  return ResponseCode.successGet(req, res, "Data Pengajuan", data);
   } catch (error) {
+    console.log(error)
     return ResponseCode.errorPost(req, res, error);
   }
 };

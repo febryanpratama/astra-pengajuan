@@ -8,6 +8,7 @@ const Foto = db.foto;
 const History = db.history;
 
 const { Op } = require("sequelize");
+const { default: axios } = require("axios");
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
@@ -47,7 +48,25 @@ exports.findAll = async (req, res) => {
       offset: offset,
     });
 
-    return ResponseCode.successGet(req, res, "Data Pengajuan", data);
+
+
+    for(let i = 0; i < data.length; i++){
+    // let datad = data[i]
+      let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
+        user_id: data[i].user_id
+      })
+
+      let dataUser = {
+        nama: user.data.data.name,
+        departemen: user.data.data.departemen
+      }
+
+      data[i].dataValues.user = dataUser
+    }
+
+  return ResponseCode.successGet(req, res, "Data Pengajuan", data);
+
+    // return ResponseCode.successGet(req, res, "Data Pengajuan", data);
   } catch (err) {
     console.log(err);
     return ResponseCode.errorPost(req, res, err.response);

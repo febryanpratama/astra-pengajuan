@@ -14,12 +14,12 @@ const { Op } = require("sequelize");
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
-  console.log(
-    "req.params.page: " +
-      req.query.page +
-      " req.query.limit: " +
-      req.query.limit
-  );
+  // console.log(
+  //   "req.params.page: " +
+  //     req.query.page +
+  //     " req.query.limit: " +
+  //     req.query.limit
+  // );
 
   let limit = parseInt(req.query.limit) || 10;
   let offset = parseInt(req.query.page) || 0;
@@ -46,8 +46,21 @@ exports.findAll = async (req, res) => {
     limit: limit,
     offset: offset,
   });
+  
+  for(let i = 0; i < data.length; i++){
+    // let datad = data[i]
+    let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
+      user_id: data[i].user_id
+    })
 
-  // console.log(d)
+    let dataUser = {
+      nama: user.data.data.name,
+      departemen: user.data.data.departemen
+    }
+
+    data[i].dataValues.user = dataUser
+  }
+
   return ResponseCode.successGet(req, res, "Data Pengajuan", data);
 };
 
