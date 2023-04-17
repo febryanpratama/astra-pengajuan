@@ -16,11 +16,17 @@ router.patch(
   // postValidator,
   PengajuanController.komentar
   );
-  router.post(
-    "/report/list",
-    AuthMiddleware.AuthAtasan,
-    PengajuanController.report
-  );
+router.post(
+  "/report/list",
+  AuthMiddleware.AuthAtasan,
+  PengajuanController.report
+);
+
+router.post(
+  "/dashboard/count",
+  AuthMiddleware.AuthAtasan,
+  PengajuanController.dashboardCount
+)
 
 
 module.exports = router;
