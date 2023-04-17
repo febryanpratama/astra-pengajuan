@@ -275,7 +275,7 @@ exports.report = async (req, res) => {
     const cekreport = await Pengajuan.findAll({
       where: {
         tanggal_pengajuan: {
-          [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
+          [Op.between]: [startedDate, endDate],
         },
       },
     });
