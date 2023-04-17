@@ -21,47 +21,52 @@ exports.findAll = async (req, res) => {
   //     req.query.limit
   // );
 
-  let limit = parseInt(req.query.limit) || 10;
-  let offset = parseInt(req.query.page) || 0;
-
-  const data = await Pengajuan.findAll({
-    include: [
-      {
-        model: Vendor,
-        as: "vendor",
-      },
-      // {
-      //   model: Foto,
-      //   as: "foto",
-      // },
-      // {
-      //   model: History,
-      //   as: "aktivitas",
-      // },
-    ],
-    where: {
-      is_deleted: null,
-      user_id: req.app.locals.credential.id,
-    },
-    limit: limit,
-    offset: offset,
-  });
+  try{
+    let limit = parseInt(req.query.limit) || 10;
+    let offset = parseInt(req.query.page) || 0;
   
-  for(let i = 0; i < data.length; i++){
-    // let datad = data[i]
-    let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
-      user_id: data[i].user_id
-    })
-
-    let dataUser = {
-      nama: user.data.data.name,
-      departemen: user.data.data.departemen
+    const data = await Pengajuan.findAll({
+      include: [
+        {
+          model: Vendor,
+          as: "vendor",
+        },
+        // {
+        //   model: Foto,
+        //   as: "foto",
+        // },
+        // {
+        //   model: History,
+        //   as: "aktivitas",
+        // },
+      ],
+      where: {
+        is_deleted: null,
+        user_id: req.app.locals.credential.id,
+      },
+      limit: limit,
+      offset: offset,
+    });
+    
+    for(let i = 0; i < data.length; i++){
+      // let datad = data[i]
+      let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
+        user_id: data[i].user_id
+      })
+  
+      let dataUser = {
+        nama: user.data.data.name,
+        departemen: user.data.data.departemen
+      }
+  
+      data[i].dataValues.user = dataUser
     }
-
-    data[i].dataValues.user = dataUser
+  
+    return ResponseCode.successGet(req, res, "Data Pengajuan", data);
+  }catch(err){
+    console.log(err)
+    return ResponseCode.errorPost(req, res, "Data Pengajuan", err);
   }
-
-  return ResponseCode.successGet(req, res, "Data Pengajuan", data);
 };
 
 exports.store = async (req, res) => {
