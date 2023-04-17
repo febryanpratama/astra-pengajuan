@@ -6,23 +6,22 @@ const {
   postValidator,
 } = require("../../../../core/validators/pengajuan/PengajuanValidator");
 
-// router.get("/", AuthMiddleware.AuthAtasan, PengajuanController.findAll);
+router.get("/", AuthMiddleware.AuthAtasan, PengajuanController.findAll);
 
 
-// router.get("/:id", AuthMiddleware.AuthAtasan, PengajuanController.detail);
-// router.patch(
-//   "/komentar/:id",
-//   AuthMiddleware.AuthAtasan,
-//   // postValidator,
-//   PengajuanController.komentar
-//   );
+router.get("/:id", AuthMiddleware.AuthAtasan, PengajuanController.detail);
+router.patch(
+  "/komentar/:id",
+  AuthMiddleware.AuthAtasan,
+  // postValidator,
+  PengajuanController.komentar
+  );
   router.post(
-    "/report",
+    "/report/list",
     AuthMiddleware.AuthAtasan,
     PengajuanController.report
   );
 
 
-// router.delete("/:id", AuthMiddleware.AuthAtasan, PengajuanController.delete);
 module.exports = router;
 //
