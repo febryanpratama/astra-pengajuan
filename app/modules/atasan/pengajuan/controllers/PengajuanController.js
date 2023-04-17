@@ -184,3 +184,97 @@ exports.report = async (req, res) => {
   }
 };
 
+
+exports.dashboardCount = async (req, res) => {
+  let data = req.body;
+
+  // console.log()
+  // const data = req.query;
+
+  // return ResponseCode.successGet(req, res, "Data Pengajuan", data);
+  // console.log("data");
+  // INI BEDA
+  const startedDate = new Date(data.tanggal_mulai + " 00:00:00");
+  const endDate = new Date(data.tanggal_selesai + " 23:59:59");
+  // return ResponseCode.successGet(req, res, startedDate);
+
+  try {
+    if (data.tipe == 'total pengajuan') {
+      let count = await Pengajuan.count({
+        where: {
+          departemen: req.app.locals.credential.departemen,
+        }
+      }) 
+
+      let data = {
+        data: count
+      }
+
+      
+      return ResponseCode.successGet(req, res, "Jumlah Semua data Pengajuan", data);
+    }
+
+    if(data.tipe == 'pengajuan diterima'){
+      let count = await Pengajuan.count({
+        where: {
+          status: 'Proses Vendor',
+          departemen: req.app.locals.credential.departemen,
+        }
+      }) 
+
+      let data = {
+        data: count
+      }
+
+      return ResponseCode.successGet(req, res, "Jumlah Data Diterima Admin", data);
+    }
+
+    if(data.tipe == 'pengajuan ditinjau'){
+      let count = await Pengajuan.count({
+        where: {
+          status: 'Verifikasi Admin',
+          departemen: req.app.locals.credential.departemen,
+        }
+      }) 
+
+      let data = {
+        data: count
+      }
+
+      return ResponseCode.successGet(req, res, "Jumlah Data Ditinjau Admin", data);
+    }
+    if(data.tipe == 'ditolak'){
+      let count = await Pengajuan.count({
+        where: {
+          status: 'Ditolak',
+          departemen: req.app.locals.credential.departemen,
+        }
+      }) 
+
+      let data = {
+        data: count
+      }
+
+      return ResponseCode.successGet(req, res, "Jumlah Data Ditolak Admin", data);
+    }
+    if(data.tipe == 'selesai'){
+      let count = await Pengajuan.count({
+        where: {
+          status: 'Selesai',
+          departemen: req.app.locals.credential.departemen,
+        }
+      }) 
+
+      let data = {
+        data: count
+      }
+
+      return ResponseCode.successGet(req, res, "Jumlah Data Selesai Admin", data);
+    }
+    
+  } catch (err) {
+    console.log(err);
+    return ResponseCode.error.error(req, res, err.response);
+  }
+}
+
