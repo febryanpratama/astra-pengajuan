@@ -194,6 +194,14 @@ exports.dashboardCount = async (req, res) => {
   // return ResponseCode.successGet(req, res, "Data Pengajuan", data);
   // console.log("data");
   // INI BEDA
+  const start = new Date();
+  var first = start.getDate() - start.getDay();
+  var last = first + 6;
+
+  var firstday = new Date(start.setDate(first))
+  var lastday = new Date(start.setDate(last))
+
+  // return ResponseCode.successGet(req, res, firstday);
   const startedDate = new Date(data.tanggal_mulai + " 00:00:00");
   const endDate = new Date(data.tanggal_selesai + " 23:59:59");
   // return ResponseCode.successGet(req, res, startedDate);
@@ -203,15 +211,20 @@ exports.dashboardCount = async (req, res) => {
       let count = await Pengajuan.count({
         where: {
           departemen: req.app.locals.credential.departemen,
+          tanggal_pengajuan:{
+            [Op.between]: [firstday, lastday],
+          }
         }
       }) 
 
-      let data = {
-        data: count
-      }
-
       
-      return ResponseCode.successGet(req, res, "Jumlah Semua data Pengajuan", data);
+const result = {
+  tanggal_mulai: firstday,
+  tanggal_selesai: lastday,
+  jumlah:count
+}
+      
+      return ResponseCode.successGet(req, res, "Jumlah Semua data Pengajuan", result);
     }
 
     if(data.tipe == 'pengajuan diterima'){
@@ -219,14 +232,19 @@ exports.dashboardCount = async (req, res) => {
         where: {
           status: 'Proses Vendor',
           departemen: req.app.locals.credential.departemen,
+          tanggal_pengajuan:{
+            [Op.between]: [firstday, lastday],
+          }
         }
       }) 
 
-      let data = {
-        data: count
+      const result = {
+        tanggal_mulai: firstday,
+        tanggal_selesai: lastday,
+        jumlah:count
       }
 
-      return ResponseCode.successGet(req, res, "Jumlah Data Diterima Admin", data);
+      return ResponseCode.successGet(req, res, "Jumlah Data Diterima Admin", result);
     }
 
     if(data.tipe == 'pengajuan ditinjau'){
@@ -234,44 +252,59 @@ exports.dashboardCount = async (req, res) => {
         where: {
           status: 'Verifikasi Admin',
           departemen: req.app.locals.credential.departemen,
+          tanggal_pengajuan:{
+            [Op.between]: [firstday, lastday],
+          }
         }
       }) 
 
-      let data = {
-        data: count
+      const result = {
+        tanggal_mulai: firstday,
+        tanggal_selesai: lastday,
+        jumlah:count
       }
 
-      return ResponseCode.successGet(req, res, "Jumlah Data Ditinjau Admin", data);
+      return ResponseCode.successGet(req, res, "Jumlah Data Ditinjau Admin", result);
     }
     if(data.tipe == 'ditolak'){
       let count = await Pengajuan.count({
         where: {
           status: 'Ditolak',
           departemen: req.app.locals.credential.departemen,
+          tanggal_pengajuan:{
+            [Op.between]: [firstday, lastday],
+          }
         }
       }) 
 
-      let data = {
-        data: count
+      const result = {
+        tanggal_mulai: firstday,
+        tanggal_selesai: lastday,
+        jumlah:count
       }
 
-      return ResponseCode.successGet(req, res, "Jumlah Data Ditolak Admin", data);
+      return ResponseCode.successGet(req, res, "Jumlah Data Ditolak Admin", result);
     }
     if(data.tipe == 'selesai'){
       let count = await Pengajuan.count({
         where: {
           status: 'Selesai',
           departemen: req.app.locals.credential.departemen,
+          tanggal_pengajuan:{
+            [Op.between]: [firstday, lastday],
+          }
         }
       }) 
 
-      let data = {
-        data: count
+      const result = {
+        tanggal_mulai: firstday,
+        tanggal_selesai: lastday,
+        jumlah:count
       }
 
-      return ResponseCode.successGet(req, res, "Jumlah Data Selesai Admin", data);
+      return ResponseCode.successGet(req, res, "Jumlah Data Selesai Admin", result);
     }
-    
+
   } catch (err) {
     console.log(err);
     return ResponseCode.error.error(req, res, err.response);
