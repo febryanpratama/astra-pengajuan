@@ -28,6 +28,10 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.DATE,
       allowNull: true,
     },
+    tanggal_penyelesaian: {
+      type: Sequelize.DATE,
+      allowNull: true,
+    },
     deskripsi: {
       type: Sequelize.TEXT,
       allowNull: true,
@@ -40,9 +44,15 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.ENUM("high", "normal", "low"),
       allowNull: false,
     },
-    // image: {
-    //   type: Sequelize.STRING,
-    // },
+
+    file_bph: {
+      type: Sequelize.TEXT("long"),
+      allowNull: true,
+    },
+    komentar_selesai: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
     status: {
       type: Sequelize.ENUM(
         "selesai",
