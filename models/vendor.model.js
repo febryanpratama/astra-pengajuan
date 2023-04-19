@@ -8,6 +8,10 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    no_vendor: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
     alamat: {
       type: Sequelize.STRING,
       allowNull: false,

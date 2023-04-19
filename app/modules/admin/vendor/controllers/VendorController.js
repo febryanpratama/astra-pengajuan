@@ -22,6 +22,7 @@ exports.store = async (req, res) => {
   const response = await Vendor.create({
     nama_vendor: data.nama_vendor,
     pemilik_vendor: data.pemilik_vendor,
+    no_vendor : data.no_vendor == null ? null : data.no_vendor,
     telpon: data.telpon,
     alamat: data.alamat,
   });
@@ -70,6 +71,7 @@ exports.update = async (req, res) => {
       {
         nama_vendor: data.nama_vendor,
         pemilik_vendor: data.pemilik_vendor,
+        no_vendor : data.no_vendor == null ? null : data.no_vendor,
         telpon: data.telpon,
         alamat: data.alamat,
       },

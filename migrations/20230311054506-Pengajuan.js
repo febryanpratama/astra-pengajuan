@@ -41,6 +41,10 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: true,
       },
+      tanggal_penyelesaian: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
       departemen: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -56,6 +60,18 @@ module.exports = {
       prioritas: {
         type: Sequelize.ENUM("Low", "Normal", "High"),
         allowNull: false,
+      },
+      file_bph: {
+        type: Sequelize.TEXT("long"),
+        allowNull: true,
+      },
+      komentar_selesai: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      rating: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       status: {
         type: Sequelize.ENUM(

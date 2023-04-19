@@ -292,9 +292,39 @@ exports.terima = async (req, res) => {
 
     if (data.tipe == "Selesai") {
       // console.log("selesai")
+      if(data.file_bph == null){
+        return ResponseCode.errorPost(req, res, "File BPH tidak boleh kosong");
+      }
+
+      const estimasi_selesai = dataPengajuan.tanggal_selesai
+      const now = new Date()
+      const timeDifference = Math.abs(estimasi_selesai.getTime() - now.getTime());
+      let differentDays = Math.ceil(timeDifference / (1000 * 3600 * 24));
+
+      let stats = ""
+      if(estimasi_selesai > now){
+        // const
+        if(differentDays > 3){
+          stats = "Very Good"
+        }else if(differentDays < 3 && differentDays >= 1){
+          stats = "Good"
+        }
+      }else{
+        if(differentDays > 3){
+          stats = "Very Poor"
+        }else if(differentDays < 3 && differentDays >= 1){
+          stats = "Poor"
+        }
+      }
+
+      // return ResponseCode.successGet(req, res, "Data Pengajuan", data);
       const response = await Pengajuan.update(
         {
+          tanggal_penyelesaian : new Date().toDateString(),
+          file_bph : data.file_bph,
+          rating: stats,
           status: "Selesai",
+          komentar_selesai: data.komentar_selesai == null ? null : data.komentar_selesai,
         },
         {
           where: {
@@ -313,7 +343,7 @@ exports.terima = async (req, res) => {
       return ResponseCode.successPost(
         req,
         res,
-        " Data Pengajuan telah Selesai",
+        "Data Pengajuan telah Selesai",
         response
       );
     }

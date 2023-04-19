@@ -21,6 +21,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      no_vendor: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       pemilik_vendor: {
         type: Sequelize.STRING,
         allowNull: false,
