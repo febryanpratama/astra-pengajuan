@@ -69,6 +69,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      rating: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       status: {
         type: Sequelize.ENUM(
           "Verifikasi Admin",
