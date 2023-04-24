@@ -206,6 +206,9 @@ exports.dashboardCount = async (req, res) => {
   const endDate = new Date(data.tanggal_selesai + " 23:59:59");
   // return ResponseCode.successGet(req, res, startedDate);
 
+    if(!data.tipe){
+    return ResponseCode.errorPost(req, res, "Tipe tidak boleh kosong");
+  }
   try {
     if (data.tipe == 'total pengajuan') {
       let count = await Pengajuan.count({
