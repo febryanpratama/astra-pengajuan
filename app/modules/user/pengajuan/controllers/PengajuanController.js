@@ -312,3 +312,132 @@ exports.report = async (req, res) => {
     return ResponseCode.error.error(req, res, err.response);
   }
 };
+
+exports.dashboardCount = async (req, res) => {
+  let data = req.body;
+
+  // console.log()
+  // const data = req.query;
+
+  // return ResponseCode.successGet(req, res, "Data Pengajuan", data);
+  // console.log("data");
+  // INI BEDA
+  const start = new Date();
+  var first = start.getDate() - start.getDay();
+  var last = first + 6;
+
+  var firstday = new Date(start.setDate(first))
+  var lastday = new Date(start.setDate(last))
+
+  // return ResponseCode.successGet(req, res, firstday);
+  const startedDate = new Date(data.tanggal_mulai + " 00:00:00");
+  const endDate = new Date(data.tanggal_selesai + " 23:59:59");
+  // return ResponseCode.successGet(req, res, startedDate);
+
+    if(!data.tipe){
+    return ResponseCode.errorPost(req, res, "Tipe tidak boleh kosong");
+  }
+  try {
+    if (data.tipe == 'total pengajuan') {
+      let count = await Pengajuan.count({
+        where: {
+          user_id: req.app.locals.credential.id,
+          tanggal_pengajuan:{
+            [Op.between]: [firstday, lastday],
+          }
+        }
+      }) 
+
+      
+const result = {
+  tanggal_mulai: firstday,
+  tanggal_selesai: lastday,
+  jumlah:count
+}
+      
+      return ResponseCode.successGet(req, res, "Jumlah Semua data Pengajuan", result);
+    }
+
+    if(data.tipe == 'pengajuan diterima'){
+      let count = await Pengajuan.count({
+        where: {
+          status: 'Proses Vendor',
+          user_id: req.app.locals.credential.id,
+          tanggal_pengajuan:{
+            [Op.between]: [firstday, lastday],
+          }
+        }
+      }) 
+
+      const result = {
+        tanggal_mulai: firstday,
+        tanggal_selesai: lastday,
+        jumlah:count
+      }
+
+      return ResponseCode.successGet(req, res, "Jumlah Data Diterima Admin", result);
+    }
+
+    if(data.tipe == 'pengajuan ditinjau'){
+      let count = await Pengajuan.count({
+        where: {
+          status: 'Verifikasi Admin',
+          user_id: req.app.locals.credential.id,
+          tanggal_pengajuan:{
+            [Op.between]: [firstday, lastday],
+          }
+        }
+      }) 
+
+      const result = {
+        tanggal_mulai: firstday,
+        tanggal_selesai: lastday,
+        jumlah:count
+      }
+
+      return ResponseCode.successGet(req, res, "Jumlah Data Ditinjau Admin", result);
+    }
+    if(data.tipe == 'ditolak'){
+      let count = await Pengajuan.count({
+        where: {
+          status: 'Ditolak',
+          user_id: req.app.locals.credential.id,
+          tanggal_pengajuan:{
+            [Op.between]: [firstday, lastday],
+          }
+        }
+      }) 
+
+      const result = {
+        tanggal_mulai: firstday,
+        tanggal_selesai: lastday,
+        jumlah:count
+      }
+
+      return ResponseCode.successGet(req, res, "Jumlah Data Ditolak Admin", result);
+    }
+    if(data.tipe == 'selesai'){
+      let count = await Pengajuan.count({
+        where: {
+          status: 'Selesai',
+          user_id: req.app.locals.credential.id,
+          tanggal_pengajuan:{
+            [Op.between]: [firstday, lastday],
+          }
+        }
+      }) 
+
+      const result = {
+        tanggal_mulai: firstday,
+        tanggal_selesai: lastday,
+        jumlah:count
+      }
+
+      return ResponseCode.successGet(req, res, "Jumlah Data Selesai Admin", result);
+    }
+
+  } catch (err) {
+    console.log(err);
+    return ResponseCode.error.error(req, res, err.response);
+  }
+}

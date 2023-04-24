@@ -36,4 +36,10 @@ router.patch(
 router.get("/jumlah/:id", AuthMiddleware.AuthAdmin, PengajuanController.jumlah);
 
 router.patch("/tolak/:id", AuthMiddleware.AuthAdmin, PengajuanController.tolak);
+
+router.post(
+  "/dashboard/count",
+  AuthMiddleware.AuthAdmin,
+  PengajuanController.dashboardCount
+)
 module.exports = router;

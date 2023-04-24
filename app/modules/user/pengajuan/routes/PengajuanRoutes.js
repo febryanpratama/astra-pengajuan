@@ -31,4 +31,10 @@ router.post(
   PengajuanController.report
 );
 
+router.post(
+  "/dashboard/count",
+  AuthMiddleware.AuthUser,
+  PengajuanController.dashboardCount
+)
+
 module.exports = router;
