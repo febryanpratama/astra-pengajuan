@@ -14,12 +14,7 @@ const { Op } = require("sequelize");
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
-  // console.log(
-  //   "req.params.page: " +
-  //     req.query.page +
-  //     " req.query.limit: " +
-  //     req.query.limit
-  // );
+
 
   try{
     let limitd = parseInt(req.query.limit) || 10;
@@ -74,16 +69,6 @@ exports.findAll = async (req, res) => {
 
 exports.store = async (req, res) => {
   let data = req.body;
-
-  // return ResponseCode.successGet(
-  //   req,
-  //   res,
-  //   "Data Pengajuan",
-  //   req.app.locals.credential.id
-  // );
-
-  // return ResponseCode.successGet(req, res, "Data Pengajuan", data);
-  // console.log(checkUser);
   try {
     // Check User id from asmokalbarmobile
     const checkUser = await axios.post(
@@ -100,6 +85,7 @@ exports.store = async (req, res) => {
     }
 
     // return ResponseCode.successGet(req, res, checkUser.data.data);
+    
 
     const response = await Pengajuan.create({
       user_id: req.app.locals.credential.id,
@@ -115,18 +101,21 @@ exports.store = async (req, res) => {
     });
 
     //foto
-
-    data.foto.forEach((element) => {
+    data.foto.forEach(async (element) => {
       // check dulu base64nya:image validasi
+
 
       const checkImage = element["image"];
 
-      const foto = Foto.create({
+      const foto = await Foto.create({
         pengajuan_id: response.id,
-        file_photo: element["image"],
+        file_photo: checkImage,
         createdAt: new Date().toDateString(),
         updatedAt: new Date().toDateString(),
       });
+
+      // console.log("foto", foto)
+
     });
 
     // tambah lg nanti
@@ -148,7 +137,7 @@ exports.store = async (req, res) => {
     );
   } catch (error) {
     // console.log(error);
-    return ResponseCode.errorPost(req, res, error.data);
+    return ResponseCode.errorPost(req, res, error.response);
   }
 };
 
