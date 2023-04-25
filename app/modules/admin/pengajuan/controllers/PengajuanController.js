@@ -17,15 +17,11 @@ const { default: axios } = require("axios");
 exports.findAll = async (req, res) => {
   // return ResponseCo
   // limit page
-  console.log(
-    "req.params.page: " +
-      req.query.page +
-      " req.query.limit: " +
-      req.query.limit
-  );
+  let limitd = parseInt(req.query.limit) || 10;
+  let offsetd = parseInt(req.query.page) || 0;
 
-  let limit = parseInt(req.query.limit) || 10;
-  let offset = parseInt(req.query.page) || 0;
+  const offset = offsetd * limitd
+  const limit = offset + limitd
 
   // return ResponseCode.successGet(req, res, "Data Pengajuan", limit);
   // console.log("page: " + page + " limit: " + limit + " offset: " + offset);

@@ -22,8 +22,11 @@ exports.findAll = async (req, res) => {
   // );
 
   try{
-    let limit = parseInt(req.query.limit) || 10;
-    let offset = parseInt(req.query.page) || 0;
+    let limitd = parseInt(req.query.limit) || 10;
+    let offsetd = parseInt(req.query.page) || 0;
+
+    const offset = offsetd * limitd
+    const limit = offset + limitd
   
     const data = await Pengajuan.findAll({
       include: [
