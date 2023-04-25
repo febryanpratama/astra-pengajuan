@@ -71,35 +71,44 @@ exports.findAll = async (req, res) => {
 
 exports.detail = async (req, res) => {
   const id = req.params.id;
-  console.log("detail")
 
   const response = await Pengajuan.findOne({
     include: [
-        {
-          model: Vendor,
-          as: "vendor",
-        },
-        {
-          model: Foto,
-          as: "foto",
-        },
-        {
-          model: History,
-          as: "aktivitas",
-        },
-      ],
-  },{
+      {
+        model: Vendor,
+        as: "vendor",
+      },
+      {
+        model: Foto,
+        as: "foto",
+      },
+      {
+        model: History,
+        as: "aktivitas",
+      },
+    ],
     where: {
       id: id,
     },
   });
   // console.log(response);
+  let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
+    user_id: response.user_id
+  })
+
+  let dataUser = {
+    nama: user.data.data.name,
+    departemen: user.data.data.departemen
+  }
+
+  response.dataValues.user = dataUser
 
   if (response == null) {
     return ResponseCode.errorPost(req, res, "Detail tidak ditemukan");
   }
   return ResponseCode.successGet(req, res, "Data Pengajuan", response);
 };
+
 
 exports.komentar = async (req, res) => {
   const id = req.params.id;
