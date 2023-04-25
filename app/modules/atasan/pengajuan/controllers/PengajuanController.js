@@ -323,6 +323,19 @@ const result = {
       return ResponseCode.successGet(req, res, "Jumlah Data Selesai Admin", result);
     }
 
+    if(data.tipe == 'vendor'){
+      let count = await Vendor.count({
+
+      })
+      const result = {
+        tanggal_mulai: '-',
+        tanggal_selesai: '-',
+        jumlah:count
+      }
+
+      return ResponseCode.successGet(req, res, "Jumlah Data Vendor", result);
+    }
+
   } catch (err) {
     console.log(err);
     return ResponseCode.error.error(req, res, err.response);

@@ -42,4 +42,16 @@ router.post(
   AuthMiddleware.AuthAdmin,
   PengajuanController.dashboardCount
 )
+router.post(
+  '/chart/count',
+  AuthMiddleware.AuthAdmin,
+  PengajuanController.chartStatus
+)
+
+router.post(
+  '/chart/count/:id',
+  AuthMiddleware.AuthAdmin,
+  PengajuanController.chartCount
+)
+
 module.exports = router;
