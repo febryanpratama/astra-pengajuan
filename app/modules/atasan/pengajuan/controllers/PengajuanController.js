@@ -12,18 +12,11 @@ const { default: axios } = require("axios");
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
-  // return ResponseCode.successGet(req, res, "Data Pengajuan", "xx");
+  let limitd = parseInt(req.query.limit) || 10;
+  let offsetd = parseInt(req.query.page) || 0;
 
-  // console.log(
-  //   "req.params.page: " +
-  //     req.query.page +
-  //     " req.query.limit: " +
-  //     req.query.limit
-  // );
-  console.log("findall")
-
-  let limit = parseInt(req.query.limit) || 10;
-  let offset = parseInt(req.query.page) || 0;
+  const offset = offsetd * limitd
+  const limit = offset + limitd
 
   try {
     const data = await Pengajuan.findAll({
