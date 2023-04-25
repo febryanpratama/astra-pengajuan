@@ -54,18 +54,17 @@ exports.findAll = async (req, res) => {
     });
 
     for(let i = 0; i < data.length; i++){
-    // let datad = data[i]
-    let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
-      user_id: data[i].user_id
-    })
+      let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
+        user_id: data[i].user_id
+      })
 
-    let dataUser = {
-      nama: user.data.data.name,
-      departemen: user.data.data.departemen
+      let dataUser = {
+        nama: user.data.data.name,
+        departemen: user.data.data.departemen
+      }
+
+      data[i].dataValues.user = dataUser
     }
-
-    data[i].dataValues.user = dataUser
-  }
 
   return ResponseCode.successGet(req, res, "Data Pengajuan", data);
   } catch (error) {
@@ -73,67 +72,6 @@ exports.findAll = async (req, res) => {
     return ResponseCode.errorPost(req, res, error);
   }
 };
-
-// exports.store = async (req, res) => {
-//   let data = req.body;
-
-// return ResponseCode.successGet(req, res, "Data Pengajuan", data);
-
-// return ResponseCode.successGet(req, res, "Data Pengajuan", "kontill");
-// try {
-// const getVendor = await db.vendors.findOne({
-//   where: {
-//     id: data.vendor_id,
-//   },
-// });
-// console.log(getVendor);
-// if (getVendor == null) {
-//   return ResponseCode.errorPost(req, res, "Vendor tidak ditemukan");
-// }
-
-// return Response Code.successPost(req, res, "Vendor ditemukan");
-
-//     const response = await Pengajuan.create({
-//       user_id: data.user_id,
-//       pengajuan_name: data.pengajuan_name,
-//       tanggal_pengajuan: new Date().toDateString(),
-//       deskripsi: data.deskripsi,
-//       prioritas: data.prioritas,
-//       status: "Verifikasi Admin",
-//       // karena sudah di set
-//       harga: 0,
-//     });
-
-//     data.foto.forEach((element) => {
-//       const checkImage = element["image"];
-
-//       const foto = Foto.create({
-//         pengajuan_id: response.id,
-//         file_photo: element["image"],
-//         createAt: new Date().toDateString(),
-//         updateAt: new Date().toDateString(),
-//       });
-//     });
-
-//     const respHistory = await History.create({
-//       pengajuan_id: response.id,
-//       tanggal: new Date().toDateString(),
-//       deskripsi: "Membuat Pengajuan Baru",
-// createAt: new Date().toDateString(),
-//     });
-
-// store foto
-
-//     return ResponseCode.successPost(
-//       req,
-//       res,
-//       "Data Pengajuan Berhasil Ditambahkan"
-//     );
-//   } catch (error) {
-//     console.log(error);
-//     return ResponseCode.errorPost(req, res, error);
-//   }
-// };
 
 exports.detail = async (req, res) => {
   const id = req.params.id;
@@ -401,7 +339,7 @@ exports.report = async (req, res) => {
     const cekreport = await Pengajuan.findAll({
       where: {
         tanggal_pengajuan: {
-          [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
+          [Op.between]: [startedDate, endDate],
         },
       },
     });
@@ -414,14 +352,20 @@ exports.report = async (req, res) => {
         "Data Pengajuan Report tidak ditemukan"
       );
     }
-    // const response = await Pengajuan.findAll({
-    //   tanggal_pengajuan: {
-    //     [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
-    //   },
-    //   where: {
-    //     id: id,
-    //   },
-    // });
+
+    for(let i = 0; i < cekreport.length; i++){
+      let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
+        user_id: cekreport[i].user_id
+      })
+
+      let dataUser = {
+        nama: user.data.data.name,
+        departemen: user.data.data.departemen
+      }
+
+      cekreport[i].dataValues.user = dataUser
+    }
+
     return ResponseCode.successGet(
       req,
       res,

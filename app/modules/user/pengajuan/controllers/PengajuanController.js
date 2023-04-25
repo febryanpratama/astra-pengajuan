@@ -293,6 +293,19 @@ exports.report = async (req, res) => {
         "Data Pengajuan Report tidak ditemukan"
       );
     }
+
+    for(let i = 0; i < cekreport.length; i++){
+      let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
+        user_id: cekreport[i].user_id
+      })
+
+      let dataUser = {
+        nama: user.data.data.name,
+        departemen: user.data.data.departemen
+      }
+
+      cekreport[i].dataValues.user = dataUser
+    }
     // const response = await Pengajuan.findAll({
     //   tanggal_pengajuan: {
     //     [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
