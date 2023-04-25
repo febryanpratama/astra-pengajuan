@@ -101,22 +101,21 @@ exports.store = async (req, res) => {
     });
 
     //foto
-    data.foto.forEach(async (element) => {
-      // check dulu base64nya:image validasi
 
+    for(let i = 0; i < data.foto.length; i++){
 
-      const checkImage = element["image"];
-
+      // return ResponseCode.successPost(
+      //   req,
+      //   res,
+      //   data.foto[i].image
+      // )
       const foto = await Foto.create({
         pengajuan_id: response.id,
-        file_photo: checkImage,
+        file_photo: data.foto[i].image,
         createdAt: new Date().toDateString(),
         updatedAt: new Date().toDateString(),
       });
-
-      // console.log("foto", foto)
-
-    });
+    }
 
     // tambah lg nanti
     // console.log(response);
@@ -163,6 +162,17 @@ exports.detail = async (req, res) => {
     },
   });
   // console.log(response);/
+
+  let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
+    user_id: response.user_id
+  })
+
+  let dataUser = {
+    nama: user.data.data.name,
+    departemen: user.data.data.departemen
+  }
+
+  response.dataValues.user = dataUser
 
   if (response == null) {
     return ResponseCode.errorPost(req, res, "Detail tidak ditemukan");

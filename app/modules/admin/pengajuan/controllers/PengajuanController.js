@@ -91,7 +91,17 @@ exports.detail = async (req, res) => {
       id: id,
     },
   });
-  console.log(response);
+  // console.log(response);
+  let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
+    user_id: response.user_id
+  })
+
+  let dataUser = {
+    nama: user.data.data.name,
+    departemen: user.data.data.departemen
+  }
+
+  response.dataValues.user = dataUser
 
   if (response == null) {
     return ResponseCode.errorPost(req, res, "Detail tidak ditemukan");
