@@ -647,10 +647,49 @@ exports.chartCount = async (req, res) => {
     for (let month = 1; month <= 12; month++) {
 
       
-      let count = await Pengajuan.count({
+      let countPoor = await Pengajuan.count({
         where: {
           vendor_id: parseInt(vendor.id),
-          status: 'Selesai',
+          rating: 'Poor',
+          tanggal_pengajuan: {
+            [Op.between]: [
+              new Date(date.getFullYear(), month-1, 1),
+              new Date(date.getFullYear(), month, 1),
+            ],
+          },
+        },
+      });
+
+      let countVeryPoor = await Pengajuan.count({
+        where: {
+          vendor_id: parseInt(vendor.id),
+          rating: 'Very Poor',
+          tanggal_pengajuan: {
+            [Op.between]: [
+              new Date(date.getFullYear(), month-1, 1),
+              new Date(date.getFullYear(), month, 1),
+            ],
+          },
+        },
+      });
+
+      let countVeryGood = await Pengajuan.count({
+        where: {
+          vendor_id: parseInt(vendor.id),
+          rating: 'Very Good',
+          tanggal_pengajuan: {
+            [Op.between]: [
+              new Date(date.getFullYear(), month-1, 1),
+              new Date(date.getFullYear(), month, 1),
+            ],
+          },
+        },
+      });
+
+      let countGood = await Pengajuan.count({
+        where: {
+          vendor_id: parseInt(vendor.id),
+          rating: 'Good',
           tanggal_pengajuan: {
             [Op.between]: [
               new Date(date.getFullYear(), month-1, 1),
@@ -662,7 +701,25 @@ exports.chartCount = async (req, res) => {
 
       sumMonth.push({
         "month": month,
-        "count": count
+        "rating": [
+          {
+            "name": "Poor",
+            "value": countPoor
+          },
+          {
+            "name": "Very Poor",
+            "value": countVeryPoor
+          },
+          {
+            "name": "Very Good",
+            "value": countVeryGood
+          },
+          {
+            "name": "Good",
+            "value": countGood
+          },
+
+        ]
       })
     }
 
