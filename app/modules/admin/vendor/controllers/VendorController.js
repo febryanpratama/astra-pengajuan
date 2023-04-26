@@ -154,7 +154,7 @@ exports.findList = async (req, res) => {
     return ResponseCode.successGet(req, res, "Data Vendor", data);
 
   }catch(err){
-    return ResponseCode.serverError(req, res, err.message)
+    return ResponseCode.errorPost(req, res, err.message)
   }
 };
 
