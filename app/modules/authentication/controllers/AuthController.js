@@ -16,11 +16,12 @@ exports.login = async (req, res) => {
   if (response.data.status === false) {
     return ResponseCode.errorPost(req, res, response.data.message);
   }
-
+  
   const respAkun = {
     id: response.data.data.id,
     email: response.data.data.email,
     departemen: response.data.data.departemen,
+    foto: 'https://asmokalbarmobile.com/uploads/'+response.data.data.foto,
     roles: response.data.data.roles,
   };
 
@@ -34,6 +35,7 @@ exports.login = async (req, res) => {
     email: response.data.data.email,
     nama: response.data.data.name,
     departemen: response.data.data.departemen,
+    foto: 'https://asmokalbarmobile.com/uploads/'+response.data.data.foto,
     roles: response.data.data.roles,
   };
 
