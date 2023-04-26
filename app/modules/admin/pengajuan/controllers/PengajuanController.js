@@ -559,7 +559,11 @@ exports.chartStatus = async (req, res) => {
     var firstDay = new Date(data.year, 1-1, 1);
     var lastDay = new Date(data.year, 12, 0);
 
-    let dataVendor = await Vendor.findAll({})
+    let dataVendor = await Vendor.findAll({
+      where: {
+        is_deleted: null
+      }
+    })
 
     // return ResponseCode.successGet(req, res, "Data Pengajuan", vendor); 
     
