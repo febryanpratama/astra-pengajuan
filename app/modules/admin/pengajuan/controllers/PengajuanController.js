@@ -614,9 +614,10 @@ exports.chartStatus = async (req, res) => {
         "countVeryGood": countVeryGood,
       })
     }
-  return ResponseCode.successPost(
+  return ResponseCode.successGet(
     req,
     res,
+    "Jumlah Semua data Pengajuan",
     sumMonth
   )
 }
@@ -667,9 +668,10 @@ exports.chartCount = async (req, res) => {
 
     vendor.dataValues.countMonth = sumMonth
 
-  return ResponseCode.successPost(
+  return ResponseCode.successGet(
     req,
     res,
+    "Data Vendor",
     vendor
   )
 }
