@@ -548,88 +548,115 @@ const result = {
 }
 
 exports.chartStatus = async (req, res) => {
-  // const id = req.params.id;
 
   const data = req.body
-  const year = new Date().getFullYear();
-  const date = new Date()
 
   if(!data.year){
     return ResponseCode.errorPost(req, res, "Tahun tidak boleh kosong");
   }
 
-  let sumMonth = []
+  try{
+    var firstDay = new Date(data.year, 1-1, 1);
+    var lastDay = new Date(data.year, 12, 0);
 
-    for (let month = 1; month <= 12; month++) {
-      
-      let countPoor = await Pengajuan.count({
-        where: {
-          // vendor_id: parseInt(vendor.id),
-          rating: 'Poor',
-          tanggal_pengajuan: {
-            [Op.between]: [
-              new Date(data.year, month-1, 1),
-              new Date(data.year, month, 1),
-            ],
-          },
-        },
-      });
+    let dataVendor = await Vendor.findAll({})
 
-      let countVeryPoor = await Pengajuan.count({
-        where: {
-          // vendor_id: parseInt(vendor.id),
-          rating: 'Very Poor',
-          tanggal_pengajuan: {
-            [Op.between]: [
-              new Date(data.year, month-1, 1),
-              new Date(data.year, month, 1),
-            ],
-          },
-        },
-      });
-      let countVeryGood = await Pengajuan.count({
-        where: {
-          // vendor_id: parseInt(vendor.id),
-          rating: 'Very Good',
-          tanggal_pengajuan: {
-            [Op.between]: [
-              new Date(data.year, month-1, 1),
-              new Date(data.year, month, 1),
-            ],
-          },
-        },
-      });
-      let countGood = await Pengajuan.count({
-        where: {
-          // vendor_id: parseInt(vendor.id),
-          rating: 'Good',
-          tanggal_pengajuan: {
-            [Op.between]: [
-              new Date(data.year, month-1, 1),
-              new Date(data.year, month, 1),
-            ],
-          },
-        },
-      });
+    // return ResponseCode.successGet(req, res, "Data Pengajuan", vendor); 
+    
+    // return ResponseCode.errorPost(
+    //   req,
+    //   res,
+    //   dataVendor.length
+    // )
+    for(let k = 0; k < dataVendor.length; k++){
 
-      sumMonth.push({
-        "month": month,
-        "countPoor": countPoor,
-        "countVeryPoor": countVeryPoor,
-        "countGood": countGood,
-        "countVeryGood": countVeryGood,
-      })
-    }
-  return ResponseCode.successGet(
-    req,
-    res,
-    "Jumlah Semua data Pengajuan",
-    sumMonth
-  )
+      // return ResponseCode.successGet(
+      //   req,
+      //   res,
+      //   "Sukses Mengambil jumlah semua data Pengajuan dan Vendor",
+      //   dataVendor[k].id
+      // )
+        let countPoor = await Pengajuan.count({
+          where: {
+            vendor_id: parseInt(dataVendor[k].id),
+            rating: 'Poor',
+            tanggal_pengajuan: {
+              [Op.between]: [
+                firstDay,
+                lastDay,
+              ],
+            },
+          },
+        });
+
+        let countVeryPoor = await Pengajuan.count({
+          where: {
+            vendor_id: parseInt(dataVendor[k].id),
+            rating: 'Very Poor',
+            tanggal_pengajuan: {
+              [Op.between]: [
+                firstDay,
+                lastDay
+              ],
+            },
+          },
+        });
+
+        let countVeryGood = await Pengajuan.count({
+          where: {
+            vendor_id: parseInt(dataVendor[k].id),
+            rating: 'Very Good',
+            tanggal_pengajuan: {
+              [Op.between]: [
+                firstDay,
+                lastDay
+              ],
+            },
+          },
+        });
+
+        let countGood = await Pengajuan.count({
+          where: {
+            vendor_id: parseInt(dataVendor[k].id),
+            rating: 'Good',
+            tanggal_pengajuan: {
+              [Op.between]: [
+                firstDay,
+                lastDay
+              ],
+            },
+          },
+        });
+
+        const sumData = {
+          countPoor: countPoor,
+          countVeryPoor: countVeryPoor,
+          countVeryGood: countVeryGood,
+          countGood: countGood
+        }
+
+        // dataVendor[k].dataValues.countVeryGood = sumData
+
+
+        dataVendor[k].dataValues.sum_rating = sumData
+
+      }
+
+      return ResponseCode.successGet(
+        req,
+        res,
+        "Jumlah Semua data Pengajuan",
+        dataVendor
+      )
+
+  } catch (err) {
+    return ResponseCode.errorPost(req, res, err.message);
+  }
 }
 
 exports.chartCount = async (req, res) => {
   const id = req.params.id;
+  const body = req.body;
   const year = new Date().getFullYear();
   const date = new Date()
 
@@ -639,6 +666,12 @@ exports.chartCount = async (req, res) => {
   //   vendor
   // )
 
+
+  try{
+
+    if(!body.year){
+      return ResponseCode.errorPost(req, res, "Tahun tidak boleh kosong");
+    }
 
   const vendor = await Vendor.findOne({
     where: {
@@ -659,8 +692,8 @@ exports.chartCount = async (req, res) => {
           rating: 'Poor',
           tanggal_pengajuan: {
             [Op.between]: [
-              new Date(date.getFullYear(), month-1, 1),
-              new Date(date.getFullYear(), month, 1),
+              new Date(year, month-1, 1),
+              new Date(year, month, 1),
             ],
           },
         },
@@ -672,8 +705,8 @@ exports.chartCount = async (req, res) => {
           rating: 'Very Poor',
           tanggal_pengajuan: {
             [Op.between]: [
-              new Date(date.getFullYear(), month-1, 1),
-              new Date(date.getFullYear(), month, 1),
+              new Date(year, month-1, 1),
+              new Date(year, month, 1),
             ],
           },
         },
@@ -685,8 +718,8 @@ exports.chartCount = async (req, res) => {
           rating: 'Very Good',
           tanggal_pengajuan: {
             [Op.between]: [
-              new Date(date.getFullYear(), month-1, 1),
-              new Date(date.getFullYear(), month, 1),
+              new Date(year, month-1, 1),
+              new Date(year, month, 1),
             ],
           },
         },
@@ -698,8 +731,8 @@ exports.chartCount = async (req, res) => {
           rating: 'Good',
           tanggal_pengajuan: {
             [Op.between]: [
-              new Date(date.getFullYear(), month-1, 1),
-              new Date(date.getFullYear(), month, 1),
+              new Date(year, month-1, 1),
+              new Date(year, month, 1),
             ],
           },
         },
@@ -707,6 +740,7 @@ exports.chartCount = async (req, res) => {
 
       sumMonth.push({
         "month": month,
+        "year" : year,
         "rating": [
           {
             "name": "Poor",
@@ -737,4 +771,9 @@ exports.chartCount = async (req, res) => {
     "Data Vendor",
     vendor
   )
+  } catch (err) {
+    // console.log(err);
+    return ResponseCode.error.error(req, res, err.response);
+  }
+
 }
