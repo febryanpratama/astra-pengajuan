@@ -20,6 +20,8 @@ router.patch(
   postValidator,
   VendorController.update
 );
+router.post("/list", AuthMiddleware.AuthAdmin, VendorController.findList);
+
 
 router.get("/jumlah/:id", AuthMiddleware.AuthAdmin, VendorController.jumlah);
 

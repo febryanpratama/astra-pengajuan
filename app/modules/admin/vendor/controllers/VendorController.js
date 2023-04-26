@@ -10,6 +10,68 @@ const Pengajuan = db.pengajuans;
 exports.findAll = async (req, res) => {
   const body = req.body
 
+
+  const data = await Vendor.findAll({
+    where: {
+      is_deleted: null,
+    },
+  });
+
+
+// return ResponseCode.successGet(req, res, "Data Vendor", lastDay);
+
+  for(i=0; i<data.length; i++){
+    const countAll = await Pengajuan.count({
+      where: {
+        vendor_id: data[i].id,
+        is_deleted: null,
+      },
+    })
+    data[i].dataValues.countAll = countAll
+
+    const countPoor = await Pengajuan.count({
+      where: {
+        vendor_id: data[i].id,
+        is_deleted: null,
+        rating: "Poor",
+      },
+    })
+    data[i].dataValues.countPoor = countPoor
+
+    const countVeryPoor = await Pengajuan.count({
+      where: {
+        vendor_id: data[i].id,
+        is_deleted: null,
+        rating: "Very Poor",
+      },
+    })
+    data[i].dataValues.countVeryPoor = countVeryPoor
+
+    const countGood = await Pengajuan.count({
+      where: {
+        vendor_id: data[i].id,
+        is_deleted: null,
+        rating: "Good",
+      },
+    })
+
+    data[i].dataValues.countGood = countGood
+
+    const countVeryGood = await Pengajuan.count({
+      where: {
+        vendor_id: data[i].id,
+        is_deleted: null,
+        rating: "Very Good",
+      },
+    })
+    data[i].dataValues.countVeryGood = countVeryGood
+  }
+
+  return ResponseCode.successGet(req, res, "Data Vendor", data);
+};
+exports.findList = async (req, res) => {
+  const body = req.body
+
   if(!body.year){
     return ResponseCode.errorPost(req, res, "Tahun harus diisi")
   }
