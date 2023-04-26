@@ -72,84 +72,90 @@ exports.findAll = async (req, res) => {
 exports.findList = async (req, res) => {
   const body = req.body
 
-  if(!body.year){
-    return ResponseCode.errorPost(req, res, "Tahun harus diisi")
+  try{
+    if(!body.year){
+      return ResponseCode.errorPost(req, res, "Tahun harus diisi")
+    }
+  
+    const data = await Vendor.findAll({
+      where: {
+        is_deleted: null,
+      },
+    });
+  
+    var firstDay = new Date(body.year, 1-1, 1);
+    var lastDay = new Date(body.year, 12, 0);
+  
+  // return ResponseCode.successGet(req, res, "Data Vendor", lastDay);
+  
+    
+    for(i=0; i<data.length; i++){
+      const countAll = await Pengajuan.count({
+        where: {
+          vendor_id: data[i].id,
+          is_deleted: null,
+          tanggal_pengajuan: {
+            [Op.between]: [firstDay, lastDay]
+          }
+        },
+      })
+      data[i].dataValues.countAll = countAll
+  
+      const countPoor = await Pengajuan.count({
+        where: {
+          vendor_id: data[i].id,
+          is_deleted: null,
+          rating: "Poor",
+          tanggal_pengajuan: {
+            [Op.between]: [firstDay, lastDay]
+          }
+        },
+      })
+      data[i].dataValues.countPoor = countPoor
+  
+      const countVeryPoor = await Pengajuan.count({
+        where: {
+          vendor_id: data[i].id,
+          is_deleted: null,
+          rating: "Very Poor",
+          tanggal_pengajuan: {
+            [Op.between]: [firstDay, lastDay]
+          }
+        },
+      })
+      data[i].dataValues.countVeryPoor = countVeryPoor
+  
+      const countGood = await Pengajuan.count({
+        where: {
+          vendor_id: data[i].id,
+          is_deleted: null,
+          rating: "Good",
+          tanggal_pengajuan: {
+            [Op.between]: [firstDay, lastDay]
+          }
+        },
+      })
+  
+      data[i].dataValues.countGood = countGood
+  
+      const countVeryGood = await Pengajuan.count({
+        where: {
+          vendor_id: data[i].id,
+          is_deleted: null,
+          rating: "Very Good",
+          tanggal_pengajuan: {
+            [Op.between]: [firstDay, lastDay]
+          }
+        },
+      })
+      data[i].dataValues.countVeryGood = countVeryGood
+    }
+  
+    return ResponseCode.successGet(req, res, "Data Vendor", data);
+
+  }catch(err){
+    return ResponseCode.serverError(req, res, err.message)
   }
-
-  const data = await Vendor.findAll({
-    where: {
-      is_deleted: null,
-    },
-  });
-
-  var firstDay = new Date(body.year, 1-1, 1);
-  var lastDay = new Date(body.year, 12, 0);
-
-// return ResponseCode.successGet(req, res, "Data Vendor", lastDay);
-
-  for(i=0; i<data.length; i++){
-    const countAll = await Pengajuan.count({
-      where: {
-        vendor_id: data[i].id,
-        is_deleted: null,
-        tanggal_pengajuan: {
-          [Op.between]: [firstDay, lastDay]
-        }
-      },
-    })
-    data[i].dataValues.countAll = countAll
-
-    const countPoor = await Pengajuan.count({
-      where: {
-        vendor_id: data[i].id,
-        is_deleted: null,
-        rating: "Poor",
-        tanggal_pengajuan: {
-          [Op.between]: [firstDay, lastDay]
-        }
-      },
-    })
-    data[i].dataValues.countPoor = countPoor
-
-    const countVeryPoor = await Pengajuan.count({
-      where: {
-        vendor_id: data[i].id,
-        is_deleted: null,
-        rating: "Very Poor",
-        tanggal_pengajuan: {
-          [Op.between]: [firstDay, lastDay]
-        }
-      },
-    })
-    data[i].dataValues.countVeryPoor = countVeryPoor
-
-    const countGood = await Pengajuan.count({
-      where: {
-        vendor_id: data[i].id,
-        is_deleted: null,
-        rating: "Good",
-        tanggal_pengajuan: {
-          [Op.between]: [firstDay, lastDay]
-        }
-      },
-    })
-
-    data[i].dataValues.countGood = countGood
-
-    const countVeryGood = await Pengajuan.count({
-      where: {
-        vendor_id: data[i].id,
-        is_deleted: null,
-        rating: "Very Good",
-        tanggal_pengajuan: {
-          [Op.between]: [firstDay, lastDay]
-        }
-      },
-    })
-    data[i].dataValues.countVeryGood = countVeryGood
-  }
-
-  return ResponseCode.successGet(req, res, "Data Vendor", data);
 };
 
 exports.store = async (req, res) => {
