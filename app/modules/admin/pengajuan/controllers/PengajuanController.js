@@ -549,8 +549,14 @@ const result = {
 
 exports.chartStatus = async (req, res) => {
   // const id = req.params.id;
+
+  const data = req.body
   const year = new Date().getFullYear();
   const date = new Date()
+
+  if(!data.year){
+    return ResponseCode.errorPost(req, res, "Tahun tidak boleh kosong");
+  }
 
   let sumMonth = []
 
@@ -562,8 +568,8 @@ exports.chartStatus = async (req, res) => {
           rating: 'Poor',
           tanggal_pengajuan: {
             [Op.between]: [
-              new Date(date.getFullYear(), month-1, 1),
-              new Date(date.getFullYear(), month, 1),
+              new Date(data.year, month-1, 1),
+              new Date(data.year, month, 1),
             ],
           },
         },
@@ -575,8 +581,8 @@ exports.chartStatus = async (req, res) => {
           rating: 'Very Poor',
           tanggal_pengajuan: {
             [Op.between]: [
-              new Date(date.getFullYear(), month-1, 1),
-              new Date(date.getFullYear(), month, 1),
+              new Date(data.year, month-1, 1),
+              new Date(data.year, month, 1),
             ],
           },
         },
@@ -587,8 +593,8 @@ exports.chartStatus = async (req, res) => {
           rating: 'Very Good',
           tanggal_pengajuan: {
             [Op.between]: [
-              new Date(date.getFullYear(), month-1, 1),
-              new Date(date.getFullYear(), month, 1),
+              new Date(data.year, month-1, 1),
+              new Date(data.year, month, 1),
             ],
           },
         },
@@ -599,8 +605,8 @@ exports.chartStatus = async (req, res) => {
           rating: 'Good',
           tanggal_pengajuan: {
             [Op.between]: [
-              new Date(date.getFullYear(), month-1, 1),
-              new Date(date.getFullYear(), month, 1),
+              new Date(data.year, month-1, 1),
+              new Date(data.year, month, 1),
             ],
           },
         },
