@@ -247,11 +247,13 @@ exports.terima = async (req, res) => {
       let differentDays = timeDifference
 
       let stats = ""
+      // return ResponseCode.successGet(req, res, "Data Pengajuan", differentDays);
       if(estimasi_selesai > now){
         // const
-        if(differentDays > 3){
+
+        if(differentDays >= 3){
           stats = "Very Good"
-        }else if(differentDays < 3 && differentDays >= 1){
+        }else if(differentDays < 3 && differentDays >= 0){
           stats = "Good"
         }
       }else{
