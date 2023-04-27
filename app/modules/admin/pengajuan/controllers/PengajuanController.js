@@ -243,8 +243,8 @@ exports.terima = async (req, res) => {
 
       const estimasi_selesai = dataPengajuan.tanggal_selesai
       const now = new Date()
-      const timeDifference = Math.abs(estimasi_selesai.getTime() - now.getTime());
-      let differentDays = Math.ceil(timeDifference / (1000 * 3600 * 24));
+      const timeDifference = Math.abs(estimasi_selesai.getDate() - now.getDate());
+      let differentDays = timeDifference
 
       let stats = ""
       if(estimasi_selesai > now){
@@ -255,6 +255,8 @@ exports.terima = async (req, res) => {
           stats = "Good"
         }
       }else{
+      // return ResponseCode.successGet(req, res, "Data Pengajuan", differentDays);
+
         if(differentDays >= 3){
           stats = "Very Poor"
         }else if(differentDays < 3 && differentDays >= 1){
@@ -262,7 +264,7 @@ exports.terima = async (req, res) => {
         }
       }
 
-      // return ResponseCode.successGet(req, res, "Data Pengajuan", data);
+      // return ResponseCode.successGet(req, res, "Data Pengajuan", stats);
       const response = await Pengajuan.update(
         {
           tanggal_penyelesaian : new Date().toDateString(),
