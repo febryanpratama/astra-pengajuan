@@ -528,7 +528,9 @@ const result = {
     }
     if(data.tipe == 'vendor'){
       let count = await Vendor.count({
-
+        where: {
+          is_deleted: null,
+        }
       })
       const result = {
         tanggal_mulai: '-',
