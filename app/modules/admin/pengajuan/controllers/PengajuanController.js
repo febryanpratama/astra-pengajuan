@@ -46,6 +46,7 @@ exports.findAll = async (req, res) => {
       },
       limit: limit,
       offset: offset,
+      order: [['tanggal_pengajuan', 'DESC']]
       // order: [["id", "DESC"]],
     });
 
@@ -254,7 +255,7 @@ exports.terima = async (req, res) => {
           stats = "Good"
         }
       }else{
-        if(differentDays > 3){
+        if(differentDays >= 3){
           stats = "Very Poor"
         }else if(differentDays < 3 && differentDays >= 1){
           stats = "Poor"
@@ -292,7 +293,7 @@ exports.terima = async (req, res) => {
       );
     }
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return ResponseCode.errorPost(req, res, err);
   }
 };
