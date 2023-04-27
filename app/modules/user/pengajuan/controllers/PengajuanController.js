@@ -281,6 +281,7 @@ exports.report = async (req, res) => {
   try {
     const cekreport = await Pengajuan.findAll({
       where: {
+        user_id: req.app.locals.credential.id,
         tanggal_pengajuan: {
           [Op.between]: [startedDate, endDate],
         },
