@@ -355,9 +355,6 @@ exports.report = async (req, res) => {
       where: {
         tanggal_pengajuan: {
           [Op.between]: [startedDate, endDate],
-        },
-        status: {
-          [Op.in]: ["Selesai", "Ditolak"]
         }
       },
     });
@@ -391,8 +388,8 @@ exports.report = async (req, res) => {
       cekreport
     );
   } catch (err) {
-    console.log(err);
-    return ResponseCode.errorPost(req, res, err.response);
+    // console.log(err);
+    return ResponseCode.errorPost(req, res, err);
   }
 };
 
