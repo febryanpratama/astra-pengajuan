@@ -357,7 +357,7 @@ exports.report = async (req, res) => {
           [Op.between]: [startedDate, endDate],
         },
         status: {
-          in: ["Selesai", "Ditolak"]
+          [Op.in]: ["Selesai", "Ditolak"]
         }
       },
     });
@@ -392,7 +392,7 @@ exports.report = async (req, res) => {
     );
   } catch (err) {
     console.log(err);
-    return ResponseCode.error.errorPost(req, res, err.response);
+    return ResponseCode.errorPost(req, res, err.response);
   }
 };
 
