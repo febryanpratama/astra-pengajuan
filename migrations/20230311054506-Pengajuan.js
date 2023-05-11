@@ -83,8 +83,14 @@ module.exports = {
         ),
         allowNull: false,
       },
+      estimasi_harga: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+        allowNull: true,
+      },
       harga: {
         type: Sequelize.INTEGER,
+        defaultValue: 0,
         allowNull: true,
       },
       is_deleted: {

@@ -67,6 +67,10 @@ module.exports = (sequelize, Sequelize) => {
       ),
       allowNull: false,
     },
+    estimasi_harga: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+    },
     harga: {
       type: Sequelize.INTEGER,
       allowNull: true,

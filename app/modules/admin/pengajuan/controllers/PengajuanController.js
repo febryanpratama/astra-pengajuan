@@ -210,7 +210,7 @@ exports.terima = async (req, res) => {
           vendor_id: data.vendor_id,
           tanggal_mulai: data.tanggal_mulai,
           tanggal_selesai: data.tanggal_selesai,
-          harga: data.harga,
+          estimasi_harga: data.estimasi_harga,
         },
         {
           where: {
@@ -272,6 +272,7 @@ exports.terima = async (req, res) => {
           rating: stats,
           status: "Selesai",
           komentar_selesai: data.komentar_selesai == null ? null : data.komentar_selesai,
+          harga: data.harga
         },
         {
           where: {
