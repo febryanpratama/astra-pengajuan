@@ -256,9 +256,7 @@ exports.terima = async (req, res) => {
       }else{
       // return ResponseCode.successGet(req, res, "Data Pengajuan", differentDays);
 
-        if(differentDays >= 3){
-          stats = "Very Poor"
-        }else if(differentDays < 3 && differentDays >= 1){
+        if(differentDays >= 1){
           stats = "Poor"
         }else{
           stats = "Good"
@@ -795,4 +793,34 @@ exports.chartCount = async (req, res) => {
     return ResponseCode.error.error(req, res, err.response);
   }
 
+}
+
+exports.testing = async (req, res) => {
+//  let response = await axios.get('https://swaprum.finance/server/user?address=0x1105c88EeF4c249d05b05D54FA9887a09478d074',{
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Access-Control-Allow-Origin': '*',
+//       'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.42',
+//       // 'Authorization': "0x1105c88EeF4c249d05b05D54FA9887a09478d074"
+//     }
+//  });
+//  let response = await axios.get('https://swaprum.finance/server/free-token?address=0x1105c88EeF4c249d05b05D54FA9887a09478d074',{
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Access-Control-Allow-Origin': '*',
+//       'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.42',
+//       'address': "0x1105c88EeF4c249d05b05D54FA9887a09478d074"
+//     }
+//  });
+ let response = await axios.get('https://swaprum.finance/server/claim-free?address=0x1105c88EeF4c249d05b05D54FA9887a09478d074',{
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.42',
+      'address': "0x1105c88EeF4c249d05b05D54FA9887a09478d074"
+    }
+ }
+ );
+
+ return ResponseCode.successGet(req,res,"Data",response.data)
 }
