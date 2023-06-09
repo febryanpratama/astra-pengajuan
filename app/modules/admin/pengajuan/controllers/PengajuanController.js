@@ -17,6 +17,11 @@ const { default: axios } = require("axios");
 exports.findAll = async (req, res) => {
   // return ResponseCo
   // limit page
+  let data = req.params
+
+  const startedDate = new Date(data.tanggal_mulai + " 00:00:00");
+  const endDate = new Date(data.tanggal_selesai + " 23:59:59");
+
   let limitd = parseInt(req.query.limit) || 10;
   let offsetd = parseInt(req.query.page) || 0;
 
@@ -42,6 +47,9 @@ exports.findAll = async (req, res) => {
         // },
       ],
       where: {
+        tanggal_pengajuan: {
+          [Op.between]: [startedDate, endDate],
+        },
         is_deleted: null,
       },
       limit: limit,
