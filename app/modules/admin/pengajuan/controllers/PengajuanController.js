@@ -17,16 +17,19 @@ const { default: axios } = require("axios");
 exports.findAll = async (req, res) => {
   // return ResponseCo
   // limit page
-  let data = req.params
+  let tmulai = req.query.tanggal_mulai
+  let tselesai = req.query.tanggal_selesai
 
-  const startedDate = new Date(data.tanggal_mulai + " 00:00:00");
-  const endDate = new Date(data.tanggal_selesai + " 23:59:59");
+  const startedDate = new Date(tmulai + " 00:00:00");
+  const endDate = new Date(tselesai + " 23:59:59");
 
   let limitd = parseInt(req.query.limit) || 10;
   let offsetd = parseInt(req.query.page) || 0;
 
   const offset = offsetd * limitd
   const limit = offset + limitd
+
+  // console.log(tmulai);
 
   // return ResponseCode.successGet(req, res, "Data Pengajuan", limit);
   // console.log("page: " + page + " limit: " + limit + " offset: " + offset);
