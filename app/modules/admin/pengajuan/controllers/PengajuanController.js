@@ -29,8 +29,8 @@ exports.findAll = async (req, res) => {
   const offset = offsetd * limitd
   const limit = offset + limitd
 
-  // console.log(tmulai);
-
+  console.log(tmulai);
+// 
   // return ResponseCode.successGet(req, res, "Data Pengajuan", limit);
   // console.log("page: " + page + " limit: " + limit + " offset: " + offset);
   try {
@@ -52,6 +52,9 @@ exports.findAll = async (req, res) => {
       where: {
         tanggal_pengajuan: {
           [Op.between]: [startedDate, endDate],
+        },
+        status: {
+          [Op.in]: ["Verifikasi Admin"],
         },
         is_deleted: null,
       },
