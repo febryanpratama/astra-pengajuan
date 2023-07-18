@@ -1,10 +1,10 @@
 {
   "production": {
     "username": "doadmin",
-    "password": "AVNS_Y16EXIeNjEKbAlSAcWk",
-    "database": "dbastrapengajuan",
-    "host": "dbdefault-do-user-11471383-0.b.db.ondigitalocean.com",
+    "password": "AVNS_Yg_M1RkuOAWDqOLIyG9",
+    "host": "db-mysql-sgp1-24107-do-user-14335789-0.b.db.ondigitalocean.com",
     "port": 25060,
+    "database": "defaultdb",
     "dialect": "mysql"
   },
   "test": {
@@ -15,11 +15,9 @@
     "dialect": "mysql"
   },
   "development": {
-    "username": "doadmin",
-    "password": "AVNS_Y16EXIeNjEKbAlSAcWk",
-    "database": "dbastrapengajuan",
-    "host": "dbdefault-do-user-11471383-0.b.db.ondigitalocean.com",
-    "port": 25060,
-    "dialect": "mysql"
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1"
   }
 }
