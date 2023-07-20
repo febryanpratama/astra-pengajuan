@@ -54,7 +54,7 @@ exports.findAll = async (req, res) => {
           [Op.between]: [startedDate, endDate],
         },
         status: {
-          [Op.in]: ["Verifikasi Admin"],
+          [Op.in]: ["Verifikasi Admin", "Proses Admin"],
         },
         is_deleted: null,
       },
