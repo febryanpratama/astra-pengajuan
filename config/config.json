@@ -4,20 +4,22 @@
     "password": "AVNS_Yg_M1RkuOAWDqOLIyG9",
     "host": "db-mysql-sgp1-24107-do-user-14335789-0.b.db.ondigitalocean.com",
     "port": 25060,
-    "database": "defaultdb",
+    "database": "astra-db",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
     "password": null,
-    "database": "database_test",
+    "database": "astra-db",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1"
+    "username": "doadmin",
+    "password": "AVNS_Yg_M1RkuOAWDqOLIyG9",
+    "host": "db-mysql-sgp1-24107-do-user-14335789-0.b.db.ondigitalocean.com",
+    "port": 25060,
+    "database": "astra-db",
+    "dialect": "mysql"
   }
 }
