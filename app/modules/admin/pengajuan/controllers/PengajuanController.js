@@ -316,14 +316,14 @@ exports.terima = async (req, res) => {
 exports.tolak = async (req, res) => {
   const id = req.params.id;
   const data = req.body;
-  // console.log(data)
+  console.log(data)
 
   // data.pengajuan_name
   try {
     const response = await Pengajuan.update(
       {
         status: "Ditolak",
-        // komentar: data.komentar,
+        komentar_ditolak: data.komentar_ditolak,
       },
       {
         where: {

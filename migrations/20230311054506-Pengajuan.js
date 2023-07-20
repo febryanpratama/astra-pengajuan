@@ -69,6 +69,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      komentar_ditolak: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       rating: {
         type: Sequelize.STRING,
         allowNull: true,
