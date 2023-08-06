@@ -9,6 +9,11 @@ const Pengajuan = db.pengajuans;
 const Vendor = db.vendors;
 const Foto = db.foto;
 const History = db.history;
+const Rating = db.rating
+
+
+const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { fromBase64 } = require('@aws-sdk/util-base64-node');
 
 const { Op } = require("sequelize");
 
@@ -69,6 +74,14 @@ exports.findAll = async (req, res) => {
 
 exports.store = async (req, res) => {
   let data = req.body;
+
+  const s3Client = new S3Client({
+    region: 'ap-southeast-2',
+    credentials: {
+      accessKeyId: 'AKIATNRBN2NRZZPT3WGJ',
+      secretAccessKey: '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',
+    },
+  });
   try {
     // Check User id from asmokalbarmobile
     const checkUser = await axios.post(
@@ -100,21 +113,48 @@ exports.store = async (req, res) => {
       harga: 0,
     });
 
-    //foto
 
     for(let i = 0; i < data.foto.length; i++){
 
-      // return ResponseCode.successPost(
-      //   req,
-      //   res,
-      //   data.foto[i].image
-      // )
-      const foto = await Foto.create({
-        pengajuan_id: response.id,
-        file_photo: data.foto[i].image,
-        createdAt: new Date().toDateString(),
-        updatedAt: new Date().toDateString(),
-      });
+
+      const base64Data = data.foto[i].image;
+      
+      // Convert base64 to binary buffer
+      // const binaryData = Buffer.from(base64Data, 'base64');
+      const binaryData = Buffer.from(base64Data.replace(/^data:image\/\w+;base64,/, ""),'base64');
+      //  const binaryData = fromBase64(base64Data);
+      
+
+      // return res.json({binaryData})
+
+      const type = base64Data.split(';')[0].split('/')[1];
+      
+      const fileName = new Date().toISOString().replace(/[-:.]/g,"")+"."+type;
+      // Set up S3 upload parameters
+      const params = {
+        Bucket: 'astrapengajuan',
+        Key: fileName,
+        Body: binaryData,
+        ACL: 'public-read',
+    //     ContentEncoding: 'base64',
+    ContentType: 'image/'+type,
+        ContentEncoding: 'base64'
+      };
+
+        const command = new PutObjectCommand(params);
+        await s3Client.send(command);
+
+        const fileUrl = `https://${params.Bucket}.s3.ap-southeast-2.amazonaws.com/${params.Key}`;
+        
+        const foto = await Foto.create({
+          pengajuan_id: response.id,
+          file_photo: fileUrl,
+          is_in: 'in',
+          createdAt: new Date().toDateString(),
+          updatedAt: new Date().toDateString(),
+        });
+
+        // console.log(fileUrl+"fileurl")
     }
 
     // tambah lg nanti
@@ -135,8 +175,8 @@ exports.store = async (req, res) => {
       "Data Pengajuan Berhasil Ditambahkan"
     );
   } catch (error) {
-    // console.log(error);
-    return ResponseCode.errorPost(req, res, error.response);
+    console.log(error);
+    return ResponseCode.errorPost(req, res, error);
   }
 };
 
@@ -224,6 +264,54 @@ exports.update = async (req, res) => {
   }
 };
 
+exports.rating = async (req, res) => {
+  const id = req.params.id;
+  let data = req.body;
+
+  try {
+    // logika cek id pengajuan
+    const cekpengajuan = await Pengajuan.findOne({
+      where: { status: "Selesai", id },
+    });
+
+    if (cekpengajuan == null) {
+      return ResponseCode.errorPost(req, res, "Pengajuan tidak ditemukan");
+    }
+
+    const cekrating = await Rating.findOne({
+      where: { pengajuan_id: id },
+    });
+
+    if (cekrating != null) {
+      return ResponseCode.errorPost(req, res, "Pengajuan sudah di rating");
+    }
+
+    const response = await Rating.create(
+      {
+        pengajuan_id: id,
+        user_id: req.app.locals.credential.id,
+        vendor_id: cekpengajuan.vendor_id,
+        rating: data.rating,
+      },
+    );
+
+    console.log(response)
+    const history = await db.history.create({
+      pengajuan_id: response.id,
+      tanggal: new Date().toDateString(),
+      deskripsi: "Pengguna Berhasil Memberikan Rating",
+      createdAt: new Date().toDateString(),
+      updatedAt: new Date().toDateString(),
+    });
+
+    return ResponseCode.successPost(req, res, "Data Pengajuan Berhasil Diubah");
+  } catch (err) {
+    //
+    console.log(err);
+    return ResponseCode.errorPost(req, res, err.response);
+    // console.log(err);
+  }
+}
 //admin terima tolak
 // };
 exports.terimatolak = async (req, res) => {

@@ -1,6 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const aws = require('aws-sdk');
+const multer = require('multer');
+// const multerS3 = require('multer-s3');
 const port = 8080;
 const AuthRoutes = require("./app/modules/authentication/routes/AuthRoutes");
 
@@ -15,6 +18,14 @@ const bodyParser = require("body-parser");
 app.use(cors());
 app.use(bodyParser.json({ type: "application/json",limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
+
+aws.config.update({
+  accessKeyId: 'AKIATNRBN2NRZZPT3WGJ',
+  secretAccessKey: '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',
+  region: 'ap-southeast-2',
+});
+
+
 
 const db = require("./models");
 db.sequelize.sync();

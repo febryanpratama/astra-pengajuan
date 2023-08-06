@@ -48,6 +48,7 @@ db.vendors = require("./vendor.model")(sequelize, Sequelize);
 db.pengajuans = require("./pengajuan.model")(sequelize, Sequelize);
 db.history = require("./history.model")(sequelize, Sequelize);
 db.foto = require("./foto.model")(sequelize, Sequelize);
+db.rating = require("./rating.model")(sequelize, Sequelize);
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
@@ -77,6 +78,11 @@ db.pengajuans.hasMany(db.history, {
 db.vendors.hasMany(db.pengajuans, {
   foreignKey: "vendor_id",
   as: "Pengajuan",
+});
+
+db.vendors.hasMany(db.rating, {
+  foreignKey: "vendor_id",
+  as: "rating",
 });
 
 module.exports = db;

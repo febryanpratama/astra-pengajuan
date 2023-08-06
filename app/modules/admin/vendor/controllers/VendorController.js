@@ -5,13 +5,20 @@ const { Op } = require("sequelize");
 // const { post, use } = require("../routes/VendorRoutes");
 const Vendor = db.vendors;
 const Pengajuan = db.pengajuans;
+const Rating = db.rating;
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
   const body = req.body
 
 
-  const data = await Vendor.findAll({
+  const data = await Vendor.findAll({include: [
+        {
+          model: Rating,
+          as: "rating",
+        },
+      ],
+    
     where: {
       is_deleted: null,
     },
@@ -65,6 +72,18 @@ exports.findAll = async (req, res) => {
       },
     })
     data[i].dataValues.countVeryGood = countVeryGood
+
+    const rate = await Rating.findOne({
+      attributes: [
+        [db.sequelize.fn("AVG", db.sequelize.col("rating")), "rating"],
+      ],
+      where: {
+        vendor_id: data[i].id,
+      }
+    })
+
+    data[i].dataValues.rate = rate.dataValues.rating
+
   }
 
   return ResponseCode.successGet(req, res, "Data Vendor", data);

@@ -25,6 +25,8 @@ router.patch(
 // router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.delete);
 router.delete("/:id", AuthMiddleware.AuthUser, PengajuanController.terimatolak);
 
+router.post("/:id/rating", AuthMiddleware.AuthUser, PengajuanController.rating);
+
 router.post(
   "/report/list",
   AuthMiddleware.AuthUser,

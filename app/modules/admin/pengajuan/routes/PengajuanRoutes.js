@@ -9,6 +9,11 @@ const {
 
 router.get("/", AuthMiddleware.AuthAdmin, PengajuanController.findAll);
 
+router.get(
+  '/testing/data',
+  PengajuanController.testing
+)
+
 router.post(
   "/report/list",
   AuthMiddleware.AuthAdmin,
@@ -53,5 +58,6 @@ router.post(
   AuthMiddleware.AuthAdmin,
   PengajuanController.chartCount
 )
+
 
 module.exports = router;

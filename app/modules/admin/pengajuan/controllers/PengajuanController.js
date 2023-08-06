@@ -12,6 +12,8 @@ const { default: axios } = require("axios");
 // const vendorModel = require("../../../../../models/vendor.model");
 
 // const fs = require("fs");
+const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { fromBase64 } = require('@aws-sdk/util-base64-node');
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
@@ -250,6 +252,13 @@ exports.terima = async (req, res) => {
 
 
     if (data.tipe == "Selesai") {
+      const s3Client = new S3Client({
+        region: 'ap-southeast-2',
+        credentials: {
+          accessKeyId: 'AKIATNRBN2NRZZPT3WGJ',
+          secretAccessKey: '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',
+        },
+      });
       // console.log("selesai")
       if(data.file_bph == null){
         return ResponseCode.errorPost(req, res, "File BPH tidak boleh kosong");
@@ -292,8 +301,53 @@ exports.terima = async (req, res) => {
           },
         }
       );
+
+      for(let i = 0; i < data.foto.length; i++){
+
+        // console.log(response+"response")
+
+      const base64Data = data.foto[i].image;
+      
+      // Convert base64 to binary buffer
+      // const binaryData = Buffer.from(base64Data, 'base64');
+      const binaryData = Buffer.from(base64Data.replace(/^data:image\/\w+;base64,/, ""),'base64');
+      //  const binaryData = fromBase64(base64Data);
+      
+
+      // return res.json({binaryData})
+
+      const type = base64Data.split(';')[0].split('/')[1];
+      
+      const fileName = new Date().toISOString().replace(/[-:.]/g,"")+"."+type;
+      // Set up S3 upload parameters
+      const params = {
+        Bucket: 'astrapengajuan',
+        Key: fileName,
+        Body: binaryData,
+        ACL: 'public-read',
+    //     ContentEncoding: 'base64',
+        ContentType: 'image/'+type,
+        ContentEncoding: 'base64'
+      };
+
+        const command = new PutObjectCommand(params);
+        await s3Client.send(command);
+
+        const fileUrl = `https://${params.Bucket}.s3.ap-southeast-2.amazonaws.com/${params.Key}`;
+        
+        const foto = await Foto.create({
+          pengajuan_id: req.params.id,
+          file_photo: fileUrl,
+          is_in: 'out',
+          createdAt: new Date().toDateString(),
+          updatedAt: new Date().toDateString(),
+        });
+
+        // console.log(fileUrl+"fileurl")
+    }
+
       const respHistory = await History.create({
-        pengajuan_id: response.id,
+        pengajuan_id: req.params.id,
         tanggal: new Date().toDateString(),
         deskripsi: "Pengajuan Telah Diselesaikan",
         createAt: new Date().toDateString(),
@@ -308,7 +362,7 @@ exports.terima = async (req, res) => {
       );
     }
   } catch (err) {
-    // console.log(err);
+    console.log(err);
     return ResponseCode.errorPost(req, res, err);
   }
 };
