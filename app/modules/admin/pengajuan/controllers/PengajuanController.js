@@ -288,7 +288,7 @@ exports.terima = async (req, res) => {
 
       const response = await Pengajuan.update(
         {
-          tanggal_penyelesaian : new Date().toDateString(),
+          tanggal_penyelesaian : new Date(),
           file_bph : data.file_bph,
           rating: stats,
           status: "Selesai",
