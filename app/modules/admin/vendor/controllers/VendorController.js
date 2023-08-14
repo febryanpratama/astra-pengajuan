@@ -96,11 +96,17 @@ exports.findList = async (req, res) => {
       return ResponseCode.errorPost(req, res, "Tahun harus diisi")
     }
   
-    const data = await Vendor.findAll({
-      where: {
-        is_deleted: null,
-      },
-    });
+    const data = await Vendor.findAll({include: [
+        {
+          model: Rating,
+          as: "rating",
+        },
+      ],
+    
+    where: {
+      is_deleted: null,
+    },
+  });
   
     var firstDay = new Date(body.year, 1-1, 1);
     var lastDay = new Date(body.year, 12, 0);
@@ -168,6 +174,17 @@ exports.findList = async (req, res) => {
         },
       })
       data[i].dataValues.countVeryGood = countVeryGood
+
+      const rate = await Rating.findOne({
+      attributes: [
+        [db.sequelize.fn("AVG", db.sequelize.col("rating")), "rating"],
+      ],
+      where: {
+        vendor_id: data[i].id,
+      }
+    })
+
+    data[i].dataValues.rate = rate.dataValues.rating
     }
   
     return ResponseCode.successGet(req, res, "Data Vendor", data);
