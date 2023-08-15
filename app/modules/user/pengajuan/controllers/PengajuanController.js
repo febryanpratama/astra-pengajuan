@@ -49,6 +49,7 @@ exports.findAll = async (req, res) => {
       },
       limit: limit,
       offset: offset,
+      order: [['tanggal_pengajuan', 'DESC']]
     });
     
     for(let i = 0; i < data.length; i++){
