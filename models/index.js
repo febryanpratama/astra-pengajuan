@@ -75,6 +75,11 @@ db.pengajuans.hasMany(db.history, {
   as: "aktivitas",
 });
 
+db.pengajuans.hasOne(db.rating, {
+  foreignKey: "pengajuan_id",
+  as: "detail_rating",
+})
+
 db.vendors.hasMany(db.pengajuans, {
   foreignKey: "vendor_id",
   as: "Pengajuan",

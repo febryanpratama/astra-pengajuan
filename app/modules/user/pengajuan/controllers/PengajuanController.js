@@ -196,6 +196,10 @@ exports.detail = async (req, res) => {
         model: History,
         as: "aktivitas",
       },
+      {
+        model: Rating,
+        as: "detail_rating"
+      }
     ],
     where: {
       id: id,
