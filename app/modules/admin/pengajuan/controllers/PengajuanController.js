@@ -6,6 +6,7 @@ const Pengajuan = db.pengajuans;
 const Vendor = db.vendors;
 const Foto = db.foto;
 const History = db.history;
+const Rating = db.rating;
 
 const { Op } = require("sequelize");
 const { default: axios } = require("axios");
@@ -418,6 +419,10 @@ exports.report = async (req, res) => {
           model: Vendor,
           as: "vendor",
         },
+        {
+          model: Rating,
+          as: "detail_rating"
+        }
       ],
       where: {
         tanggal_pengajuan: {
