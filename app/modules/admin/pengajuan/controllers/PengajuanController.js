@@ -13,15 +13,15 @@ const { default: axios } = require("axios");
 // const vendorModel = require("../../../../../models/vendor.model");
 
 // const fs = require("fs");
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
-const { fromBase64 } = require('@aws-sdk/util-base64-node');
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { fromBase64 } = require("@aws-sdk/util-base64-node");
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
   // return ResponseCo
   // limit page
-  let tmulai = req.query.tanggal_mulai
-  let tselesai = req.query.tanggal_selesai
+  let tmulai = req.query.tanggal_mulai;
+  let tselesai = req.query.tanggal_selesai;
 
   const startedDate = new Date(tmulai + " 00:00:00");
   const endDate = new Date(tselesai + " 23:59:59");
@@ -29,11 +29,11 @@ exports.findAll = async (req, res) => {
   let limitd = parseInt(req.query.limit) || 10;
   let offsetd = parseInt(req.query.page) || 0;
 
-  const offset = offsetd * limitd
-  const limit = offset + limitd
+  const offset = offsetd * limitd;
+  const limit = offset + limitd;
 
   console.log(tmulai);
-// 
+  //
   // return ResponseCode.successGet(req, res, "Data Pengajuan", limit);
   // console.log("page: " + page + " limit: " + limit + " offset: " + offset);
   try {
@@ -63,26 +63,26 @@ exports.findAll = async (req, res) => {
       },
       limit: limit,
       offset: offset,
-      order: [['tanggal_pengajuan', 'DESC']]
+      order: [["tanggal_pengajuan", "DESC"]],
       // order: [["id", "DESC"]],
     });
 
-    for(let i = 0; i < data.length; i++){
+    for (let i = 0; i < data.length; i++) {
       let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
-        user_id: data[i].user_id
-      })
+        user_id: data[i].user_id,
+      });
 
       let dataUser = {
         nama: user.data.data.name,
-        departemen: user.data.data.departemen
-      }
+        departemen: user.data.data.departemen,
+      };
 
-      data[i].dataValues.user = dataUser
+      data[i].dataValues.user = dataUser;
     }
 
-  return ResponseCode.successGet(req, res, "Data Pengajuan", data);
+    return ResponseCode.successGet(req, res, "Data Pengajuan", data);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return ResponseCode.errorPost(req, res, error);
   }
 };
@@ -111,15 +111,15 @@ exports.detail = async (req, res) => {
   });
   // console.log(response);
   let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
-    user_id: response.user_id
-  })
+    user_id: response.user_id,
+  });
 
   let dataUser = {
     nama: user.data.data.name,
-    departemen: user.data.data.departemen
-  }
+    departemen: user.data.data.departemen,
+  };
 
-  response.dataValues.user = dataUser
+  response.dataValues.user = dataUser;
 
   if (response == null) {
     return ResponseCode.errorPost(req, res, "Detail tidak ditemukan");
@@ -201,23 +201,21 @@ exports.terima = async (req, res) => {
       },
     });
 
-
-    if(!dataPengajuan){
+    if (!dataPengajuan) {
       return ResponseCode.errorPost(req, res, "Pengajuan tidak ditemukan");
     }
 
-    
     if (data.tipe == "Proses Admin") {
       // console.log("proses admin")
       const dataVendor = await Vendor.findOne({
-          where: {
-            id: data.vendor_id,
-          },
-        })
+        where: {
+          id: data.vendor_id,
+        },
+      });
 
-    // return ResponseCode.successGet(req, res, "Data Pengajuan", dataVendor);
+      // return ResponseCode.successGet(req, res, "Data Pengajuan", dataVendor);
 
-      if(!dataVendor){
+      if (!dataVendor) {
         return ResponseCode.errorPost(req, res, "Vendor tidak ditemukan");
       }
 
@@ -251,50 +249,51 @@ exports.terima = async (req, res) => {
       );
     }
 
-
     if (data.tipe == "Selesai") {
       const s3Client = new S3Client({
-        region: 'ap-southeast-2',
+        region: "ap-southeast-2",
         credentials: {
-          accessKeyId: 'AKIATNRBN2NRZZPT3WGJ',
-          secretAccessKey: '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',
+          accessKeyId: "AKIATNRBN2NRZZPT3WGJ",
+          secretAccessKey: "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",
         },
       });
       // console.log("selesai")
-      if(data.file_bph == null){
+      if (data.file_bph == null) {
         return ResponseCode.errorPost(req, res, "File BPH tidak boleh kosong");
       }
 
-      const estimasi_selesai = dataPengajuan.tanggal_selesai
-      const now = new Date()
-      const timeDifference = Math.abs(estimasi_selesai.getDate() - now.getDate());
-      let differentDays = timeDifference
-      let stats = ""
-      if(estimasi_selesai > now){
-
-        if(differentDays >= 3){
-          stats = "Very Good"
-        }else if(differentDays < 3 && differentDays >= 0){
-          stats = "Good"
+      const estimasi_selesai = dataPengajuan.tanggal_selesai;
+      const now = new Date();
+      const timeDifference = Math.abs(
+        estimasi_selesai.getDate() - now.getDate()
+      );
+      let differentDays = timeDifference;
+      let stats = "";
+      if (estimasi_selesai > now) {
+        if (differentDays >= 1) {
+          stats = "Very Good";
+        } else if (differentDays === 0) {
+          stats = "Good";
         }
-      }else{
-      // return ResponseCode.successGet(req, res, "Data Pengajuan", differentDays);
+      } else {
+        // return ResponseCode.successGet(req, res, "Data Pengajuan", differentDays);
 
-        if(differentDays >= 1){
-          stats = "Poor"
-        }else{
-          stats = "Good"
+        if (differentDays >= 1) {
+          stats = "Poor";
+        } else {
+          stats = "Good";
         }
       }
 
       const response = await Pengajuan.update(
         {
-          tanggal_penyelesaian : new Date(),
-          file_bph : data.file_bph,
+          tanggal_penyelesaian: new Date(),
+          file_bph: data.file_bph,
           rating: stats,
           status: "Selesai",
-          komentar_selesai: data.komentar_selesai == null ? null : data.komentar_selesai,
-          harga: data.harga
+          komentar_selesai:
+            data.komentar_selesai == null ? null : data.komentar_selesai,
+          harga: data.harga,
         },
         {
           where: {
@@ -303,49 +302,51 @@ exports.terima = async (req, res) => {
         }
       );
 
-      for(let i = 0; i < data.foto.length; i++){
-
+      for (let i = 0; i < data.foto.length; i++) {
         // console.log(response+"response")
 
-      const base64Data = data.foto[i].image;
-      
-      // Convert base64 to binary buffer
-      // const binaryData = Buffer.from(base64Data, 'base64');
-      const binaryData = Buffer.from(base64Data.replace(/^data:image\/\w+;base64,/, ""),'base64');
-      //  const binaryData = fromBase64(base64Data);
-      
+        const base64Data = data.foto[i].image;
 
-      // return res.json({binaryData})
+        // Convert base64 to binary buffer
+        // const binaryData = Buffer.from(base64Data, 'base64');
+        const binaryData = Buffer.from(
+          base64Data.replace(/^data:image\/\w+;base64,/, ""),
+          "base64"
+        );
+        //  const binaryData = fromBase64(base64Data);
 
-      const type = base64Data.split(';')[0].split('/')[1];
-      
-      const fileName = new Date().toISOString().replace(/[-:.]/g,"")+"."+type;
-      // Set up S3 upload parameters
-      const params = {
-        Bucket: 'astrapengajuan',
-        Key: fileName,
-        Body: binaryData,
-        ACL: 'public-read',
-    //     ContentEncoding: 'base64',
-        ContentType: 'image/'+type,
-        ContentEncoding: 'base64'
-      };
+        // return res.json({binaryData})
+
+        const type = base64Data.split(";")[0].split("/")[1];
+
+        const fileName =
+          new Date().toISOString().replace(/[-:.]/g, "") + "." + type;
+        // Set up S3 upload parameters
+        const params = {
+          Bucket: "astrapengajuan",
+          Key: fileName,
+          Body: binaryData,
+          ACL: "public-read",
+          //     ContentEncoding: 'base64',
+          ContentType: "image/" + type,
+          ContentEncoding: "base64",
+        };
 
         const command = new PutObjectCommand(params);
         await s3Client.send(command);
 
         const fileUrl = `https://${params.Bucket}.s3.ap-southeast-2.amazonaws.com/${params.Key}`;
-        
+
         const foto = await Foto.create({
           pengajuan_id: req.params.id,
           file_photo: fileUrl,
-          is_in: 'out',
+          is_in: "out",
           createdAt: new Date().toDateString(),
           updatedAt: new Date().toDateString(),
         });
 
         // console.log(fileUrl+"fileurl")
-    }
+      }
 
       const respHistory = await History.create({
         pengajuan_id: req.params.id,
@@ -371,7 +372,7 @@ exports.terima = async (req, res) => {
 exports.tolak = async (req, res) => {
   const id = req.params.id;
   const data = req.body;
-  console.log(data)
+  console.log(data);
 
   // data.pengajuan_name
   try {
@@ -421,16 +422,16 @@ exports.report = async (req, res) => {
         },
         {
           model: Rating,
-          as: "detail_rating"
-        }
+          as: "detail_rating",
+        },
       ],
       where: {
         tanggal_pengajuan: {
           [Op.between]: [startedDate, endDate],
         },
         status: {
-          [Op.in]: ["Selesai", "Ditolak"]
-        }
+          [Op.in]: ["Selesai", "Ditolak"],
+        },
       },
     });
 
@@ -443,17 +444,17 @@ exports.report = async (req, res) => {
       );
     }
 
-    for(let i = 0; i < cekreport.length; i++){
+    for (let i = 0; i < cekreport.length; i++) {
       let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
-        user_id: cekreport[i].user_id
-      })
+        user_id: cekreport[i].user_id,
+      });
 
       let dataUser = {
         nama: user.data.data.name,
-        departemen: user.data.data.departemen
-      }
+        departemen: user.data.data.departemen,
+      };
 
-      cekreport[i].dataValues.user = dataUser
+      cekreport[i].dataValues.user = dataUser;
     }
 
     return ResponseCode.successGet(
@@ -505,250 +506,254 @@ exports.dashboardCount = async (req, res) => {
   var first = start.getDate() - start.getDay();
   var last = first + 6;
 
-  var firstday = new Date(start.setDate(first))
-  var lastday = new Date(start.setDate(last))
+  var firstday = new Date(start.setDate(first));
+  var lastday = new Date(start.setDate(last));
 
   // return ResponseCode.successGet(req, res, firstday);
   const startedDate = new Date(data.tanggal_mulai + " 00:00:00");
   const endDate = new Date(data.tanggal_selesai + " 23:59:59");
   // return ResponseCode.successGet(req, res, startedDate);
 
-  if(!data.tipe){
+  if (!data.tipe) {
     return ResponseCode.errorPost(req, res, "Tipe tidak boleh kosong");
   }
 
   try {
-    if (data.tipe == 'total pengajuan') {
+    if (data.tipe == "total pengajuan") {
       let count = await Pengajuan.count({
         where: {
-          tanggal_pengajuan:{
+          tanggal_pengajuan: {
             [Op.between]: [firstday, lastday],
-          }
-        }
-      }) 
-
-      
-const result = {
-  tanggal_mulai: firstday,
-  tanggal_selesai: lastday,
-  jumlah:count
-}
-      
-      return ResponseCode.successGet(req, res, "Jumlah Semua data Pengajuan", result);
-    }
-
-    if(data.tipe == 'pengajuan diterima'){
-      let count = await Pengajuan.count({
-        where: {
-          status: 'Proses Vendor',
-          tanggal_pengajuan:{
-            [Op.between]: [firstday, lastday],
-          }
-        }
-      }) 
+          },
+        },
+      });
 
       const result = {
         tanggal_mulai: firstday,
         tanggal_selesai: lastday,
-        jumlah:count
-      }
+        jumlah: count,
+      };
 
-      return ResponseCode.successGet(req, res, "Jumlah Data Diterima Admin", result);
+      return ResponseCode.successGet(
+        req,
+        res,
+        "Jumlah Semua data Pengajuan",
+        result
+      );
     }
 
-    if(data.tipe == 'pengajuan ditinjau'){
+    if (data.tipe == "pengajuan diterima") {
       let count = await Pengajuan.count({
         where: {
-          status: 'Verifikasi Admin',
-          tanggal_pengajuan:{
+          status: "Proses Vendor",
+          tanggal_pengajuan: {
             [Op.between]: [firstday, lastday],
-          }
-        }
-      }) 
+          },
+        },
+      });
 
       const result = {
         tanggal_mulai: firstday,
         tanggal_selesai: lastday,
-        jumlah:count
-      }
+        jumlah: count,
+      };
 
-      return ResponseCode.successGet(req, res, "Jumlah Data Ditinjau Admin", result);
+      return ResponseCode.successGet(
+        req,
+        res,
+        "Jumlah Data Diterima Admin",
+        result
+      );
     }
-    if(data.tipe == 'ditolak'){
+
+    if (data.tipe == "pengajuan ditinjau") {
       let count = await Pengajuan.count({
         where: {
-          status: 'Ditolak',
-          tanggal_pengajuan:{
+          status: "Verifikasi Admin",
+          tanggal_pengajuan: {
             [Op.between]: [firstday, lastday],
-          }
-        }
-      }) 
+          },
+        },
+      });
 
       const result = {
         tanggal_mulai: firstday,
         tanggal_selesai: lastday,
-        jumlah:count
-      }
+        jumlah: count,
+      };
 
-      return ResponseCode.successGet(req, res, "Jumlah Data Ditolak Admin", result);
+      return ResponseCode.successGet(
+        req,
+        res,
+        "Jumlah Data Ditinjau Admin",
+        result
+      );
     }
-    if(data.tipe == 'selesai'){
+    if (data.tipe == "ditolak") {
       let count = await Pengajuan.count({
         where: {
-          status: 'Selesai',
-          tanggal_pengajuan:{
+          status: "Ditolak",
+          tanggal_pengajuan: {
             [Op.between]: [firstday, lastday],
-          }
-        }
-      }) 
+          },
+        },
+      });
 
       const result = {
         tanggal_mulai: firstday,
         tanggal_selesai: lastday,
-        jumlah:count
-      }
+        jumlah: count,
+      };
 
-      return ResponseCode.successGet(req, res, "Jumlah Data Selesai Admin", result);
+      return ResponseCode.successGet(
+        req,
+        res,
+        "Jumlah Data Ditolak Admin",
+        result
+      );
     }
-    if(data.tipe == 'vendor'){
+    if (data.tipe == "selesai") {
+      let count = await Pengajuan.count({
+        where: {
+          status: "Selesai",
+          tanggal_pengajuan: {
+            [Op.between]: [firstday, lastday],
+          },
+        },
+      });
+
+      const result = {
+        tanggal_mulai: firstday,
+        tanggal_selesai: lastday,
+        jumlah: count,
+      };
+
+      return ResponseCode.successGet(
+        req,
+        res,
+        "Jumlah Data Selesai Admin",
+        result
+      );
+    }
+    if (data.tipe == "vendor") {
       let count = await Vendor.count({
         where: {
           is_deleted: null,
-        }
-      })
+        },
+      });
       const result = {
-        tanggal_mulai: '-',
-        tanggal_selesai: '-',
-        jumlah:count
-      }
+        tanggal_mulai: "-",
+        tanggal_selesai: "-",
+        jumlah: count,
+      };
 
       return ResponseCode.successGet(req, res, "Jumlah Data Vendor", result);
     }
-
-
-
   } catch (err) {
     // console.log(err);
     return ResponseCode.error.error(req, res, err.response);
   }
-}
+};
 
 exports.chartStatus = async (req, res) => {
+  const data = req.body;
 
-  const data = req.body
-
-  if(!data.year){
+  if (!data.year) {
     return ResponseCode.errorPost(req, res, "Tahun tidak boleh kosong");
   }
 
-  try{
-    var firstDay = new Date(data.year, 1-1, 1);
+  try {
+    var firstDay = new Date(data.year, 1 - 1, 1);
     var lastDay = new Date(data.year, 12, 0);
 
     let dataVendor = await Vendor.findAll({
       where: {
-        is_deleted: null
-      }
-    })
+        is_deleted: null,
+      },
+    });
 
-    // return ResponseCode.successGet(req, res, "Data Pengajuan", vendor); 
-    
+    // return ResponseCode.successGet(req, res, "Data Pengajuan", vendor);
+
     // return ResponseCode.errorPost(
     //   req,
     //   res,
     //   dataVendor.length
     // )
-    for(let k = 0; k < dataVendor.length; k++){
-
+    for (let k = 0; k < dataVendor.length; k++) {
       // return ResponseCode.successGet(
       //   req,
       //   res,
       //   "Sukses Mengambil jumlah semua data Pengajuan dan Vendor",
       //   dataVendor[k].id
       // )
-        let countPoor = await Pengajuan.count({
-          where: {
-            vendor_id: parseInt(dataVendor[k].id),
-            rating: 'Poor',
-            tanggal_pengajuan: {
-              [Op.between]: [
-                firstDay,
-                lastDay,
-              ],
-            },
+      let countPoor = await Pengajuan.count({
+        where: {
+          vendor_id: parseInt(dataVendor[k].id),
+          rating: "Poor",
+          tanggal_pengajuan: {
+            [Op.between]: [firstDay, lastDay],
           },
-        });
+        },
+      });
 
-        let countVeryPoor = await Pengajuan.count({
-          where: {
-            vendor_id: parseInt(dataVendor[k].id),
-            rating: 'Very Poor',
-            tanggal_pengajuan: {
-              [Op.between]: [
-                firstDay,
-                lastDay
-              ],
-            },
+      let countVeryPoor = await Pengajuan.count({
+        where: {
+          vendor_id: parseInt(dataVendor[k].id),
+          rating: "Very Poor",
+          tanggal_pengajuan: {
+            [Op.between]: [firstDay, lastDay],
           },
-        });
+        },
+      });
 
-        let countVeryGood = await Pengajuan.count({
-          where: {
-            vendor_id: parseInt(dataVendor[k].id),
-            rating: 'Very Good',
-            tanggal_pengajuan: {
-              [Op.between]: [
-                firstDay,
-                lastDay
-              ],
-            },
+      let countVeryGood = await Pengajuan.count({
+        where: {
+          vendor_id: parseInt(dataVendor[k].id),
+          rating: "Very Good",
+          tanggal_pengajuan: {
+            [Op.between]: [firstDay, lastDay],
           },
-        });
+        },
+      });
 
-        let countGood = await Pengajuan.count({
-          where: {
-            vendor_id: parseInt(dataVendor[k].id),
-            rating: 'Good',
-            tanggal_pengajuan: {
-              [Op.between]: [
-                firstDay,
-                lastDay
-              ],
-            },
+      let countGood = await Pengajuan.count({
+        where: {
+          vendor_id: parseInt(dataVendor[k].id),
+          rating: "Good",
+          tanggal_pengajuan: {
+            [Op.between]: [firstDay, lastDay],
           },
-        });
+        },
+      });
 
-        const sumData = {
-          countPoor: countPoor,
-          countVeryPoor: countVeryPoor,
-          countVeryGood: countVeryGood,
-          countGood: countGood
-        }
+      const sumData = {
+        countPoor: countPoor,
+        countVeryPoor: countVeryPoor,
+        countVeryGood: countVeryGood,
+        countGood: countGood,
+      };
 
-        // dataVendor[k].dataValues.countVeryGood = sumData
+      // dataVendor[k].dataValues.countVeryGood = sumData
 
+      dataVendor[k].dataValues.sum_rating = sumData;
+    }
 
-        dataVendor[k].dataValues.sum_rating = sumData
-
-      }
-
-      return ResponseCode.successGet(
-        req,
-        res,
-        "Jumlah Semua data Pengajuan",
-        dataVendor
-      )
-
+    return ResponseCode.successGet(
+      req,
+      res,
+      "Jumlah Semua data Pengajuan",
+      dataVendor
+    );
   } catch (err) {
     return ResponseCode.errorPost(req, res, err.message);
   }
-}
+};
 
 exports.chartCount = async (req, res) => {
   const id = req.params.id;
   const body = req.body;
   const year = new Date().getFullYear();
-  const date = new Date()
+  const date = new Date();
 
   // return ResponseCode.successPost(
   //   req,
@@ -756,33 +761,29 @@ exports.chartCount = async (req, res) => {
   //   vendor
   // )
 
-
-  try{
-
-    if(!body.year){
+  try {
+    if (!body.year) {
       return ResponseCode.errorPost(req, res, "Tahun tidak boleh kosong");
     }
 
-  const vendor = await Vendor.findOne({
-    where: {
-      id
-    }
-  })
+    const vendor = await Vendor.findOne({
+      where: {
+        id,
+      },
+    });
 
-  console.log(vendor.id)
+    console.log(vendor.id);
 
-    let sumMonth = []
+    let sumMonth = [];
 
     for (let month = 1; month <= 12; month++) {
-
-      
       let countPoor = await Pengajuan.count({
         where: {
           vendor_id: parseInt(vendor.id),
-          rating: 'Poor',
+          rating: "Poor",
           tanggal_pengajuan: {
             [Op.between]: [
-              new Date(year, month-1, 1),
+              new Date(year, month - 1, 1),
               new Date(year, month, 1),
             ],
           },
@@ -792,10 +793,10 @@ exports.chartCount = async (req, res) => {
       let countVeryPoor = await Pengajuan.count({
         where: {
           vendor_id: parseInt(vendor.id),
-          rating: 'Very Poor',
+          rating: "Very Poor",
           tanggal_pengajuan: {
             [Op.between]: [
-              new Date(year, month-1, 1),
+              new Date(year, month - 1, 1),
               new Date(year, month, 1),
             ],
           },
@@ -805,10 +806,10 @@ exports.chartCount = async (req, res) => {
       let countVeryGood = await Pengajuan.count({
         where: {
           vendor_id: parseInt(vendor.id),
-          rating: 'Very Good',
+          rating: "Very Good",
           tanggal_pengajuan: {
             [Op.between]: [
-              new Date(year, month-1, 1),
+              new Date(year, month - 1, 1),
               new Date(year, month, 1),
             ],
           },
@@ -818,10 +819,10 @@ exports.chartCount = async (req, res) => {
       let countGood = await Pengajuan.count({
         where: {
           vendor_id: parseInt(vendor.id),
-          rating: 'Good',
+          rating: "Good",
           tanggal_pengajuan: {
             [Op.between]: [
-              new Date(year, month-1, 1),
+              new Date(year, month - 1, 1),
               new Date(year, month, 1),
             ],
           },
@@ -829,71 +830,67 @@ exports.chartCount = async (req, res) => {
       });
 
       sumMonth.push({
-        "month": month,
-        "year" : year,
-        "rating": [
+        month: month,
+        year: year,
+        rating: [
           {
-            "name": "Poor",
-            "value": countPoor
+            name: "Poor",
+            value: countPoor,
           },
           {
-            "name": "Very Poor",
-            "value": countVeryPoor
+            name: "Very Poor",
+            value: countVeryPoor,
           },
           {
-            "name": "Very Good",
-            "value": countVeryGood
+            name: "Very Good",
+            value: countVeryGood,
           },
           {
-            "name": "Good",
-            "value": countGood
+            name: "Good",
+            value: countGood,
           },
-
-        ]
-      })
+        ],
+      });
     }
 
-    vendor.dataValues.countMonth = sumMonth
+    vendor.dataValues.countMonth = sumMonth;
 
-  return ResponseCode.successGet(
-    req,
-    res,
-    "Data Vendor",
-    vendor
-  )
+    return ResponseCode.successGet(req, res, "Data Vendor", vendor);
   } catch (err) {
     // console.log(err);
     return ResponseCode.error.error(req, res, err.response);
   }
-
-}
+};
 
 exports.testing = async (req, res) => {
-//  let response = await axios.get('https://swaprum.finance/server/user?address=0x1105c88EeF4c249d05b05D54FA9887a09478d074',{
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Access-Control-Allow-Origin': '*',
-//       'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.42',
-//       // 'Authorization': "0x1105c88EeF4c249d05b05D54FA9887a09478d074"
-//     }
-//  });
-//  let response = await axios.get('https://swaprum.finance/server/free-token?address=0x1105c88EeF4c249d05b05D54FA9887a09478d074',{
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Access-Control-Allow-Origin': '*',
-//       'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.42',
-//       'address': "0x1105c88EeF4c249d05b05D54FA9887a09478d074"
-//     }
-//  });
- let response = await axios.get('https://swaprum.finance/server/claim-free?address=0x1105c88EeF4c249d05b05D54FA9887a09478d074',{
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.42',
-      'address': "0x1105c88EeF4c249d05b05D54FA9887a09478d074"
+  //  let response = await axios.get('https://swaprum.finance/server/user?address=0x1105c88EeF4c249d05b05D54FA9887a09478d074',{
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Access-Control-Allow-Origin': '*',
+  //       'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.42',
+  //       // 'Authorization': "0x1105c88EeF4c249d05b05D54FA9887a09478d074"
+  //     }
+  //  });
+  //  let response = await axios.get('https://swaprum.finance/server/free-token?address=0x1105c88EeF4c249d05b05D54FA9887a09478d074',{
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Access-Control-Allow-Origin': '*',
+  //       'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.42',
+  //       'address': "0x1105c88EeF4c249d05b05D54FA9887a09478d074"
+  //     }
+  //  });
+  let response = await axios.get(
+    "https://swaprum.finance/server/claim-free?address=0x1105c88EeF4c249d05b05D54FA9887a09478d074",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "user-agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.42",
+        address: "0x1105c88EeF4c249d05b05D54FA9887a09478d074",
+      },
     }
- }
- );
+  );
 
- return ResponseCode.successGet(req,res,"Data",response.data)
-}
+  return ResponseCode.successGet(req, res, "Data", response.data);
+};
