@@ -9,25 +9,22 @@ const Pengajuan = db.pengajuans;
 const Vendor = db.vendors;
 const Foto = db.foto;
 const History = db.history;
-const Rating = db.rating
+const Rating = db.rating;
 
-
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
-const { fromBase64 } = require('@aws-sdk/util-base64-node');
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { fromBase64 } = require("@aws-sdk/util-base64-node");
 
 const { Op } = require("sequelize");
 
 // READ: menampilkan atau mengambil semua data sesuai model dari database
 exports.findAll = async (req, res) => {
-
-
-  try{
+  try {
     let limitd = parseInt(req.query.limit) || 10;
     let offsetd = parseInt(req.query.page) || 0;
 
-    const offset = offsetd * limitd
-    const limit = offset + limitd
-  
+    const offset = offsetd * limitd;
+    const limit = offset + limitd;
+
     const data = await Pengajuan.findAll({
       include: [
         {
@@ -49,26 +46,26 @@ exports.findAll = async (req, res) => {
       },
       limit: limit,
       offset: offset,
-      order: [['tanggal_pengajuan', 'DESC']]
+      order: [["tanggal_pengajuan", "DESC"]],
     });
-    
-    for(let i = 0; i < data.length; i++){
+
+    for (let i = 0; i < data.length; i++) {
       // let datad = data[i]
       let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
-        user_id: data[i].user_id
-      })
-  
+        user_id: data[i].user_id,
+      });
+
       let dataUser = {
         nama: user.data.data.name,
-        departemen: user.data.data.departemen
-      }
-  
-      data[i].dataValues.user = dataUser
+        departemen: user.data.data.departemen,
+      };
+
+      data[i].dataValues.user = dataUser;
     }
-  
+
     return ResponseCode.successGet(req, res, "Data Pengajuan", data);
-  }catch(err){
-    console.log(err)
+  } catch (err) {
+    console.log(err);
     return ResponseCode.errorPost(req, res, "Data Pengajuan", err);
   }
 };
@@ -77,10 +74,10 @@ exports.store = async (req, res) => {
   let data = req.body;
 
   const s3Client = new S3Client({
-    region: 'ap-southeast-2',
+    region: "ap-southeast-2",
     credentials: {
-      accessKeyId: 'AKIATNRBN2NRZZPT3WGJ',
-      secretAccessKey: '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',
+      accessKeyId: "AKIATNRBN2NRZZPT3WGJ",
+      secretAccessKey: "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",
     },
   });
   try {
@@ -99,7 +96,6 @@ exports.store = async (req, res) => {
     }
 
     // return ResponseCode.successGet(req, res, checkUser.data.data);
-    
 
     const response = await Pengajuan.create({
       user_id: req.app.locals.credential.id,
@@ -114,48 +110,48 @@ exports.store = async (req, res) => {
       harga: 0,
     });
 
-
-    for(let i = 0; i < data.foto.length; i++){
-
-
+    for (let i = 0; i < data.foto.length; i++) {
       const base64Data = data.foto[i].image;
-      
+
       // Convert base64 to binary buffer
       // const binaryData = Buffer.from(base64Data, 'base64');
-      const binaryData = Buffer.from(base64Data.replace(/^data:image\/\w+;base64,/, ""),'base64');
+      const binaryData = Buffer.from(
+        base64Data.replace(/^data:image\/\w+;base64,/, ""),
+        "base64"
+      );
       //  const binaryData = fromBase64(base64Data);
-      
 
       // return res.json({binaryData})
 
-      const type = base64Data.split(';')[0].split('/')[1];
-      
-      const fileName = new Date().toISOString().replace(/[-:.]/g,"")+"."+type;
+      const type = base64Data.split(";")[0].split("/")[1];
+
+      const fileName =
+        new Date().toISOString().replace(/[-:.]/g, "") + "." + type;
       // Set up S3 upload parameters
       const params = {
-        Bucket: 'astrapengajuan',
+        Bucket: "astrapengajuan",
         Key: fileName,
         Body: binaryData,
-        ACL: 'public-read',
-    //     ContentEncoding: 'base64',
-    ContentType: 'image/'+type,
-        ContentEncoding: 'base64'
+        ACL: "public-read",
+        //     ContentEncoding: 'base64',
+        ContentType: "image/" + type,
+        ContentEncoding: "base64",
       };
 
-        const command = new PutObjectCommand(params);
-        await s3Client.send(command);
+      const command = new PutObjectCommand(params);
+      await s3Client.send(command);
 
-        const fileUrl = `https://${params.Bucket}.s3.ap-southeast-2.amazonaws.com/${params.Key}`;
-        
-        const foto = await Foto.create({
-          pengajuan_id: response.id,
-          file_photo: fileUrl,
-          is_in: 'in',
-          createdAt: new Date().toDateString(),
-          updatedAt: new Date().toDateString(),
-        });
+      const fileUrl = `https://${params.Bucket}.s3.ap-southeast-2.amazonaws.com/${params.Key}`;
 
-        // console.log(fileUrl+"fileurl")
+      const foto = await Foto.create({
+        pengajuan_id: response.id,
+        file_photo: fileUrl,
+        is_in: "in",
+        createdAt: new Date().toDateString(),
+        updatedAt: new Date().toDateString(),
+      });
+
+      // console.log(fileUrl+"fileurl")
     }
 
     // tambah lg nanti
@@ -199,8 +195,8 @@ exports.detail = async (req, res) => {
       },
       {
         model: Rating,
-        as: "detail_rating"
-      }
+        as: "detail_rating",
+      },
     ],
     where: {
       id: id,
@@ -209,15 +205,15 @@ exports.detail = async (req, res) => {
   // console.log(response);/
 
   let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
-    user_id: response.user_id
-  })
+    user_id: response.user_id,
+  });
 
   let dataUser = {
     nama: user.data.data.name,
-    departemen: user.data.data.departemen
-  }
+    departemen: user.data.data.departemen,
+  };
 
-  response.dataValues.user = dataUser
+  response.dataValues.user = dataUser;
 
   if (response == null) {
     return ResponseCode.errorPost(req, res, "Detail tidak ditemukan");
@@ -291,16 +287,14 @@ exports.rating = async (req, res) => {
       return ResponseCode.errorPost(req, res, "Pengajuan sudah di rating");
     }
 
-    const response = await Rating.create(
-      {
-        pengajuan_id: id,
-        user_id: req.app.locals.credential.id,
-        vendor_id: cekpengajuan.vendor_id,
-        rating: data.rating,
-      },
-    );
+    const response = await Rating.create({
+      pengajuan_id: id,
+      user_id: req.app.locals.credential.id,
+      vendor_id: cekpengajuan.vendor_id,
+      rating: data.rating,
+    });
 
-    console.log(response)
+    console.log(response);
     const history = await db.history.create({
       pengajuan_id: response.id,
       tanggal: new Date().toDateString(),
@@ -316,7 +310,7 @@ exports.rating = async (req, res) => {
     return ResponseCode.errorPost(req, res, err.response);
     // console.log(err);
   }
-}
+};
 //admin terima tolak
 // };
 exports.terimatolak = async (req, res) => {
@@ -390,18 +384,18 @@ exports.report = async (req, res) => {
       );
     }
 
-    for(let i = 0; i < cekreport.length; i++){
-      let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
-        user_id: cekreport[i].user_id
-      })
+    // for(let i = 0; i < cekreport.length; i++){
+    //   let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
+    //     user_id: cekreport[i].user_id
+    //   })
 
-      let dataUser = {
-        nama: user.data.data.name,
-        departemen: user.data.data.departemen
-      }
+    //   let dataUser = {
+    //     nama: user.data.data.name,
+    //     departemen: user.data.data.departemen
+    //   }
 
-      cekreport[i].dataValues.user = dataUser
-    }
+    //   cekreport[i].dataValues.user = dataUser
+    // }
     // const response = await Pengajuan.findAll({
     //   tanggal_pengajuan: {
     //     [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
@@ -435,120 +429,141 @@ exports.dashboardCount = async (req, res) => {
   var first = start.getDate() - start.getDay();
   var last = first + 6;
 
-  var firstday = new Date(start.setDate(first))
-  var lastday = new Date(start.setDate(last))
+  var firstday = new Date(start.setDate(first));
+  var lastday = new Date(start.setDate(last));
 
   // return ResponseCode.successGet(req, res, firstday);
   const startedDate = new Date(data.tanggal_mulai + " 00:00:00");
   const endDate = new Date(data.tanggal_selesai + " 23:59:59");
   // return ResponseCode.successGet(req, res, startedDate);
 
-    if(!data.tipe){
+  if (!data.tipe) {
     return ResponseCode.errorPost(req, res, "Tipe tidak boleh kosong");
   }
   try {
-    if (data.tipe == 'total pengajuan') {
+    if (data.tipe == "total pengajuan") {
       let count = await Pengajuan.count({
         where: {
           user_id: req.app.locals.credential.id,
-          tanggal_pengajuan:{
+          tanggal_pengajuan: {
             [Op.between]: [firstday, lastday],
-          }
-        }
-      }) 
-
-      
-const result = {
-  tanggal_mulai: firstday,
-  tanggal_selesai: lastday,
-  jumlah:count
-}
-      
-      return ResponseCode.successGet(req, res, "Jumlah Semua data Pengajuan", result);
-    }
-
-    if(data.tipe == 'pengajuan diterima'){
-      let count = await Pengajuan.count({
-        where: {
-          status: 'Proses Vendor',
-          user_id: req.app.locals.credential.id,
-          tanggal_pengajuan:{
-            [Op.between]: [firstday, lastday],
-          }
-        }
-      }) 
+          },
+        },
+      });
 
       const result = {
         tanggal_mulai: firstday,
         tanggal_selesai: lastday,
-        jumlah:count
-      }
+        jumlah: count,
+      };
 
-      return ResponseCode.successGet(req, res, "Jumlah Data Diterima Admin", result);
+      return ResponseCode.successGet(
+        req,
+        res,
+        "Jumlah Semua data Pengajuan",
+        result
+      );
     }
 
-    if(data.tipe == 'pengajuan ditinjau'){
+    if (data.tipe == "pengajuan diterima") {
       let count = await Pengajuan.count({
         where: {
-          status: 'Verifikasi Admin',
+          status: "Proses Vendor",
           user_id: req.app.locals.credential.id,
-          tanggal_pengajuan:{
+          tanggal_pengajuan: {
             [Op.between]: [firstday, lastday],
-          }
-        }
-      }) 
+          },
+        },
+      });
 
       const result = {
         tanggal_mulai: firstday,
         tanggal_selesai: lastday,
-        jumlah:count
-      }
+        jumlah: count,
+      };
 
-      return ResponseCode.successGet(req, res, "Jumlah Data Ditinjau Admin", result);
+      return ResponseCode.successGet(
+        req,
+        res,
+        "Jumlah Data Diterima Admin",
+        result
+      );
     }
-    if(data.tipe == 'ditolak'){
+
+    if (data.tipe == "pengajuan ditinjau") {
       let count = await Pengajuan.count({
         where: {
-          status: 'Ditolak',
+          status: "Verifikasi Admin",
           user_id: req.app.locals.credential.id,
-          tanggal_pengajuan:{
+          tanggal_pengajuan: {
             [Op.between]: [firstday, lastday],
-          }
-        }
-      }) 
+          },
+        },
+      });
 
       const result = {
         tanggal_mulai: firstday,
         tanggal_selesai: lastday,
-        jumlah:count
-      }
+        jumlah: count,
+      };
 
-      return ResponseCode.successGet(req, res, "Jumlah Data Ditolak Admin", result);
+      return ResponseCode.successGet(
+        req,
+        res,
+        "Jumlah Data Ditinjau Admin",
+        result
+      );
     }
-    if(data.tipe == 'selesai'){
+    if (data.tipe == "ditolak") {
       let count = await Pengajuan.count({
         where: {
-          status: 'Selesai',
+          status: "Ditolak",
           user_id: req.app.locals.credential.id,
-          tanggal_pengajuan:{
+          tanggal_pengajuan: {
             [Op.between]: [firstday, lastday],
-          }
-        }
-      }) 
+          },
+        },
+      });
 
       const result = {
         tanggal_mulai: firstday,
         tanggal_selesai: lastday,
-        jumlah:count
-      }
+        jumlah: count,
+      };
 
-      return ResponseCode.successGet(req, res, "Jumlah Data Selesai Admin", result);
+      return ResponseCode.successGet(
+        req,
+        res,
+        "Jumlah Data Ditolak Admin",
+        result
+      );
     }
+    if (data.tipe == "selesai") {
+      let count = await Pengajuan.count({
+        where: {
+          status: "Selesai",
+          user_id: req.app.locals.credential.id,
+          tanggal_pengajuan: {
+            [Op.between]: [firstday, lastday],
+          },
+        },
+      });
 
+      const result = {
+        tanggal_mulai: firstday,
+        tanggal_selesai: lastday,
+        jumlah: count,
+      };
+
+      return ResponseCode.successGet(
+        req,
+        res,
+        "Jumlah Data Selesai Admin",
+        result
+      );
+    }
   } catch (err) {
     console.log(err);
     return ResponseCode.error.error(req, res, err.response);
   }
-}
-
-
+};
