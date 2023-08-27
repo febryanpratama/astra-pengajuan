@@ -43,6 +43,9 @@ exports.findAll = async (req, res) => {
       where: {
         is_deleted: null,
         user_id: req.app.locals.credential.id,
+        status: {
+          [Op.in]: ["Verifikasi Admin", "Proses Admin"],
+        },
       },
       limit: limit,
       offset: offset,
@@ -367,10 +370,19 @@ exports.report = async (req, res) => {
 
   try {
     const cekreport = await Pengajuan.findAll({
+      include: [
+        {
+          model: Rating,
+          as: "detail_rating",
+        },
+      ],
       where: {
         user_id: req.app.locals.credential.id,
         tanggal_pengajuan: {
           [Op.between]: [startedDate, endDate],
+        },
+        status: {
+          [Op.in]: ["Ditolak", "Selesai"],
         },
       },
     });
@@ -384,26 +396,27 @@ exports.report = async (req, res) => {
       );
     }
 
-    // for(let i = 0; i < cekreport.length; i++){
-    //   let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
-    //     user_id: cekreport[i].user_id
-    //   })
+    for (let i = 0; i < cekreport.length; i++) {
+      let user = await axios.post("https://asmokalbarmobile.com/api/auth/me", {
+        user_id: cekreport[i].user_id,
+      });
 
-    //   let dataUser = {
-    //     nama: user.data.data.name,
-    //     departemen: user.data.data.departemen
-    //   }
+      let dataUser = {
+        nama: user.data.data.name,
+        departemen: user.data.data.departemen,
+      };
 
-    //   cekreport[i].dataValues.user = dataUser
-    // }
-    // const response = await Pengajuan.findAll({
-    //   tanggal_pengajuan: {
-    //     [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
-    //   },
-    //   where: {
-    //     id: id,
-    //   },
-    // });
+      cekreport[i].dataValues.user = dataUser;
+    }
+
+    const response = await Pengajuan.findAll({
+      tanggal_pengajuan: {
+        [Op.between]: [data.tanggal_mulai, data.tanggal_selesai],
+      },
+      where: {
+        id: id,
+      },
+    });
     return ResponseCode.successGet(
       req,
       res,
