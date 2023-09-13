@@ -15,23 +15,19 @@ const PengajuanRoutesadmin = require("./app/modules/admin/pengajuan/routes/Penga
 const PengajuanRoutesatasan = require("./app/modules/atasan/pengajuan/routes/PengajuanRoutes");
 const bodyParser = require("body-parser");
 
-// var corsOptions = {
-//   origin: function (origin, callback) {},
-//   methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
-//   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-//   credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
-//   allowedHeaders: [
-//     "Content-Type",
-//     "Authorization",
-//     "X-Requested-With",
-//     "device-remember-token",
-//     "Access-Control-Allow-Origin",
-//     "Origin",
-//     "Accept",
-//   ],
-// };
+var allowlist = ["https://lapor-pak-astra.vercel.app/"];
 
-app.use(cors());
+var corsOptionsDelegate = function (req, callback) {
+  var corsOptions;
+  if (allowlist.indexOf(req.header("Origin")) !== -1) {
+    corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
+  } else {
+    corsOptions = { origin: false }; // disable CORS for this request
+  }
+  callback(null, corsOptions); // callback expects two parameters: error and options
+};
+
+app.options(cors(corsOptionsDelegate));
 app.use(bodyParser.json({ type: "application/json", limit: "50mb" }));
 app.use(
   bodyParser.urlencoded({
