@@ -13,6 +13,7 @@ const Rating = db.rating;
 
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { fromBase64 } = require("@aws-sdk/util-base64-node");
+const AWS = require("@aws-sdk/client-s3");
 
 const { Op } = require("sequelize");
 
@@ -76,13 +77,19 @@ exports.findAll = async (req, res) => {
 exports.store = async (req, res) => {
   let data = req.body;
 
-  const s3Client = new S3Client({
+  AWS.config.update({
+    accessKeyId: "AKIATNRBN2NRZZPT3WGJ",
+    secretAccessKey: "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",
     region: "ap-southeast-2",
-    credentials: {
-      accessKeyId: "AKIATNRBN2NRZZPT3WGJ",
-      secretAccessKey: "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",
-    },
   });
+
+  // const s3Client = new S3Client({
+  //   region: "ap-southeast-2",
+  //   credentials: {
+  //     accessKeyId: "AKIATNRBN2NRZZPT3WGJ",
+  //     secretAccessKey: "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",
+  //   },
+  // });
   try {
     // Check User id from asmokalbarmobile
     const checkUser = await axios.post(
@@ -131,24 +138,28 @@ exports.store = async (req, res) => {
       const fileName =
         new Date().toISOString().replace(/[-:.]/g, "") + "." + type;
       // Set up S3 upload parameters
+      // const params = {
+      //   Bucket: "astrapengajuan",
+      //   Key: fileName,
+      //   Body: binaryData,
+      //   ACL: "public-read",
+      //   //     ContentEncoding: 'base64',
+      //   ContentType: "image/" + type,
+      //   ContentEncoding: "base64",
+      // };
+
       const params = {
         Bucket: "astrapengajuan",
         Key: fileName,
-        Body: binaryData,
-        ACL: "public-read",
-        //     ContentEncoding: 'base64',
-        ContentType: "image/" + type,
-        ContentEncoding: "base64",
+        Body: binaryData, // Assuming req.body contains the file data
       };
+      await s3.send(new PutObjectCommand(params));
 
       const command = new PutObjectCommand(params);
-      await s3Client.send(command);
-
-      const fileUrl = `https://${params.Bucket}.s3.ap-southeast-2.amazonaws.com/${params.Key}`;
 
       const foto = await Foto.create({
         pengajuan_id: response.id,
-        file_photo: fileUrl,
+        file_photo: command,
         is_in: "in",
         createdAt: new Date().toDateString(),
         updatedAt: new Date().toDateString(),

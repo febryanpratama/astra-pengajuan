@@ -1,10 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const aws = require("aws-sdk");
+// const aws = require("@aws-sdk/client-s3");
 const multer = require("multer");
 // const multerS3 = require('multer-s3');
-const port = 8080;
+const port = 3030;
 const AuthRoutes = require("./app/modules/authentication/routes/AuthRoutes");
 
 const VendorRoutes = require("./app/modules/admin/vendor/routes/VendorRoutes");
@@ -41,11 +41,11 @@ app.use(
   })
 );
 
-aws.config.update({
-  accessKeyId: "AKIATNRBN2NRZZPT3WGJ",
-  secretAccessKey: "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",
-  region: "ap-southeast-2",
-});
+// aws.config.update({
+//   accessKeyId: "AKIATNRBN2NRZZPT3WGJ",
+//   secretAccessKey: "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",
+//   region: "ap-southeast-2",
+// });
 
 const db = require("./models");
 db.sequelize.sync();
@@ -70,5 +70,5 @@ app.use("/api/admin/pengajuan", PengajuanRoutesadmin);
 app.use("/api/atasan/pengajuan", PengajuanRoutesatasan);
 
 app.listen(port, () =>
-  console.log(`App listening on port http://localhost:${port}!`)
+  console.log(`App listening on port http://localhost:${port}`)
 );
