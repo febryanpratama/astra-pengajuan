@@ -4,7 +4,7 @@ const app = express();
 // const aws = require("@aws-sdk/client-s3");
 const multer = require("multer");
 // const multerS3 = require('multer-s3');
-const port = 8081;
+const port = 8080;
 const AuthRoutes = require("./app/modules/authentication/routes/AuthRoutes");
 
 const VendorRoutes = require("./app/modules/admin/vendor/routes/VendorRoutes");
