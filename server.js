@@ -53,21 +53,33 @@ const corsOptions = {
 
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "*");
 
   // Request methods you wish to allow
-  res.setHeader("Access-Control-Allow-Methods", "*");
+  res.header("Access-Control-Allow-Methods", "*");
 
   // Request headers you wish to allow
-  res.setHeader("Access-Control-Allow-Headers", "*");
+  res.header("Access-Control-Allow-Headers", "*");
 
   // Set to true if you need the website to include cookies in the requests sent
   // to the API (e.g. in case you use sessions)
-  res.setHeader("Access-Control-Allow-Credentials", true);
+  res.header("Access-Control-Allow-Credentials", true);
 
   // Pass to next layer of middleware
   next();
 });
+
+const corsOption = {
+  origin: "https://lapor-pak-astra.vercel.app",
+  optionsSuccessStatus: 200,
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "Content-Type, Authorization, X-Requested-With, Accept, Origin, Referer, User-Agent",
+  preflightContinue: true,
+  credentials: true,
+};
+
+app.use(cors(corsOption));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
