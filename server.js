@@ -51,25 +51,22 @@ const corsOptions = {
   optionsSuccessStatus: 204, // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
-// app.use(function (req, res, next) {
-//   // Website you wish to allow to connect
-//   res.header(
-//     "Access-Control-Allow-Origin",
-//     "https://lapor-pak-astra.vercel.app"
-//   );
-//   res.header(
-//     "Access-Control-Allow-Methods",
-//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-//   );
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-//   );
-//   res.header("preflightContinue", true);
+app.use(function (req, res, next) {
+  // Website you wish to allow to connect
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  ); // If needed
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type, Authorization, Origin, Accept"
+  ); // If needed
+  res.setHeader("preflightContinue", true); // If needed
+  res.setHeader("Access-Control-Allow-Credentials", true); // If needed
 
-//   // Pass to next layer of middleware
-//   next();
-// });
+  res.send("cors problem fixed:)");
+});
 
 // const corsOption = {
 //   origin: "https://lapor-pak-astra.vercel.app",
@@ -80,18 +77,6 @@ const corsOptions = {
 //   preflightContinue: true,
 //   credentials: true,
 // };
-
-app.use(
-  cors({
-    origin: "https://lapor-pak-astra.vercel.app",
-    optionsSuccessStatus: 200,
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers":
-      "Content-Type, Authorization, X-Requested-With, Accept, Origin, Referer, User-Agent",
-    preflightContinue: true,
-    credentials: true,
-  })
-);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
