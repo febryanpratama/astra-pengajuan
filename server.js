@@ -48,20 +48,26 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+const corsOptions = {
+  origin: "https://lapor-pak-astra.vercel.app", // Replace with your allowed origin(s)
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // If you need to support cookies, sessions, or authentication headers
+  optionsSuccessStatus: 204, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
 // user
-app.use("/api/auth", AuthRoutes);
-app.use("/api/user/vendor", VendorRoutesUser);
-app.use("/api/user/pengajuan", PengajuanRoutes);
+app.use("/api/auth", cors(), AuthRoutes);
+app.use("/api/user/vendor", cors(), VendorRoutesUser);
+app.use("/api/user/pengajuan", cors(), PengajuanRoutes);
 
 // Admin
-// app.use("/api/auth", AuthRoutes);
-app.use("/api/admin/vendor", VendorRoutes);
-app.use("/api/admin/pengajuan", PengajuanRoutesadmin);
+// app.use("/api/auth", cors(), AuthRoutes);
+app.use("/api/admin/vendor", cors(), VendorRoutes);
+app.use("/api/admin/pengajuan", cors(), PengajuanRoutesadmin);
 
 // Atasan
-// app.use("/api/atasan/auth", AuthRoutes);
-app.use("/api/atasan/pengajuan", PengajuanRoutesatasan);
+// app.use("/api/atasan/auth", cors(), AuthRoutes);
+app.use("/api/atasan/pengajuan", cors(), PengajuanRoutesatasan);
 
 app.listen(port, () =>
   console.log(`App listening on port http://localhost:${port}`)
