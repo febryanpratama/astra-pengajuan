@@ -44,10 +44,6 @@ app.use(
 const db = require("./models");
 db.sequelize.sync();
 // db.Sequelize.sync();
-app.use(cors());
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
 const corsOptions = {
   origin: "https://lapor-pak-astra.vercel.app", // Replace with your allowed origin(s)
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -55,19 +51,24 @@ const corsOptions = {
   optionsSuccessStatus: 204, // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
+app.use(cors(corsOptions));
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 // user
-app.use("/api/auth", cors(), AuthRoutes);
-app.use("/api/user/vendor", cors(), VendorRoutesUser);
-app.use("/api/user/pengajuan", cors(), PengajuanRoutes);
+app.use("/api/auth", cors(corsOptions), AuthRoutes);
+app.use("/api/user/vendor", cors(corsOptions), VendorRoutesUser);
+app.use("/api/user/pengajuan", cors(corsOptions), PengajuanRoutes);
 
 // Admin
-// app.use("/api/auth", cors(), AuthRoutes);
-app.use("/api/admin/vendor", cors(), VendorRoutes);
-app.use("/api/admin/pengajuan", cors(), PengajuanRoutesadmin);
+// app.use("/api/auth", cors(corsOptions), AuthRoutes);
+app.use("/api/admin/vendor", cors(corsOptions), VendorRoutes);
+app.use("/api/admin/pengajuan", cors(corsOptions), PengajuanRoutesadmin);
 
 // Atasan
-// app.use("/api/atasan/auth", cors(), AuthRoutes);
-app.use("/api/atasan/pengajuan", cors(), PengajuanRoutesatasan);
+// app.use("/api/atasan/auth", cors(corsOptions), AuthRoutes);
+app.use("/api/atasan/pengajuan", cors(corsOptions), PengajuanRoutesatasan);
 
 app.listen(port, () =>
   console.log(`App listening on port http://localhost:${port}`)
