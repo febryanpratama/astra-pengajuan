@@ -51,24 +51,47 @@ const corsOptions = {
   optionsSuccessStatus: 204, // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
-app.use(cors(corsOptions));
+app.use(function (req, res, next) {
+  // Website you wish to allow to connect
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:8888");
+
+  // Request methods you wish to allow
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+
+  // Request headers you wish to allow
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+
+  // Set to true if you need the website to include cookies in the requests sent
+  // to the API (e.g. in case you use sessions)
+  res.setHeader("Access-Control-Allow-Credentials", true);
+
+  // Pass to next layer of middleware
+  next();
+});
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
 // user
-app.use("/api/auth", cors(corsOptions), AuthRoutes);
-app.use("/api/user/vendor", cors(corsOptions), VendorRoutesUser);
-app.use("/api/user/pengajuan", cors(corsOptions), PengajuanRoutes);
+app.use("/api/auth", AuthRoutes);
+app.use("/api/user/vendor", VendorRoutesUser);
+app.use("/api/user/pengajuan", PengajuanRoutes);
 
 // Admin
-// app.use("/api/auth", cors(corsOptions), AuthRoutes);
-app.use("/api/admin/vendor", cors(corsOptions), VendorRoutes);
-app.use("/api/admin/pengajuan", cors(corsOptions), PengajuanRoutesadmin);
+// app.use("/api/auth", AuthRoutes);
+app.use("/api/admin/vendor", VendorRoutes);
+app.use("/api/admin/pengajuan", PengajuanRoutesadmin);
 
 // Atasan
-// app.use("/api/atasan/auth", cors(corsOptions), AuthRoutes);
-app.use("/api/atasan/pengajuan", cors(corsOptions), PengajuanRoutesatasan);
+// app.use("/api/atasan/auth", AuthRoutes);
+app.use("/api/atasan/pengajuan", PengajuanRoutesatasan);
 
 app.listen(port, () =>
   console.log(`App listening on port http://localhost:${port}`)
