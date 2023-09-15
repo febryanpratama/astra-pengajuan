@@ -1,25 +1,26 @@
 {
   "production": {
-    "username": "doadmin",
-    "password": "AVNS_Yg_M1RkuOAWDqOLIyG9",
-    "host": "db-mysql-sgp1-24107-do-user-14335789-0.b.db.ondigitalocean.com",
-    "port": 25060,
-    "database": "astra-db",
+    "username" : "doadmin",
+    "password" : "AVNS_MSG6cgn7djRhui37Ysl",
+    "host" : "dbastra-do-user-13495530-0.b.db.ondigitalocean.com",
+    "port" : 25060,
+    "database" : "dbastrapengajuan",
+    "sslmode" : true,
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
     "password": null,
-    "database": "astra-db",
+    "database": "astra_pengajuaqqqn",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "development": {
-    "username": "doadmin",
-    "password": "AVNS_Yg_M1RkuOAWDqOLIyG9",
-    "host": "db-mysql-sgp1-24107-do-user-14335789-0.b.db.ondigitalocean.com",
-    "port": 25060,
-    "database": "astra-db",
+    "username": "root",
+    "password": null,
+    "host": "127.0.0.1",
+    "port": 3306,
+    "database": "astra_pengajuaawdn",
     "dialect": "mysql"
   }
 }
