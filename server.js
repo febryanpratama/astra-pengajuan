@@ -15,19 +15,17 @@ const PengajuanRoutesadmin = require("./app/modules/admin/pengajuan/routes/Penga
 const PengajuanRoutesatasan = require("./app/modules/atasan/pengajuan/routes/PengajuanRoutes");
 const bodyParser = require("body-parser");
 
-var allowlist = ["https://lapor-pak-astra.vercel.app/"];
+// var corsOptionsDelegate = function (req, callback) {
+//   var corsOptions;
+//   if (allowlist.indexOf(req.header("Origin")) !== -1) {
+//     corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
+//   } else {
+//     corsOptions = { origin: false }; // disable CORS for this request
+//   }
+//   callback(null, corsOptions); // callback expects two parameters: error and options
+// };
 
-var corsOptionsDelegate = function (req, callback) {
-  var corsOptions;
-  if (allowlist.indexOf(req.header("Origin")) !== -1) {
-    corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
-  } else {
-    corsOptions = { origin: false }; // disable CORS for this request
-  }
-  callback(null, corsOptions); // callback expects two parameters: error and options
-};
-
-app.options(cors(corsOptionsDelegate));
+// app.options(cors(corsOptionsDelegate));
 app.use(bodyParser.json({ type: "application/json", limit: "50mb" }));
 app.use(
   bodyParser.urlencoded({
@@ -46,7 +44,7 @@ app.use(
 const db = require("./models");
 db.sequelize.sync();
 // db.Sequelize.sync();
-
+app.use(cors());
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
