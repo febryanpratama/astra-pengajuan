@@ -56,16 +56,17 @@ app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE, HEAD"
   ); // If needed
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type, Authorization, Origin, Accept"
+    "X-Requested-With,content-type, Authorization,"
   ); // If needed
   res.setHeader("preflightContinue", true); // If needed
   res.setHeader("Access-Control-Allow-Credentials", true); // If needed
 
-  res.send("cors problem fixed:)");
+  // res.send("cors problem fixed:)");
+  next();
 });
 
 // const corsOption = {
