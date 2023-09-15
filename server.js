@@ -53,7 +53,10 @@ const corsOptions = {
 
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:8888");
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://lapor-pak-astra.vercel.app"
+  );
 
   // Request methods you wish to allow
   res.setHeader(
