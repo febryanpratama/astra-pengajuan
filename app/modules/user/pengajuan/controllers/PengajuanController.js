@@ -366,7 +366,7 @@ exports.terimatolak = async (req, res) => {
 };
 
 exports.report = async (req, res) => {
-  const id = req.params.id;
+  const id = req.app.locals.credential.id;
   let data = req.body;
 
   // console.log()
