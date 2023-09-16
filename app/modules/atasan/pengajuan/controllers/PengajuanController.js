@@ -135,7 +135,7 @@ exports.komentar = async (req, res) => {
 };
 
 exports.report = async (req, res) => {
-  const id = req.params.id;
+  const id = req.app.locals.credential.id;
   let data = req.body;
 
   // console.log()
@@ -233,15 +233,15 @@ exports.dashboardCount = async (req, res) => {
             [Op.between]: [firstday, lastday],
           }
         }
-      }) 
+      })
 
-      
+
 const result = {
   tanggal_mulai: firstday,
   tanggal_selesai: lastday,
   jumlah:count
 }
-      
+
       return ResponseCode.successGet(req, res, "Jumlah Semua data Pengajuan", result);
     }
 
@@ -254,7 +254,7 @@ const result = {
             [Op.between]: [firstday, lastday],
           }
         }
-      }) 
+      })
 
       const result = {
         tanggal_mulai: firstday,
@@ -274,7 +274,7 @@ const result = {
             [Op.between]: [firstday, lastday],
           }
         }
-      }) 
+      })
 
       const result = {
         tanggal_mulai: firstday,
@@ -293,7 +293,7 @@ const result = {
             [Op.between]: [firstday, lastday],
           }
         }
-      }) 
+      })
 
       const result = {
         tanggal_mulai: firstday,
@@ -312,7 +312,7 @@ const result = {
             [Op.between]: [firstday, lastday],
           }
         }
-      }) 
+      })
 
       const result = {
         tanggal_mulai: firstday,
