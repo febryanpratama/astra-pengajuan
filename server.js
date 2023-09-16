@@ -51,6 +51,8 @@ const corsOptions = {
   optionsSuccessStatus: 204, // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
+app.use(cors(corsOptions));
+
 app.use(function (req, res, next) {
   // Website you wish to allow to connect
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -62,8 +64,8 @@ app.use(function (req, res, next) {
     "Access-Control-Allow-Headers",
     "X-Requested-With,content-type, Authorization,"
   ); // If needed
-  res.setHeader("preflightContinue", true); // If needed
-  res.setHeader("Access-Control-Allow-Credentials", true); // If needed
+  // res.setHeader("preflightContinue", true); // If needed
+  // res.setHeader("Access-Control-Allow-Credentials", true); // If needed
 
   // res.send("cors problem fixed:)");
   next();
