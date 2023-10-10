@@ -78,9 +78,9 @@ exports.store = async (req, res) => {
   let data = req.body;
 
   AWS.config.update({
-    accessKeyId: "AKIATNRBN2NRZZPT3WGJ",
-    secretAccessKey: "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",
-    region: "ap-southeast-2",
+    accessKeyId: "",
+    secretAccessKey: "",
+    region: "",
   });
 
   // const s3Client = new S3Client({
