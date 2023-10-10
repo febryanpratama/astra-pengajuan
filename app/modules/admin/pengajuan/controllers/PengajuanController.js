@@ -253,8 +253,8 @@ exports.terima = async (req, res) => {
       const s3Client = new S3Client({
         region: "ap-southeast-2",
         credentials: {
-          accessKeyId: "AKIATNRBN2NRZZPT3WGJ",
-          secretAccessKey: "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",
+          accessKeyId: "",
+          secretAccessKey: "",
         },
       });
       // console.log("selesai")
